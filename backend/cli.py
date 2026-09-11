@@ -3,8 +3,15 @@ print the full trace legibly -- routing reasoning, all 4 positions, the
 disagreement, and the reconciliation with its trade-off named."""
 from __future__ import annotations
 
-from orchestrator.graph import run_seed
-from seeds.supplier_milestone import SUPPLIER_MILESTONE_SEED
+from dotenv import find_dotenv, load_dotenv
+
+# Loaded here, not just in model/config.py -- P1's run path never imports
+# the model layer, but LangSmith tracing env vars (LANGCHAIN_*) still need
+# to reach the process before orchestrator.graph runs the seed.
+load_dotenv(find_dotenv(usecwd=True))
+
+from orchestrator.graph import run_seed  # noqa: E402
+from seeds.supplier_milestone import SUPPLIER_MILESTONE_SEED  # noqa: E402
 
 
 def _header(text: str) -> None:
