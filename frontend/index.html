@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Consilium — orchestration trace</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+:root{
+  --ground:#FBF6F0; --surface:#FFFFFF; --surface-2:#F6EDE3; --surface-3:#F1E5D7;
+  --ink:#23201C; --ink-soft:#5C554C; --muted:#948A7D; --line:#E8DCCD;
+  --coral:#FF5D3A; --coral-2:#E5482A; --coral-tint:#FFEBE4;
+  --teal:#0E6E6C; --teal-tint:#E0F0EF;
+  --amber:#D9880C; --amber-tint:#FBEFD6;
+  --good:#2E9E6B; --good-tint:#E3F5EC; --crit:#D64545; --crit-tint:#FBEAEA;
+  --shadow:0 1px 2px rgba(45,32,20,.05), 0 8px 24px -12px rgba(45,32,20,.18);
+  --shadow-lg:0 2px 4px rgba(45,32,20,.06), 0 24px 60px -24px rgba(45,32,20,.30);
+  --r:14px; --r-sm:10px; --r-lg:22px; --maxw:1180px;
+  --sans:"Figtree",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --display:"Bricolage Grotesque",var(--sans);
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono",monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#16120E; --surface:#211A14; --surface-2:#2A2119; --surface-3:#332820;
+    --ink:#F4ECE1; --ink-soft:#C6BAAB; --muted:#8E8375; --line:#372B22;
+    --coral:#FF6E4E; --coral-2:#FF8468; --coral-tint:#3A211A;
+    --teal:#3FADA9; --teal-tint:#153433; --amber:#F0B23E; --amber-tint:#3A2C14;
+    --good:#49B481; --good-tint:#173327; --crit:#E86A6A; --crit-tint:#3A1E1E;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px -14px rgba(0,0,0,.6);
+    --shadow-lg:0 2px 6px rgba(0,0,0,.5), 0 28px 70px -24px rgba(0,0,0,.75);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#16120E; --surface:#211A14; --surface-2:#2A2119; --surface-3:#332820;
+  --ink:#F4ECE1; --ink-soft:#C6BAAB; --muted:#8E8375; --line:#372B22;
+  --coral:#FF6E4E; --coral-2:#FF8468; --coral-tint:#3A211A;
+  --teal:#3FADA9; --teal-tint:#153433; --amber:#F0B23E; --amber-tint:#3A2C14;
+  --good:#49B481; --good-tint:#173327; --crit:#E86A6A; --crit-tint:#3A1E1E;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px -14px rgba(0,0,0,.6);
+  --shadow-lg:0 2px 6px rgba(0,0,0,.5), 0 28px 70px -24px rgba(0,0,0,.75);
+}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);line-height:1.5;-webkit-font-smoothing:antialiased}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 20px 64px}
+a{color:var(--teal)}
+
+header.top{display:flex;align-items:center;justify-content:space-between;padding:22px 20px;border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:baseline;gap:10px}
+.brand h1{font-family:var(--display);font-weight:700;font-size:1.4rem;margin:0}
+.brand span{color:var(--muted);font-size:.85rem}
+.theme-toggle{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:8px 14px;font:inherit;font-size:.85rem;cursor:pointer}
+.theme-toggle:hover{border-color:var(--muted)}
+
+h2.section-title{font-family:var(--display);font-weight:700;font-size:1.15rem;margin:36px 0 14px}
+.hint{color:var(--muted);font-size:.85rem;margin:-8px 0 18px}
+
+.seed-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.seed-card{text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:var(--r);padding:18px;cursor:pointer;font:inherit;color:inherit;box-shadow:var(--shadow)}
+.seed-card:hover:not(:disabled){border-color:var(--coral);transform:translateY(-1px)}
+.seed-card:disabled{cursor:not-allowed;opacity:.55}
+.seed-card .badge{display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);background:var(--surface-2);border-radius:999px;padding:2px 9px;margin-bottom:10px}
+.seed-card h3{font-family:var(--display);font-size:1.02rem;margin:0 0 6px}
+.seed-card p{margin:0;color:var(--ink-soft);font-size:.88rem}
+
+.freetext-box{margin-top:14px;border:1px dashed var(--line);border-radius:var(--r);padding:16px;color:var(--muted);display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.freetext-box input{flex:1;min-width:200px;border:1px solid var(--line);background:var(--surface-2);border-radius:var(--r-sm);padding:10px 12px;font:inherit;color:var(--muted)}
+.freetext-box button{border:1px solid var(--line);background:var(--surface-2);color:var(--muted);border-radius:var(--r-sm);padding:10px 16px;font:inherit;cursor:not-allowed}
+
+#run{display:none}
+#run.visible{display:block}
+
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:22px;box-shadow:var(--shadow);margin-bottom:18px}
+.panel h3{font-family:var(--display);font-size:1.05rem;margin:0 0 8px}
+.routing-reasoning{color:var(--ink-soft)}
+.routing-agents{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.routing-agents .chip{font-family:var(--mono);font-size:.78rem;background:var(--surface-2);border:1px solid var(--line);border-radius:999px;padding:5px 12px}
+
+.positions-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.position-card{border:1px solid var(--line);background:var(--surface);border-radius:var(--r);padding:18px;box-shadow:var(--shadow);opacity:0;transform:translateY(6px)}
+.position-card.in{opacity:1;transform:none}
+@media (prefers-reduced-motion: no-preference){
+  .position-card{transition:opacity .35s ease, transform .35s ease}
+}
+.position-card.pending{opacity:.6}
+.position-card.pending .pending-label{font-size:.8rem;color:var(--muted);font-style:italic}
+.position-card.conflict-focus{border-color:var(--crit);box-shadow:0 0 0 2px var(--crit-tint), var(--shadow)}
+.position-card .agent-name{font-family:var(--display);font-weight:700;font-size:1rem;margin:0 0 8px;text-transform:capitalize}
+.position-card .lead-figure{font-family:var(--mono);font-size:.82rem;color:var(--ink-soft);background:var(--surface-2);border-radius:var(--r-sm);padding:8px 10px;margin:10px 0}
+.position-card .reasoning{font-size:.9rem;color:var(--ink-soft);margin:8px 0}
+.position-card .driving{font-size:.82rem;color:var(--muted)}
+.position-card .driving b{color:var(--ink-soft)}
+
+.stance{display:inline-block;font-family:var(--mono);font-weight:700;font-size:.72rem;letter-spacing:.03em;text-transform:uppercase;border-radius:999px;padding:4px 11px}
+.stance-yes{background:var(--good-tint);color:var(--good)}
+.stance-conditional{background:var(--amber-tint);color:var(--amber)}
+.stance-no{background:var(--crit-tint);color:var(--crit)}
+.stance-blocker{background:var(--crit);color:#fff;box-shadow:0 0 0 3px var(--crit-tint)}
+
+.conflict-panel{border-color:var(--crit);background:var(--crit-tint)}
+.conflict-panel h3{color:var(--crit)}
+.conflict-summary{font-size:1rem;font-weight:600;margin-bottom:10px}
+.pair-row{display:flex;align-items:center;gap:10px;margin:6px 0;font-family:var(--mono);font-size:.85rem}
+.pair-row .vs{color:var(--crit);font-weight:700}
+.note-list{margin:10px 0 0;padding-left:18px;font-size:.85rem;color:var(--ink-soft)}
+.note-list.blockers li{color:var(--crit);font-weight:600}
+
+.reconciliation-panel{border:2px solid var(--coral)}
+.recommendation{font-family:var(--display);font-weight:700;font-size:1.5rem;margin:0 0 12px;line-height:1.25}
+.why{color:var(--ink-soft);margin:0 0 14px}
+.trade-off{background:var(--surface-2);border-left:3px solid var(--coral);border-radius:0 var(--r-sm) var(--r-sm) 0;padding:12px 16px;font-size:.9rem;margin:0 0 16px}
+.recon-lists{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:16px}
+.recon-lists h4{font-size:.8rem;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);margin:0 0 8px}
+.recon-lists ul{margin:0;padding-left:18px;font-size:.85rem;color:var(--ink-soft)}
+
+.run-actions{margin-top:8px}
+.run-actions button{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:9px 18px;font:inherit;font-size:.85rem;cursor:pointer}
+
+.error-banner{background:var(--crit-tint);color:var(--crit);border:1px solid var(--crit);border-radius:var(--r);padding:14px 16px;margin-bottom:18px;font-size:.9rem}
+
+footer{max-width:var(--maxw);margin:40px auto 0;padding:20px;color:var(--muted);font-size:.8rem;text-align:center;border-top:1px solid var(--line)}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="brand">
+    <h1>Consilium</h1>
+    <span>orchestration trace</span>
+  </div>
+  <button class="theme-toggle" id="themeToggle" type="button">Theme</button>
+</header>
+
+<div class="wrap">
+  <section id="picker">
+    <h2 class="section-title">Run a decision through the council</h2>
+    <p class="hint">A master orchestrator routes the scenario to Finance, Delivery, PMO and Operations, lets them disagree, and reconciles their positions into one recommendation. Pick a seed to watch it happen.</p>
+    <div class="seed-grid" id="seedGrid"></div>
+    <div class="freetext-box">
+      <span>Free text — coming in P4</span>
+      <input type="text" placeholder="Describe your own scenario..." disabled>
+      <button disabled type="button">Run</button>
+    </div>
+  </section>
+
+  <section id="run">
+    <h2 class="section-title" id="runTitle">Run</h2>
+    <div id="errorSlot"></div>
+
+    <div class="panel" id="routingPanel" style="display:none">
+      <h3>Master routing</h3>
+      <p class="routing-reasoning" id="routingReasoning"></p>
+      <div class="routing-agents" id="routingAgents"></div>
+    </div>
+
+    <h2 class="section-title" id="positionsTitle" style="display:none">Specialist positions</h2>
+    <div class="positions-grid" id="positionsGrid"></div>
+
+    <div class="panel conflict-panel" id="conflictPanel" style="display:none">
+      <h3>The disagreement</h3>
+      <div class="conflict-summary" id="conflictSummary"></div>
+      <div id="conflictPairs"></div>
+      <ul class="note-list blockers" id="blockerNotes"></ul>
+      <ul class="note-list" id="conditionalNotes"></ul>
+    </div>
+
+    <div class="panel reconciliation-panel" id="reconciliationPanel" style="display:none">
+      <h3>Master reconciliation</h3>
+      <p class="recommendation" id="recRecommendation"></p>
+      <p class="why" id="recWhy"></p>
+      <div class="trade-off" id="recTradeOff"></div>
+      <div class="recon-lists">
+        <div>
+          <h4>Assumptions made</h4>
+          <ul id="recAssumptions"></ul>
+        </div>
+        <div>
+          <h4>What this did not consider</h4>
+          <ul id="recNotConsidered"></ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="run-actions">
+      <button id="againBtn" type="button">&larr; Choose another seed</button>
+    </div>
+  </section>
+</div>
+
+<footer>Illustrative sample scaffold — recommend-only, never writes to a real system — developed with Claude · by Anuj Upadhyay</footer>
+
+<script>
+const AGENT_LABELS = {finance:"Finance", delivery:"Delivery", pmo:"PMO", operations:"Operations"};
+
+function applyStoredTheme(){
+  const stored = localStorage.getItem("consilium-theme");
+  if(stored) document.documentElement.setAttribute("data-theme", stored);
+}
+function toggleTheme(){
+  const current = document.documentElement.getAttribute("data-theme");
+  const next = current === "dark" ? "light" : (current === "light" ? null : (matchMedia("(prefers-color-scheme: dark)").matches ? "light" : "dark"));
+  if(next){ document.documentElement.setAttribute("data-theme", next); localStorage.setItem("consilium-theme", next); }
+  else { document.documentElement.removeAttribute("data-theme"); localStorage.removeItem("consilium-theme"); }
+}
+applyStoredTheme();
+document.getElementById("themeToggle").addEventListener("click", toggleTheme);
+
+let currentSource = null;
+
+async function loadSeeds(){
+  const res = await fetch("/seeds");
+  const seeds = await res.json();
+  const grid = document.getElementById("seedGrid");
+  grid.innerHTML = "";
+  seeds.forEach(seed => {
+    const btn = document.createElement("button");
+    btn.className = "seed-card";
+    btn.disabled = !seed.available;
+    btn.innerHTML = `<span class="badge">${seed.available ? "Ready to run" : "Coming soon"}</span>
+      <h3>${seed.title}</h3><p>${seed.scenario}</p>`;
+    if(seed.available) btn.addEventListener("click", () => runSeed(seed));
+    grid.appendChild(btn);
+  });
+}
+
+function resetRunView(){
+  document.getElementById("errorSlot").innerHTML = "";
+  document.getElementById("routingPanel").style.display = "none";
+  document.getElementById("routingAgents").innerHTML = "";
+  document.getElementById("routingReasoning").textContent = "";
+  document.getElementById("positionsTitle").style.display = "none";
+  document.getElementById("positionsGrid").innerHTML = "";
+  document.getElementById("conflictPanel").style.display = "none";
+  document.getElementById("reconciliationPanel").style.display = "none";
+}
+
+function runSeed(seed){
+  if(currentSource) currentSource.close();
+  resetRunView();
+  document.getElementById("picker").style.display = "none";
+  document.getElementById("run").classList.add("visible");
+  document.getElementById("runTitle").textContent = seed.title;
+
+  const source = new EventSource(`/run/${seed.id}/stream`);
+  currentSource = source;
+
+  source.addEventListener("trace", e => handleTraceEvent(JSON.parse(e.data)));
+  source.addEventListener("error", e => {
+    let message = "Connection to the orchestration stream was lost.";
+    try { message = JSON.parse(e.data).message; } catch(_) {}
+    showError(message);
+    source.close();
+  });
+  source.addEventListener("done", () => source.close());
+}
+
+function showError(message){
+  document.getElementById("errorSlot").innerHTML = `<div class="error-banner">${message}</div>`;
+}
+
+function handleTraceEvent(evt){
+  if(evt.kind === "route") renderRouting(evt.payload);
+  else if(evt.kind === "position") renderPosition(evt.payload);
+  else if(evt.kind === "conflict") renderConflict(evt.payload);
+  else if(evt.kind === "reconciliation") renderReconciliation(evt.payload);
+}
+
+function renderRouting(payload){
+  document.getElementById("routingPanel").style.display = "block";
+  document.getElementById("routingReasoning").textContent = payload.reasoning;
+  const agentsEl = document.getElementById("routingAgents");
+  agentsEl.innerHTML = "";
+  payload.routed_agents.forEach(id => {
+    const chip = document.createElement("span");
+    chip.className = "chip";
+    chip.textContent = AGENT_LABELS[id] || id;
+    agentsEl.appendChild(chip);
+  });
+
+  document.getElementById("positionsTitle").style.display = "block";
+  const grid = document.getElementById("positionsGrid");
+  grid.innerHTML = "";
+  payload.routed_agents.forEach(id => {
+    const card = document.createElement("div");
+    card.className = "position-card pending";
+    card.id = `position-${id}`;
+    card.innerHTML = `<div class="agent-name">${AGENT_LABELS[id] || id}</div><div class="pending-label">Working…</div>`;
+    grid.appendChild(card);
+  });
+}
+
+function renderPosition(position){
+  const card = document.getElementById(`position-${position.agent}`);
+  if(!card) return;
+  card.className = "position-card";
+  card.innerHTML = `
+    <div class="agent-name">${AGENT_LABELS[position.agent] || position.agent}</div>
+    <span class="stance stance-${position.stance}">${position.stance}</span>
+    <div class="lead-figure">${position.lead_figure}</div>
+    <div class="reasoning">${position.reasoning}</div>
+    <div class="driving"><b>Driving constraint:</b> ${position.driving_constraint}</div>
+  `;
+  requestAnimationFrame(() => card.classList.add("in"));
+}
+
+function renderConflict(conflict){
+  document.getElementById("conflictPanel").style.display = "block";
+  document.getElementById("conflictSummary").textContent = conflict.summary;
+
+  const pairsEl = document.getElementById("conflictPairs");
+  pairsEl.innerHTML = "";
+  const highlighted = new Set();
+  conflict.disagreeing_pairs.forEach(([a, b]) => {
+    const row = document.createElement("div");
+    row.className = "pair-row";
+    row.innerHTML = `<span>${AGENT_LABELS[a] || a}</span><span class="vs">vs</span><span>${AGENT_LABELS[b] || b}</span>`;
+    pairsEl.appendChild(row);
+    highlighted.add(a); highlighted.add(b);
+  });
+
+  const blockerEl = document.getElementById("blockerNotes");
+  blockerEl.innerHTML = "";
+  (conflict.blocker_notes || []).forEach(note => {
+    const li = document.createElement("li");
+    li.textContent = note;
+    blockerEl.appendChild(li);
+    const agentId = note.split(":")[0];
+    highlighted.add(agentId);
+  });
+
+  const conditionalEl = document.getElementById("conditionalNotes");
+  conditionalEl.innerHTML = "";
+  (conflict.conditional_notes || []).forEach(note => {
+    const li = document.createElement("li");
+    li.textContent = note;
+    conditionalEl.appendChild(li);
+  });
+
+  highlighted.forEach(id => {
+    const card = document.getElementById(`position-${id}`);
+    if(card) card.classList.add("conflict-focus");
+  });
+}
+
+function renderReconciliation(rec){
+  document.getElementById("reconciliationPanel").style.display = "block";
+  document.getElementById("recRecommendation").textContent = rec.recommendation;
+  document.getElementById("recWhy").textContent = rec.why;
+  document.getElementById("recTradeOff").textContent = rec.trade_off;
+
+  const assumptionsEl = document.getElementById("recAssumptions");
+  assumptionsEl.innerHTML = "";
+  rec.assumptions.forEach(a => { const li = document.createElement("li"); li.textContent = a; assumptionsEl.appendChild(li); });
+
+  const notConsideredEl = document.getElementById("recNotConsidered");
+  notConsideredEl.innerHTML = "";
+  rec.not_considered.forEach(n => { const li = document.createElement("li"); li.textContent = n; notConsideredEl.appendChild(li); });
+
+  document.getElementById("reconciliationPanel").scrollIntoView({behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "nearest"});
+}
+
+document.getElementById("againBtn").addEventListener("click", () => {
+  if(currentSource) currentSource.close();
+  document.getElementById("run").classList.remove("visible");
+  document.getElementById("picker").style.display = "block";
+});
+
+loadSeeds();
+</script>
+</body>
+</html>

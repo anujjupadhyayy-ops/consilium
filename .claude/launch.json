@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "consilium-backend",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": ["-c", "cd backend && source ../.venv/bin/activate && uvicorn api.app:app --reload --port 8000"],
+      "port": 8000
+    }
+  ]
+}
