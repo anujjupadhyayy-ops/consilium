@@ -33,6 +33,7 @@ def test_positions_and_trace_reducers_accumulate_across_parallel_writes():
                 "recommendation": "test",
                 "reasoning": "test",
                 "driving_constraint": "test",
+                "lead_figure": "test",
             }
             event = make_trace_event(step, "position", agent_name, "test", {})
             return {"positions": [position], "trace": [event]}

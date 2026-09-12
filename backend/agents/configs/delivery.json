@@ -1,0 +1,11 @@
+{
+  "lens": "Critical path, milestone health, resourcing reality, revenue-at-risk.",
+  "rules_summary": [
+    "Effective RAG floors at amber for unresourced work, however good the reported status.",
+    "Criticality (on the critical path) and health (RAG) are tracked separately.",
+    "Critical Revenue at Risk = revenue-tagged milestones with effective RAG amber/red that are also on the critical path.",
+    "Yes if the change reduces Critical Revenue at Risk; Conditional if it helps schedule but doesn't yet (unresourced or off-path); No otherwise."
+  ],
+  "user_overridable": true,
+  "unresourced_floor_rag": "amber"
+}

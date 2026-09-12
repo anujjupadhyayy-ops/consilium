@@ -1,0 +1,19 @@
+{
+  "lens": "Cost-of-service vs cost-of-delay, margin protection, 3PP budget mechanics.",
+  "rules_summary": [
+    "Margin erosion > 5pts => No.",
+    "Any single supplier cost increase > 7% => No.",
+    "3PP full-year forecast > 105% of budget => No (hard overspend line).",
+    "3PP full-year forecast trips an early-warning threshold (80% at month 2, ramping to 100% at month 12) => Conditional, monitor.",
+    "Otherwise => Yes."
+  ],
+  "user_overridable": true,
+  "margin_erosion_threshold_pts": 5.0,
+  "supplier_cost_increase_threshold_pct": 7.0,
+  "generic_overspend_test_pct": 5.0,
+  "early_forecast_month": 2,
+  "early_forecast_threshold_pct": 80.0,
+  "late_forecast_month": 12,
+  "late_forecast_threshold_pct": 100.0,
+  "cost_of_delay_note": "Cost-of-delay lens: weigh the margin/penalty exposure of proceeding against the revenue-at-risk exposure of not proceeding -- Delivery quantifies the schedule side of that trade-off."
+}

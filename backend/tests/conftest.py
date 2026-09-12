@@ -17,6 +17,13 @@ def seed_input() -> str:
 
 
 @pytest.fixture
+def seed_facts() -> dict:
+    from seeds.supplier_milestone import SUPPLIER_MILESTONE_SEED
+
+    return SUPPLIER_MILESTONE_SEED["facts"]
+
+
+@pytest.fixture
 def built_graph():
     from orchestrator.graph import build_graph
 

@@ -1,0 +1,16 @@
+{
+  "lens": "Operational capacity, process impact, licence & 3PP-kit inventory, supplier SLA control.",
+  "rules_summary": [
+    "Operational Health = the WEAKEST of four signals (capacity, 3PP spend, savings delivery, supplier/SLA & licence-kit) -- never an average.",
+    "Any signal RED => Blocker, regardless of the other three.",
+    "Weakest signal AMBER, none RED => Conditional.",
+    "All four signals GREEN => Yes."
+  ],
+  "user_overridable": true,
+  "capacity_amber_threshold_pct": 90.0,
+  "capacity_red_threshold_pct": 100.0,
+  "spend_amber_threshold_pct": 95.0,
+  "spend_red_threshold_pct": 100.0,
+  "savings_amber_threshold_ratio": 0.9,
+  "savings_red_threshold_ratio": 0.7
+}
