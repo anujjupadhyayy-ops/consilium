@@ -10,6 +10,11 @@ A forkable, open-source multi-agent back-office scaffold: a **master orchestrato
 ## The ball — why this exists
 Move Anuj's public signal from *"builds dashboards / vibe-codes"* → *"understands and can design a multi-agent user ecosystem."* Proven by **architecture + visible orchestration + the business depth of the agent profiles** — not by claiming an autonomous AI employee. Specific audience: **non-technical business leaders** who will remember Anuj because he made something technical legible *in their language*.
 
+## Product position (Path A — LOCKED)
+Consilium is a **domain-agnostic multi-agent decision framework**, not a finance/back-office product. What is generic and reusable is the **framework** (orchestration engine + trace UI) and the **agent-design method**; the specific agent rules are **user-definable, swappable config** a forker sets for their own world. Delivery/commercial is only the **flagship demo** because it is Anuj's domain. The demo agents ship **expert but illustrative** logic (not Anuj's literal/proprietary employer rules — a confidentiality line, and more generic besides). Depth is demonstrated by the **capability and complexity the agents can hold** (e.g. a time-phased forecast flag), not by whose thresholds they are. Reframe "back-office" throughout as "decision framework (demoed on a delivery/commercial back-office)."
+
+**Generality check (Anuj, 2026-09-12):** the four example agents are industry-standard spines (commercial/finance discipline · EVM · PRINCE2/MSP · capacity/spend/savings/supplier) with illustrative, user-definable values — usable by the wider PMO/Ops/Delivery community, not just Anuj. Caveat: PMO leans PRINCE2/MSP (UK/enterprise/gov); editable rules let an Agile/SAFe shop swap it — which is exactly why user-editable agents are core.
+
 ## Framing decision (LOCKED)
 **Forkable scaffold, not a finished autonomous back-office.** General-purpose multi-agent on arbitrary input degrades into generic mush, and over-claiming reads as naive to the senior audience. A clean, honest, forkable scaffold signals *someone who understands the system deeply enough to know its limits* — the mature signal, achievable solo.
 
@@ -31,6 +36,7 @@ Move Anuj's public signal from *"builds dashboards / vibe-codes"* → *"understa
 - 4 one-click seed scenarios.
 - The **orchestration-trace UI** (the hero): routing decision, parallel specialist work, surfaced disagreement, reconciliation — all legible to a non-technical exec.
 - **BYO-LLM**: OpenAI-compatible config; open demo on a cheap OSS model behind a rate limit.
+- **Agent rules as editable config** (not hardcoded) — foundation for user-editable agents; the P4 UI reads/writes this.
 - Public repo + README + fork guide + MIT licence.
 
 ## Scope — OUT (v1 — roadmap, stated openly)
@@ -72,7 +78,7 @@ Bar = the **Voyij prototype** (`Voyji Traveller/Mobile View - Deployment 3/index
 - **P1 — Orchestration spine + repo.** Git init + GitHub remote; LangGraph supervisor + 4 stub agents + bounded termination + LangSmith tracing; one seed running end-to-end in the terminal. Proves the mechanism.
 - **P2 — Real agent profiles.** Domain logic per agent; genuine conflict emerges on the supplier seed.
 - **P3 — Trace UI.** The hero screen. *The recordable demo exists at the end of this phase.*
-- **P4 — Free-text + clarification + model config + rate-limited demo deploy.**
+- **P4 — Free-text + clarification + model config + rate-limited demo deploy + user-editable agents UI (Copilot-style edit/create-an-agent; the headline "plug in your own brain" feature).**
 - **P5 — Showcase.** Page, video, screenshots, README; ship + 5 inboxes.
 
 Each phase is a **stopping point.** If the role hunt (Arc A) needs the weeks, stop after **P3** — you already have a recordable demo — and build the showcase around it.
