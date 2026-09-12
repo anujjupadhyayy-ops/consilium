@@ -24,6 +24,20 @@ _DECLINE_MARKERS = (
 )
 
 
+def _persona() -> str:
+    """User-editable framing (P3.6 Settings/Council) -- tone and priority
+    only. Appended after the mandatory instructions in each prompt, never
+    substituted for them, and never able to touch the locked policy: see
+    _enforce_blocker_policy, which checks the model's actual output
+    regardless of what the persona asked for."""
+    from .cos_settings import read_cos_settings
+
+    try:
+        return read_cos_settings().get("persona", "")
+    except (FileNotFoundError, ValueError):
+        return ""
+
+
 class RoutingDecision(BaseModel):
     rationale: str
     engaged: dict[str, str] = {}
@@ -110,7 +124,8 @@ def _llm_route(input_text: str, agents: list) -> RoutingDecision:
         "out.\n\nAvailable agents:\n" + roster + "\n\n"
         'Respond with ONLY a JSON object: {"rationale": str, "engaged": {agent_id: reason}, '
         '"skipped": {agent_id: reason}, "facts": {agent_id: {...fields matching that agent\'s '
-        "facts_schema...}}}."
+        "facts_schema...}}}. "
+        f"Additional style/priority guidance from the user (does not override the rules above): {_persona()}"
     )
     try:
         return call_structured(system, f"Scenario: {input_text}", RoutingDecision)
@@ -216,7 +231,8 @@ def _llm_reconcile(input_text: str, positions: list[AgentPosition], conflict: Co
         "trade-off using the agents' actual driving constraints -- never write in generalities. "
         "Always state what was assumed and what was not considered. " + policy_clause +
         'Respond with ONLY a JSON object: {"recommendation": str, "why": str, "trade_off": str, '
-        '"assumptions": [str], "not_considered": [str]}.'
+        '"assumptions": [str], "not_considered": [str]}. '
+        f"Additional style/priority guidance from the user (does not override the policy above): {_persona()}"
     )
     user = f"Scenario: {input_text}\n\nPositions:\n{positions_desc}\n\nDetected conflict: {conflict['summary']}"
 

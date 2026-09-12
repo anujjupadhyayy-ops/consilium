@@ -66,3 +66,59 @@ def get_agent(agent_id: str) -> Optional[ConfigurableAgent]:
     """Used by /council/retest -- the one agent's base config, ready for
     the caller to layer overrides onto."""
     return next((a for a in load_agents_from_manifest() if a.id == agent_id), None)
+
+
+class UnknownAgentError(KeyError):
+    pass
+
+
+def _find_manifest_entry(agent_id: str, manifest_path: Optional[PathLike] = None) -> dict:
+    manifest_path = Path(manifest_path) if manifest_path else DEFAULT_MANIFEST_PATH
+    manifest = json.loads(manifest_path.read_text())
+    entry = next((e for e in manifest["agents"] if e["id"] == agent_id), None)
+    if entry is None:
+        raise UnknownAgentError(agent_id)
+    return entry
+
+
+def get_agent_config_raw(
+    agent_id: str,
+    manifest_path: Optional[PathLike] = None,
+    configs_dir: Optional[PathLike] = None,
+) -> dict:
+    """The raw persisted JSON for one agent's config -- used by
+    GET /agents/{id}/config so the Council UI can hydrate from truth
+    (looks the agent up regardless of enabled/disabled state)."""
+    configs_dir = Path(configs_dir) if configs_dir else DEFAULT_CONFIGS_DIR
+    entry = _find_manifest_entry(agent_id, manifest_path)
+    return json.loads((configs_dir / entry["config"]).read_text())
+
+
+def save_agent_config(
+    agent_id: str,
+    config_overrides: dict,
+    manifest_path: Optional[PathLike] = None,
+    configs_dir: Optional[PathLike] = None,
+) -> ConfigurableAgent:
+    """PUT /agents/{id}/config -- P3.6's persistence seam. Merges
+    `config_overrides` over the currently-persisted config, validates the
+    result through that agent kind's Pydantic model (rules count/length,
+    numeric bounds -- a malformed config raises pydantic.ValidationError
+    and is never written), then writes the merged, validated config back
+    to configs/*.json so it survives a restart and a fork ships with these
+    as the new defaults. Returns an agent instance built from the saved
+    config, ready to evaluate/narrate immediately.
+    """
+    manifest_path = Path(manifest_path) if manifest_path else DEFAULT_MANIFEST_PATH
+    configs_dir = Path(configs_dir) if configs_dir else DEFAULT_CONFIGS_DIR
+    entry = _find_manifest_entry(agent_id, manifest_path)
+
+    agent_cls = AGENT_KIND_REGISTRY[entry["kind"]]
+    config_path = configs_dir / entry["config"]
+    current = json.loads(config_path.read_text())
+    merged = {**current, **config_overrides}
+
+    config = agent_cls.config_model.model_validate(merged)  # raises on anything malformed
+
+    config_path.write_text(json.dumps(config.model_dump(), indent=2) + "\n")
+    return agent_cls(agent_id=agent_id, config=config)

@@ -13,7 +13,7 @@ from fastapi.responses import StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
-from agents.registry import get_agent, load_agents_from_manifest
+from agents.registry import get_agent, get_agent_config_raw, load_agents_from_manifest, save_agent_config, UnknownAgentError
 from orchestrator.graph import build_graph
 from orchestrator.state import initial_state
 from seeds.registry import get_seed, list_seeds
@@ -138,12 +138,73 @@ def council_retest(req: RetestRequest) -> dict:
     return dict(position)
 
 
+@app.get("/agents/{agent_id}/config")
+def get_agent_config(agent_id: str) -> dict:
+    """The Council UI hydrates its rule list and numeric fields from this,
+    not a hardcoded copy -- so a page reload always shows what's actually
+    persisted."""
+    try:
+        return get_agent_config_raw(agent_id)
+    except UnknownAgentError:
+        raise HTTPException(status_code=404, detail=f"Unknown agent '{agent_id}'.")
+
+
+@app.put("/agents/{agent_id}/config")
+def put_agent_config(agent_id: str, body: dict[str, Any]) -> dict:
+    """P3.6's persistence seam: rules list + numeric thresholds together,
+    validated and written to agents/configs/*.json. A malformed body
+    (a rule too long, too many rules, a threshold out of range, ...) is
+    rejected with 422 and never applied -- see AgentConfig's validators
+    and each agent's Field(ge=.., le=..) bounds."""
+    try:
+        agent = save_agent_config(agent_id, body)
+    except UnknownAgentError:
+        raise HTTPException(status_code=404, detail=f"Unknown agent '{agent_id}'.")
+    except Exception as exc:  # pydantic.ValidationError or a bad value
+        raise HTTPException(status_code=422, detail=f"Invalid config: {exc}") from exc
+    return agent.config.model_dump()
+
+
+# ------------------------------------------------------------ chief of staff --
+
+class ChiefOfStaffConfigRequest(BaseModel):
+    persona: str
+
+
+@app.get("/chief-of-staff/config")
+def get_chief_of_staff_config() -> dict:
+    from orchestrator.cos_settings import read_cos_settings
+
+    return read_cos_settings()
+
+
+@app.put("/chief-of-staff/config")
+def put_chief_of_staff_config(req: ChiefOfStaffConfigRequest) -> dict:
+    """Persona/routing-guidance only -- the adjudication policy
+    (operational-blocker-wins) and guardrails are not settable through
+    this or any endpoint; see chief_of_staff._enforce_blocker_policy,
+    which holds regardless of what this persona says."""
+    from orchestrator.cos_settings import write_cos_settings
+
+    try:
+        return write_cos_settings(req.persona)
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+
+
 # --------------------------------------------------------------- settings --
+
+HOSTED_PROVIDER_BASE_URLS = {
+    "openai": "https://api.openai.com/v1",
+    "anthropic": "https://api.anthropic.com/v1",
+    "openrouter": "https://openrouter.ai/api/v1",
+}
+
 
 class ModelSettingsRequest(BaseModel):
     provider: str
+    model: str
     base_url: Optional[str] = None
-    model_name: str
     api_key: Optional[str] = None
 
 
@@ -160,19 +221,37 @@ def get_model_settings() -> dict:
     }
 
 
-@app.post("/settings/model")
-def save_and_test_model_settings(req: ModelSettingsRequest) -> dict:
-    from model.config import ModelConfig
-    from model.llm import test_connection
+@app.put("/settings/model")
+def put_model_settings(req: ModelSettingsRequest) -> dict:
+    """Hosted providers (openai/anthropic/openrouter) get their canonical
+    base URL resolved server-side -- a client-supplied base_url for one of
+    these is ignored, not trusted -- and require a key. Local/self-hosted
+    keeps the client's base_url and doesn't require a key."""
     from model.runtime_settings import write_runtime_settings
 
-    data = {"provider": req.provider, "base_url": req.base_url, "model_name": req.model_name}
+    provider = req.provider.strip().lower()
+    if provider in HOSTED_PROVIDER_BASE_URLS:
+        if not req.api_key:
+            raise HTTPException(status_code=422, detail=f"An API key is required for provider '{provider}'.")
+        base_url = HOSTED_PROVIDER_BASE_URLS[provider]
+    else:
+        base_url = req.base_url or None
+
+    data: dict[str, Any] = {"provider": provider, "base_url": base_url, "model_name": req.model}
     if req.api_key:
         data["api_key"] = req.api_key
     write_runtime_settings(data)
 
+    return get_model_settings()
+
+
+@app.post("/settings/model/test")
+def test_model_settings() -> dict:
+    from model.config import ModelConfig
+    from model.llm import test_connection
+
     ok, message = test_connection(ModelConfig.current())
-    return {"saved": True, "connection_ok": ok, "message": message}
+    return {"connection_ok": ok, "message": message}
 
 
 # ---------------------------------------------------------------- trigger --
