@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, ClassVar, Type
 
 from pydantic import BaseModel
 
@@ -19,6 +19,9 @@ SIGNAL_NAMES = {
 
 
 class OperationsConfig(AgentConfig):
+    trigger_keywords: list[str] = [
+        "capacity", "licence", "license", "sla", "kit", "resourcing", "operational", "supplier",
+    ]
     capacity_amber_threshold_pct: float = 90.0
     capacity_red_threshold_pct: float = 100.0
     spend_amber_threshold_pct: float = 95.0
@@ -28,16 +31,20 @@ class OperationsConfig(AgentConfig):
 
 
 class OperationsFacts(BaseModel):
-    capacity_utilisation_pct_if_accepted: float
-    third_party_spend_pct_of_budget: float
-    savings_delivery_ratio: float
-    licence_provisioned_for_new_date: bool
-    supplier_sla_in_place: bool
+    # Neutral/no-concern defaults (all-green) -- used when the Chief of
+    # Staff's LLM extraction is unavailable and evaluation must degrade
+    # gracefully.
+    capacity_utilisation_pct_if_accepted: float = 50.0
+    third_party_spend_pct_of_budget: float = 50.0
+    savings_delivery_ratio: float = 1.0
+    licence_provisioned_for_new_date: bool = True
+    supplier_sla_in_place: bool = True
 
 
 class OperationsAgent(ConfigurableAgent):
     kind = "operations"
     config_model = OperationsConfig
+    facts_model: ClassVar[Type[BaseModel]] = OperationsFacts
 
     def evaluate(self, facts_raw: dict[str, Any]) -> AgentPosition:
         facts = OperationsFacts.model_validate(facts_raw)

@@ -1,6 +1,7 @@
 # Environment / secrets
 .env
 *.key
+backend/model/runtime_settings.json
 
 # Python
 __pycache__/

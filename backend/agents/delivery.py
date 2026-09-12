@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any, Literal
+from typing import Any, ClassVar, Literal, Type
 
 from pydantic import BaseModel
 
@@ -14,28 +14,34 @@ _FROM_SEVERITY = {v: k for k, v in _SEVERITY.items()}
 
 
 class DeliveryConfig(AgentConfig):
+    trigger_keywords: list[str] = [
+        "milestone", "schedule", "critical path", "delay", "delivery date", "resourcing", "slip",
+    ]
     # "Effective RAG" floor for unresourced work -- an unresourced milestone
     # can never read better than this, however good its reported status.
     unresourced_floor_rag: RAG = "amber"
 
 
 class DeliveryFacts(BaseModel):
-    budget: float
-    actual_pct: float  # 0-1: proportion of budget's worth of work done
-    schedule_pct: float  # 0-1: proportion of work planned to be done by now
-    spend_to_date: float
+    # Neutral/no-concern defaults -- used when the Chief of Staff's LLM
+    # extraction is unavailable and evaluation must degrade gracefully.
+    budget: float = 100_000.0
+    actual_pct: float = 0.5  # 0-1: proportion of budget's worth of work done
+    schedule_pct: float = 0.5  # 0-1: proportion of work planned to be done by now
+    spend_to_date: float = 50_000.0
     slip_days_before_change: float = 0.0
-    is_resourced: bool
-    is_on_critical_path: bool
-    is_revenue_tagged: bool
-    revenue_value: float
-    reported_rag_before: RAG
-    reported_rag_after: RAG  # if the proposed change is accepted
+    is_resourced: bool = True
+    is_on_critical_path: bool = False
+    is_revenue_tagged: bool = False
+    revenue_value: float = 0.0
+    reported_rag_before: RAG = "green"
+    reported_rag_after: RAG = "green"  # if the proposed change is accepted
 
 
 class DeliveryAgent(ConfigurableAgent):
     kind = "delivery"
     config_model = DeliveryConfig
+    facts_model: ClassVar[Type[BaseModel]] = DeliveryFacts
 
     def evaluate(self, facts_raw: dict[str, Any]) -> AgentPosition:
         facts = DeliveryFacts.model_validate(facts_raw)

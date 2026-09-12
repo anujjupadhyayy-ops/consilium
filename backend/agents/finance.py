@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, ClassVar, Type
 
 from pydantic import BaseModel
 
@@ -10,6 +10,9 @@ from .base import AgentConfig, ConfigurableAgent
 
 
 class FinanceConfig(AgentConfig):
+    trigger_keywords: list[str] = [
+        "cost", "budget", "supplier", "margin", "3pp", "invoice", "price increase", "spend",
+    ]
     margin_erosion_threshold_pts: float = 5.0
     supplier_cost_increase_threshold_pct: float = 7.0
     # Hard breach = 100% (never-exceed line) + this generic overspend test.
@@ -29,15 +32,19 @@ class FinanceConfig(AgentConfig):
 
 
 class FinanceFacts(BaseModel):
-    margin_erosion_pts: float
-    supplier_cost_increase_pct: float
-    budget_forecast_utilisation_pct: float
-    fy_month_elapsed: int
+    # Neutral/no-concern defaults -- used when the Chief of Staff's LLM
+    # extraction is unavailable and evaluation must degrade gracefully
+    # rather than crash on a missing required field.
+    margin_erosion_pts: float = 0.0
+    supplier_cost_increase_pct: float = 0.0
+    budget_forecast_utilisation_pct: float = 50.0
+    fy_month_elapsed: int = 6
 
 
 class FinanceAgent(ConfigurableAgent):
     kind = "finance"
     config_model = FinanceConfig
+    facts_model: ClassVar[Type[BaseModel]] = FinanceFacts
 
     def evaluate(self, facts_raw: dict[str, Any]) -> AgentPosition:
         facts = FinanceFacts.model_validate(facts_raw)

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any, Literal
+from typing import Any, ClassVar, Literal, Type
 
 from pydantic import BaseModel
 
@@ -12,6 +12,9 @@ AdverseDirection = Literal["over", "under"]
 
 
 class PMOConfig(AgentConfig):
+    trigger_keywords: list[str] = [
+        "contract variation", "change control", "governance", "tolerance", "compliance", "pme", "gate",
+    ]
     # PRINCE2/MSP delegated tolerance per dimension, as a % variance the PM
     # can absorb before an exception has to be escalated.
     tolerances_pct: dict[str, float] = {
@@ -52,6 +55,7 @@ class PMOFacts(BaseModel):
 class PMOAgent(ConfigurableAgent):
     kind = "pmo"
     config_model = PMOConfig
+    facts_model: ClassVar[Type[BaseModel]] = PMOFacts
 
     def evaluate(self, facts_raw: dict[str, Any]) -> AgentPosition:
         facts = PMOFacts.model_validate(facts_raw)

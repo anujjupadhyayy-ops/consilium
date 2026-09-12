@@ -60,3 +60,9 @@ def list_enabled_agent_ids(manifest_path: Optional[PathLike] = None) -> list[str
     manifest_path = Path(manifest_path) if manifest_path else DEFAULT_MANIFEST_PATH
     manifest = json.loads(manifest_path.read_text())
     return [entry["id"] for entry in manifest["agents"] if entry.get("enabled", True)]
+
+
+def get_agent(agent_id: str) -> Optional[ConfigurableAgent]:
+    """Used by /council/retest -- the one agent's base config, ready for
+    the caller to layer overrides onto."""
+    return next((a for a in load_agents_from_manifest() if a.id == agent_id), None)
