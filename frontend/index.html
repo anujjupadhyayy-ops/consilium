@@ -199,6 +199,17 @@
   .locknote{margin-top:12px;padding:9px 12px;background:var(--surface-2);border-radius:var(--r-sm);font-size:12px;color:var(--muted);border-left:3px solid var(--muted)}
   .prefbox{margin-top:12px;background:var(--ground);border:1px solid var(--line);border-radius:var(--r);padding:12px}
   .prefbox .pl{font:600 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--teal);margin-bottom:8px}
+  .rlab{font:600 10px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+  .rulelist{display:flex;flex-direction:column;gap:6px}
+  .rulerow{display:flex;gap:6px;align-items:center}
+  .rin{flex:1;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;padding:7px 9px;font:500 12.5px var(--sans)}
+  .rin:focus{outline:2px solid var(--coral);outline-offset:1px}
+  .rx{border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:8px;width:28px;height:30px;cursor:pointer;font-size:15px;line-height:1;flex:none}
+  .rx:hover{border-color:var(--crit);color:var(--crit)}
+  .addrule{align-self:flex-start;border:1px dashed var(--line);background:transparent;color:var(--coral);border-radius:8px;padding:6px 11px;font:700 11.5px var(--sans);cursor:pointer;margin-top:2px}
+  .addrule:hover{border-color:var(--coral)}
+  .cospersona{width:100%;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:9px;padding:9px 11px;font:500 12.5px var(--sans);resize:vertical;min-height:58px}
+  .cospersona:focus{outline:2px solid var(--coral);outline-offset:1px}
   .cgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(288px,1fr));gap:14px}
   .ccard{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column}
   .cch{display:flex;align-items:center;gap:10px;padding:13px 15px;border-bottom:1px solid var(--line)}
@@ -235,6 +246,7 @@
   .srow{display:flex;flex-direction:column;gap:5px;margin-bottom:13px}
   .srow label{font:600 11px var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
   .stext,.field select{border:1px solid var(--line);background:var(--ground);color:var(--ink);border-radius:9px;padding:9px 11px;font:500 13px var(--sans)}
+  .stext:disabled{opacity:.55;cursor:not-allowed}
   .conn{display:flex;align-items:center;gap:11px;padding:12px 0;border-top:1px solid var(--line)} .conn:first-of-type{border-top:0}
   .conn .ci{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;font:800 14px var(--display);color:#fff}
   .conn .nm{font:700 13px var(--sans)} .conn .ds{font-size:11.5px;color:var(--muted)}
@@ -339,10 +351,10 @@
       <div class="card"><div class="ch">Language model</div><div class="cb">
         <div class="srow"><label>Provider</label><select class="stext" id="s-prov"><option>OpenAI</option><option>Anthropic</option><option>OpenRouter (OSS gateway)</option><option selected>Local / self-hosted (OSS)</option></select></div>
         <div class="srow"><label>Base URL</label><input class="stext" id="s-url" value="http://localhost:11434/v1" spellcheck="false"></div>
-        <div class="srow"><label>Model</label><input class="stext" id="s-model" value="kimi-k2" spellcheck="false"></div>
+        <div class="srow"><label>Model</label><input class="stext" id="s-model" value="llama3.2" spellcheck="false"></div>
         <div class="srow"><label>API key</label><input class="stext" id="s-key" type="password" value="" placeholder="sk-… (not needed for local)"></div>
         <button class="savebtn" id="s-save">Save & test connection</button><span class="saved" id="s-saved">✓ Saved · connection OK</span>
-        <div class="setnote">OpenAI-compatible — any provider or self-hosted OSS model drops in by changing the base URL. Keys stay in your browser in this demo; the framework reads them from server-side env.</div>
+        <div class="setnote">OpenAI-compatible — any provider or self-hosted OSS model drops in by changing the base URL. For OpenAI/Anthropic/OpenRouter the base URL is fixed server-side and a key is required; for local/self-hosted it's yours to set and a key is optional.</div>
       </div></div>
       <div class="card"><div class="ch">Connections & triggers</div><div class="cb">
         <div class="conn"><span class="ci" style="background:#EA4335">G</span><div><div class="nm">Gmail</div><div class="ds">OAuth · scope <span class="mono">gmail.readonly</span> · revocable anytime</div></div><button class="cbtn" data-conn="gmail">Connect with Google</button></div>
@@ -366,12 +378,6 @@ const AGENTS={
 const STANCE={yes:["s-yes","Yes"],no:["s-no","No"],conditional:["s-cond","Conditional"],blocker:["s-block","Blocker"]};
 const TILES={finance:["Watching Workstream C — FY forecast 84% at M6","a"],delivery:["£420k critical revenue at risk on 1 milestone","r"],pmo:["2 change-control gates open","a"],operations:["1 hard blocker active — licence not provisioned","r"]};
 const ORDER=["finance","delivery","pmo","operations"];
-const RULES={
-  finance:["No if project-margin erosion > 5 pts","No if any supplier cost > 7% over budget","3PP: flag full-year forecast ≥ 80%, weighted by the month it's read","Never forecast beyond 100% of budget"],
-  delivery:["Earned value — SPI / CPI / EAC","Unresourced milestone can't be green (effective RAG)","Criticality = consequence if it slips, not current health","Deciding lens: Critical Revenue at Risk"],
-  pmo:["PRINCE2 / MSP tolerances + stage gates","Common voice: proceed, but via a change-control gate","Four pillars — Portfolio / Delivery / PMs / Reporting","Carries contract-variation routing"],
-  operations:["Four signals — capacity, 3PP spend, savings, supplier/SLA","Verdict = the weakest of the four (never averaged)","Hard blocker if licence / kit / SLA isn't in place"]
-};
 
 const stage=document.getElementById("stage"), rail=document.getElementById("rail");
 const reduce=matchMedia("(prefers-reduced-motion:reduce)").matches;
@@ -379,6 +385,7 @@ const wait=ms=>new Promise(r=>setTimeout(r,reduce?0:ms));
 
 let running=false, currentSource=null, currentTrace=[], collectedPositions={}, currentRunMeta=null, licState="no";
 let SEEDS=[];
+let CONFIGS={};      // agent_id -> persisted config, fetched from /agents/{id}/config
 const liveRuns=[];
 
 document.getElementById("roster").innerHTML=ORDER.map(k=>{const a=AGENTS[k];
@@ -576,46 +583,124 @@ document.getElementById("sim").addEventListener("click",async()=>{
 });
 
 // ---------------------------------------------------------------- council --
-function specCard(k){const a=AGENTS[k];let controls="";
-  if(k==="finance")controls=`<div class="fields"><div class="field"><label>Project-margin floor (pts)</label><input type="number" id="cf-margin" value="5" min="0" max="30"></div><div class="field"><label>Supplier-cost line (%)</label><input type="number" id="cf-supplier" value="7" min="0" max="60"></div><div class="field"><label>3PP forecast flag (%)</label><input type="number" id="cf-forecast" value="80" min="0" max="100"></div><button class="retest" data-retest="finance">Re-test on supplier scenario ▸</button><div class="result" id="res-finance"></div></div>`;
-  if(k==="operations")controls=`<div class="fields"><div class="field"><label>Early-cutover licence provisioned?</label><span class="toggle"><button data-lic="no" class="on">No</button><button data-lic="yes">Yes</button></span></div><button class="retest" data-retest="operations">Re-test on supplier scenario ▸</button><div class="result" id="res-operations"></div></div>`;
-  const rules=RULES[k].map(r=>`<div class="rl">${r}</div>`).join("");
-  return `<div class="ccard"><div class="cch"><span class="ic" style="background:${a.c}">${a.ic}</span><div><div class="nm">${a.nm}</div><div class="ln">${a.lens}</div></div><span class="tag">editable</span></div><div class="ccb"><div class="rules">${rules}</div>${controls}</div></div>`;
+// Every agent's rules are edit/add/remove, hydrated from the persisted
+// config (GET /agents/{id}/config), not a hardcoded copy.
+function ruleList(k){
+  const rules=(CONFIGS[k]&&CONFIGS[k].rules_summary)||[];
+  return `<div class="rulelist" id="rl-${k}">`+
+    rules.map((r,i)=>`<div class="rulerow"><input class="rin" data-agent="${k}" data-i="${i}" value="${String(r).replace(/"/g,'&quot;')}"><button class="rx" data-agent="${k}" data-i="${i}" title="Remove rule">×</button></div>`).join("")+
+    `<button class="addrule" data-add="${k}">+ Add rule</button></div>`;
 }
-function renderCouncil(){
+function renderRuleList(k){const el=document.getElementById("rl-"+k);if(el)el.outerHTML=ruleList(k);}
+
+function specCard(k){
+  const a=AGENTS[k];
+  const cfg=CONFIGS[k]||{};
+  let controls="";
+  if(k==="finance")controls=`<div class="fields"><div class="field"><label>Project-margin floor (pts)</label><input type="number" id="cf-margin" value="${cfg.margin_erosion_threshold_pts??5}" min="0" max="100"></div><div class="field"><label>Supplier-cost line (%)</label><input type="number" id="cf-supplier" value="${cfg.supplier_cost_increase_threshold_pct??7}" min="0" max="200"></div><div class="field"><label>3PP forecast flag (%)</label><input type="number" id="cf-forecast" value="${cfg.early_forecast_threshold_pct??80}" min="0" max="100"></div><button class="retest" data-retest="finance">Save & re-test on supplier scenario ▸</button><div class="result" id="res-finance"></div></div>`;
+  if(k==="operations")controls=`<div class="fields"><div class="field"><label>Early-cutover licence provisioned?</label><span class="toggle"><button data-lic="no" class="on">No</button><button data-lic="yes">Yes</button></span></div><button class="retest" data-retest="operations">Save & re-test on supplier scenario ▸</button><div class="result" id="res-operations"></div></div>`;
+  if(k==="delivery"||k==="pmo")controls=`<button class="retest" data-save="${k}">Save rules ▸</button><div class="result" id="res-${k}"></div>`;
+  return `<div class="ccard"><div class="cch"><span class="ic" style="background:${a.c}">${a.ic}</span><div><div class="nm">${a.nm}</div><div class="ln">${a.lens}</div></div><span class="tag">editable</span></div><div class="ccb"><div class="rlab">Rules — edit, add or remove</div>${ruleList(k)}${controls}</div></div>`;
+}
+
+async function loadConfigs(){
+  const entries=await Promise.all(ORDER.map(async k=>{
+    try{ const res=await fetch(`/agents/${k}/config`); return [k, await res.json()]; }
+    catch(_){ return [k, {rules_summary:[]}]; }
+  }));
+  CONFIGS=Object.fromEntries(entries);
+}
+async function loadPersona(){
+  try{
+    const res=await fetch("/chief-of-staff/config");
+    const s=await res.json();
+    return s.persona||"";
+  }catch(_){ return ""; }
+}
+
+async function renderCouncil(){
+  await loadConfigs();
+  const persona=await loadPersona();
   const master=`<div class="mastercard"><div class="mch"><span class="ic">CoS</span><span class="nm">Chief of Staff</span><span class="lock">🔒 System-governed core</span></div>
     <div class="mcb"><dl style="margin:0"><div class="crow"><dt>Routing</dt><dd>Reads the decision, selects which specialists are relevant (and skips the rest), with a stated reason.</dd></div>
     <div class="crow"><dt>Reconcile policy</dt><dd><b style="color:var(--ink)">operational-blocker-wins</b> — a hard operational constraint outranks a cost / schedule trade-off; positions are adjudicated, never averaged.</dd></div>
     <div class="crow"><dt>Guardrails</dt><dd>Recommend-only · bounded termination · always states assumptions + what it did not consider.</dd></div></dl>
     <div class="locknote">The adjudication core is locked by design — users configure the specialists, not how the council resolves conflict. Rewriting that would undermine trust in every verdict.</div>
-    <div class="prefbox"><div class="pl">Your preferences — what to flag to me</div><div class="field" style="margin-bottom:8px"><label>Escalate verdicts at or above</label><span class="toggle"><button class="on">Blocker</button><button>Any conflict</button><button>All</button></span></div><div class="field"><label>Revenue-at-risk alert threshold (£k)</label><input type="number" value="250" min="0"></div></div></div></div>`;
+    <div class="prefbox"><div class="pl">Configure your Chief of Staff — persona & routing guidance</div><textarea class="cospersona" id="cos-persona">${persona.replace(/</g,"&lt;")}</textarea><button class="retest" style="margin-top:8px" id="cos-save">Save persona ▸</button><span class="saved" id="cos-saved">✓ Saved</span></div>
+    <div class="prefbox"><div class="pl">What to flag to me</div><div class="field" style="margin-bottom:8px"><label>Escalate verdicts at or above</label><span class="toggle"><button class="on">Blocker</button><button>Any conflict</button><button>All</button></span></div><div class="field"><label>Revenue-at-risk alert threshold (£k)</label><input type="number" value="250" min="0"></div></div></div></div>`;
   document.getElementById("council").innerHTML=master+`<div class="cgrid">${ORDER.map(specCard).join("")}</div>`;
 }
 function showResult(id,stance,msg){const[cl,lb]=STANCE[stance]||["s-cond",stance];const el=document.getElementById(id);
-  el.innerHTML=`<span class="stance ${cl}">${lb}</span><div>${msg}</div><div style="color:var(--muted);margin-top:6px;font-size:11.5px">Same facts, your rules → the stance recomputes live. This is the config driving behaviour, not a script.</div>`;el.classList.add("show");}
+  el.innerHTML=`<span class="stance ${cl}">${lb}</span><div>${msg}</div><div style="color:var(--muted);margin-top:6px;font-size:11.5px">Saved to config — the next Decision-desk run reasons with this too.</div>`;el.classList.add("show");}
+function showSavedOnly(id,msg){const el=document.getElementById(id);
+  el.innerHTML=`<div>${msg}</div><div style="color:var(--muted);margin-top:6px;font-size:11.5px">Saved to config — the next Decision-desk run reasons with this too.</div>`;el.classList.add("show");}
+
+document.getElementById("council").addEventListener("input",e=>{
+  const ri=e.target.closest(".rin"); if(!ri) return;
+  const k=ri.dataset.agent, i=+ri.dataset.i;
+  CONFIGS[k]=CONFIGS[k]||{rules_summary:[]};
+  CONFIGS[k].rules_summary[i]=ri.value;
+});
 document.getElementById("council").addEventListener("click",async e=>{
-  const lic=e.target.closest("[data-lic]");if(lic){licState=lic.dataset.lic;lic.parentNode.querySelectorAll("button").forEach(b=>b.classList.toggle("on",b===lic));return;}
-  const pf=e.target.closest(".prefbox .toggle button");if(pf){pf.parentNode.querySelectorAll("button").forEach(b=>b.classList.toggle("on",b===pf));return;}
-  const rt=e.target.closest("[data-retest]");if(!rt)return;
-  rt.disabled=true;
+  const rx=e.target.closest(".rx");
+  if(rx){const k=rx.dataset.agent;CONFIGS[k].rules_summary.splice(+rx.dataset.i,1);renderRuleList(k);return;}
+
+  const ad=e.target.closest("[data-add]");
+  if(ad){const k=ad.dataset.add;CONFIGS[k]=CONFIGS[k]||{rules_summary:[]};CONFIGS[k].rules_summary.push("New rule — describe it in plain English");renderRuleList(k);
+    const ins=document.querySelectorAll("#rl-"+k+" .rin");if(ins.length){ins[ins.length-1].focus();ins[ins.length-1].select();}return;}
+
+  const lic=e.target.closest("[data-lic]");
+  if(lic){licState=lic.dataset.lic;lic.parentNode.querySelectorAll("button").forEach(b=>b.classList.toggle("on",b===lic));return;}
+
+  const pf=e.target.closest(".prefbox .toggle button");
+  if(pf){pf.parentNode.querySelectorAll("button").forEach(b=>b.classList.toggle("on",b===pf));return;}
+
+  const sv=e.target.closest("[data-save]");
+  if(sv){
+    const k=sv.dataset.save; sv.disabled=true;
+    try{
+      const res=await fetch(`/agents/${k}/config`,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify({rules_summary:CONFIGS[k].rules_summary})});
+      if(!res.ok){const err=await res.json();showSavedOnly(`res-${k}`,`⚠ ${err.detail||"Could not save"}`);return;}
+      CONFIGS[k]=await res.json();
+      showSavedOnly(`res-${k}`,`✓ ${AGENTS[k].nm}'s ${CONFIGS[k].rules_summary.length} rules saved.`);
+    } finally { sv.disabled=false; }
+    return;
+  }
+
+  const rt=e.target.closest("[data-retest]");
+  if(rt){
+    const k=rt.dataset.retest; rt.disabled=true;
+    try{
+      const configOverrides={rules_summary:(CONFIGS[k]&&CONFIGS[k].rules_summary)||[]};
+      if(k==="finance"){
+        configOverrides.margin_erosion_threshold_pts=+document.getElementById("cf-margin").value;
+        configOverrides.supplier_cost_increase_threshold_pct=+document.getElementById("cf-supplier").value;
+        configOverrides.early_forecast_threshold_pct=+document.getElementById("cf-forecast").value;
+      }
+      const putRes=await fetch(`/agents/${k}/config`,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(configOverrides)});
+      if(!putRes.ok){const err=await putRes.json();showResult(`res-${k}`,"conditional",`⚠ ${err.detail||"Could not save"}`);return;}
+      CONFIGS[k]=await putRes.json();
+
+      const retestBody={agent_id:k};
+      if(k==="operations")retestBody.fact_overrides={licence_provisioned_for_new_date:licState==="yes"};
+      const retestRes=await fetch("/council/retest",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(retestBody)});
+      const pos=await retestRes.json();
+      showResult(`res-${k}`,pos.stance,pos.reasoning||pos.detail);
+    } finally { rt.disabled=false; }
+    return;
+  }
+});
+document.getElementById("council").addEventListener("click",async e=>{
+  const b=e.target.closest("#cos-save"); if(!b) return;
+  b.disabled=true;
   try{
-    if(rt.dataset.retest==="finance"){
-      const body={agent_id:"finance",config_overrides:{
-        margin_erosion_threshold_pts:+document.getElementById("cf-margin").value,
-        supplier_cost_increase_threshold_pct:+document.getElementById("cf-supplier").value,
-        early_forecast_threshold_pct:+document.getElementById("cf-forecast").value,
-      }};
-      const res=await fetch("/council/retest",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
-      const pos=await res.json();
-      showResult("res-finance",pos.stance,pos.reasoning||pos.detail);
-    }
-    if(rt.dataset.retest==="operations"){
-      const body={agent_id:"operations",fact_overrides:{licence_provisioned_for_new_date:licState==="yes"}};
-      const res=await fetch("/council/retest",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
-      const pos=await res.json();
-      showResult("res-operations",pos.stance,pos.reasoning||pos.detail);
-    }
-  } finally { rt.disabled=false; }
+    const persona=document.getElementById("cos-persona").value;
+    const res=await fetch("/chief-of-staff/config",{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify({persona})});
+    const s=document.getElementById("cos-saved");
+    if(res.ok){ s.textContent="✓ Saved"; } else { const err=await res.json(); s.textContent="⚠ "+(err.detail||"Could not save"); }
+    s.classList.add("show");
+    setTimeout(()=>s.classList.remove("show"),2500);
+  } finally { b.disabled=false; }
 });
 
 // -------------------------------------------------------------- inspector --
@@ -642,34 +727,52 @@ function renderInspectFromTrace(){
 }
 
 // -------------------------------------------------------------- settings --
+const PROV_CODE={"OpenAI":"openai","Anthropic":"anthropic","OpenRouter (OSS gateway)":"openrouter","Local / self-hosted (OSS)":"oss"};
+const CODE_PROV=Object.fromEntries(Object.entries(PROV_CODE).map(([label,code])=>[code,label]));
+const PROV={
+  "OpenAI":{url:"https://api.openai.com/v1",model:"gpt-4o-mini",lock:true,key:true},
+  "Anthropic":{url:"https://api.anthropic.com/v1",model:"claude-sonnet-4",lock:true,key:true},
+  "OpenRouter (OSS gateway)":{url:"https://openrouter.ai/api/v1",model:"deepseek/deepseek-chat",lock:true,key:true},
+  "Local / self-hosted (OSS)":{url:"http://localhost:11434/v1",model:"llama3.2",lock:false,key:false}
+};
+function applyProv(){const p=PROV[document.getElementById("s-prov").value];if(!p)return;
+  const u=document.getElementById("s-url"),k=document.getElementById("s-key");
+  u.disabled=p.lock;u.title=p.lock?"Fixed by the provider — editable only for self-hosted":"";
+  if(p.lock) u.value=p.url;
+  k.placeholder=p.key?"sk-… (required)":"not needed for local";
+}
+document.getElementById("s-prov").addEventListener("change",applyProv);
+
 async function loadModelSettingsIntoForm(){
   try{
     const res=await fetch("/settings/model");
     const s=await res.json();
-    const provMap={openai:"OpenAI",anthropic:"Anthropic",oss:"Local / self-hosted (OSS)"};
-    const label=provMap[s.provider]||s.provider;
+    const label=CODE_PROV[s.provider]||"Local / self-hosted (OSS)";
     const sel=document.getElementById("s-prov");
     [...sel.options].forEach(o=>{if(o.textContent===label)sel.value=o.textContent;});
     document.getElementById("s-url").value=s.base_url||"";
     document.getElementById("s-model").value=s.model_name||"";
   }catch(_){}
+  applyProv();
 }
 document.getElementById("s-save").addEventListener("click",async()=>{
   const btn=document.getElementById("s-save"), s=document.getElementById("s-saved");
-  const provMap={"OpenAI":"openai","Anthropic":"anthropic","OpenRouter (OSS gateway)":"oss","Local / self-hosted (OSS)":"oss"};
   const body={
-    provider:provMap[document.getElementById("s-prov").value]||"oss",
+    provider:PROV_CODE[document.getElementById("s-prov").value]||"oss",
     base_url:document.getElementById("s-url").value||null,
-    model_name:document.getElementById("s-model").value,
+    model:document.getElementById("s-model").value,
   };
   const key=document.getElementById("s-key").value; if(key) body.api_key=key;
-  btn.disabled=true; const original=btn.textContent; btn.textContent="Testing…";
+  btn.disabled=true; const original=btn.textContent; btn.textContent="Saving…";
   try{
-    const res=await fetch("/settings/model",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
-    const result=await res.json();
+    const putRes=await fetch("/settings/model",{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
+    if(!putRes.ok){const err=await putRes.json();s.textContent="⚠ "+(err.detail||"Could not save");s.classList.add("show");return;}
+    btn.textContent="Testing…";
+    const testRes=await fetch("/settings/model/test",{method:"POST"});
+    const result=await testRes.json();
     s.textContent=result.connection_ok?"✓ Saved · connection OK":"⚠ Saved · "+result.message;
     s.classList.add("show");
-    setTimeout(()=>s.classList.remove("show"),4000);
+    setTimeout(()=>s.classList.remove("show"),4500);
   }catch(_){
     s.textContent="⚠ Could not reach the server"; s.classList.add("show");
   } finally { btn.disabled=false; btn.textContent=original; }
