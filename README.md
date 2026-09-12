@@ -10,6 +10,18 @@ Profiles & Orchestration](docs/01%20—%20Agent%20Profiles%20&%20Orchestration.m
 [Showcase & Distribution Plan](docs/02%20—%20Showcase%20&%20Distribution%20Plan.md), and the
 [P2 Agent Logic Spec](docs/P2-Agent-Logic-Spec.md).
 
+## Status: P3.6 — every agent's rules are genuinely editable, live
+
+On top of P3.5's live reasoning: open Council and add, edit, or remove a plain-English rule for
+**any** of the four agents (Finance/Delivery/PMO/Operations — all four now have working controls,
+not just two), or edit a numeric threshold — it persists to `agents/configs/*.json` via
+`PUT /agents/{id}/config` and the very next run reasons with it. The Chief of Staff's
+persona/routing-guidance is editable the same way (`/chief-of-staff/config`); its adjudication
+policy and guardrails are not — `_enforce_blocker_policy` checks the model's actual output
+regardless of what the persona asked for. Settings' provider dropdown is provider-aware:
+OpenAI/Anthropic/OpenRouter get their base URL resolved server-side (a client-supplied one is
+ignored) and require a key; local/self-hosted keeps your URL and needs none.
+
 ## Status: P3.5 — the council genuinely reasons, live, in the browser
 
 Type a free-text back-office dilemma into the Decision desk, hit Convene, and watch it happen for
