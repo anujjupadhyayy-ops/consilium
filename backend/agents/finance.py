@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any, ClassVar, Type
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from orchestrator.state import AgentPosition
 
@@ -13,17 +13,17 @@ class FinanceConfig(AgentConfig):
     trigger_keywords: list[str] = [
         "cost", "budget", "supplier", "margin", "3pp", "invoice", "price increase", "spend",
     ]
-    margin_erosion_threshold_pts: float = 5.0
-    supplier_cost_increase_threshold_pct: float = 7.0
+    margin_erosion_threshold_pts: float = Field(5.0, ge=0, le=100)
+    supplier_cost_increase_threshold_pct: float = Field(7.0, ge=0, le=200)
     # Hard breach = 100% (never-exceed line) + this generic overspend test.
-    generic_overspend_test_pct: float = 5.0
+    generic_overspend_test_pct: float = Field(5.0, ge=0, le=100)
     # Early-warning threshold, linearly interpolated between these two
     # illustrative anchor points from the spec (month 2 -> 80%, month 12 ->
     # 100%) -- both anchors, not just the interpolation, are editable.
-    early_forecast_month: int = 2
-    early_forecast_threshold_pct: float = 80.0
-    late_forecast_month: int = 12
-    late_forecast_threshold_pct: float = 100.0
+    early_forecast_month: int = Field(2, ge=1, le=12)
+    early_forecast_threshold_pct: float = Field(80.0, ge=0, le=100)
+    late_forecast_month: int = Field(12, ge=1, le=12)
+    late_forecast_threshold_pct: float = Field(100.0, ge=0, le=200)
     cost_of_delay_note: str = (
         "Cost-of-delay lens: weigh the margin/penalty exposure of proceeding "
         "against the revenue-at-risk exposure of not proceeding -- Delivery "

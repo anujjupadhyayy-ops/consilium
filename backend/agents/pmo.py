@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any, ClassVar, Literal, Type
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field, field_validator
 
 from orchestrator.state import AgentPosition
 
@@ -38,9 +38,17 @@ class PMOConfig(AgentConfig):
     }
     # A breach beyond tolerance * this multiple isn't a mere exception --
     # it needs a full re-baseline/rejection, not a change request.
-    hard_reject_multiple_of_tolerance: float = 2.0
+    hard_reject_multiple_of_tolerance: float = Field(2.0, ge=1.0, le=10.0)
     contract_variation_gate_name: str = "Change Control Gate 2 (contract variation)"
     tolerance_breach_gate_name: str = "Change Control Gate 1 (tolerance exception)"
+
+    @field_validator("tolerances_pct")
+    @classmethod
+    def _validate_tolerances(cls, values: dict[str, float]) -> dict[str, float]:
+        for dim, pct in values.items():
+            if not (0 <= pct <= 200):
+                raise ValueError(f"tolerances_pct[{dim}]={pct} out of range 0-200")
+        return values
 
 
 class PMOFacts(BaseModel):

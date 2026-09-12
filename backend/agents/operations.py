@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any, ClassVar, Type
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from orchestrator.state import AgentPosition
 
@@ -22,12 +22,12 @@ class OperationsConfig(AgentConfig):
     trigger_keywords: list[str] = [
         "capacity", "licence", "license", "sla", "kit", "resourcing", "operational", "supplier",
     ]
-    capacity_amber_threshold_pct: float = 90.0
-    capacity_red_threshold_pct: float = 100.0
-    spend_amber_threshold_pct: float = 95.0
-    spend_red_threshold_pct: float = 100.0
-    savings_amber_threshold_ratio: float = 0.9
-    savings_red_threshold_ratio: float = 0.7
+    capacity_amber_threshold_pct: float = Field(90.0, ge=0, le=200)
+    capacity_red_threshold_pct: float = Field(100.0, ge=0, le=200)
+    spend_amber_threshold_pct: float = Field(95.0, ge=0, le=200)
+    spend_red_threshold_pct: float = Field(100.0, ge=0, le=200)
+    savings_amber_threshold_ratio: float = Field(0.9, ge=0, le=2)
+    savings_red_threshold_ratio: float = Field(0.7, ge=0, le=2)
 
 
 class OperationsFacts(BaseModel):

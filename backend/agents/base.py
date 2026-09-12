@@ -4,10 +4,18 @@ import json
 from abc import ABC, abstractmethod
 from typing import Any, ClassVar, Type
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field, field_validator
 
 from orchestrator.state import AgentPosition, ConsiliumState
 from orchestrator.trace import make_trace_event, next_step
+
+# P3.6: plain-English rules are free-text and genuinely change an agent's
+# reasoning (they're injected into narrate()'s system prompt below) --
+# capped in count/length so Council editing can't be used to blow up the
+# prompt or smuggle in something absurd. Numeric limits are the hard
+# signals and stay enforced in code (each agent's own Config fields).
+MAX_RULES = 12
+MAX_RULE_LENGTH = 240
 
 
 class AgentConfig(BaseModel):
@@ -21,11 +29,20 @@ class AgentConfig(BaseModel):
     """
 
     lens: str
-    rules_summary: list[str]
+    rules_summary: list[str] = Field(max_length=MAX_RULES)
     user_overridable: bool = True
     # Keyword/phrase match against a (simulated) inbound trigger, e.g. an
     # email -- see api/app.py's /trigger/inbound-email.
     trigger_keywords: list[str] = []
+
+    @field_validator("rules_summary")
+    @classmethod
+    def _validate_rules(cls, rules: list[str]) -> list[str]:
+        cleaned = [r.strip() for r in rules if r.strip()]
+        for rule in cleaned:
+            if len(rule) > MAX_RULE_LENGTH:
+                raise ValueError(f"rule exceeds {MAX_RULE_LENGTH} characters: {rule[:40]}...")
+        return cleaned
 
 
 class NarrationResult(BaseModel):
