@@ -25,7 +25,7 @@ def main() -> None:
     print(f"\nScenario: {seed['scenario']}")
     print(f"Why this needs several functions: {seed['why_multi_function']}")
 
-    result = run_seed(seed["scenario"])
+    result = run_seed(seed["scenario"], seed["facts"])
 
     _header("ROUTING")
     print(f"Routed to: {', '.join(result['routed_agents'])}")
@@ -35,13 +35,17 @@ def main() -> None:
     for position in result["positions"]:
         print(f"\n[{position['agent'].upper()}] {position['recommendation']}  (stance: {position['stance']})")
         print(f"  Reasoning: {position['reasoning']}")
-        print(f"  Driving constraint: {position['driving_constraint']}")
+        print(f"  Lead figure: {position['lead_figure']}")
 
     _header("THE DISAGREEMENT")
     conflict = result["conflict"]
     print(conflict["summary"])
     for a, b in conflict["disagreeing_pairs"]:
         print(f"  - {a} vs {b}")
+    if conflict["blocker_notes"]:
+        print("Blockers:")
+        for note in conflict["blocker_notes"]:
+            print(f"  - {note}")
     if conflict["conditional_notes"]:
         print("Conditional constraints:")
         for note in conflict["conditional_notes"]:

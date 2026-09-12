@@ -27,19 +27,19 @@ def test_model_config_has_sane_defaults(monkeypatch):
     assert config.model_name
 
 
-def test_full_seed_run_never_touches_the_model_client(monkeypatch, seed_input):
-    """P1's stub agents are hard-coded -- confirm this is a verified
-    invariant, not just a convention, by making the model client raise if
-    anything on the seed's code path ever calls it."""
+def test_full_seed_run_never_touches_the_model_client(monkeypatch, seed_input, seed_facts):
+    """Config-driven agents are still deterministic rule evaluators in P2 --
+    confirm this is a verified invariant, not just a convention, by making
+    the model client raise if anything on the seed's code path calls it."""
     from orchestrator.graph import build_graph
     from orchestrator.state import initial_state
 
     def _boom(*args, **kwargs):
-        raise AssertionError("model.client.get_client was called during a P1 run")
+        raise AssertionError("model.client.get_client was called during a P2 run")
 
     monkeypatch.setattr("model.client.get_client", _boom)
 
     compiled = build_graph()
-    result = compiled.invoke(initial_state(seed_input), config={"recursion_limit": 10})
+    result = compiled.invoke(initial_state(seed_input, seed_facts), config={"recursion_limit": 10})
 
     assert result["reconciliation"] is not None
