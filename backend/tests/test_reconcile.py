@@ -1,5 +1,5 @@
 from agents.registry import load_agents_from_manifest
-from orchestrator.master import build_reconciliation, detect_conflict
+from orchestrator.chief_of_staff import build_reconciliation, detect_conflict
 
 
 def _positions(seed_facts: dict):

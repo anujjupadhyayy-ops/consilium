@@ -5,7 +5,7 @@ from typing import Annotated, Literal, Optional, TypedDict
 
 # "blocker" added in P2: a hard, agent-agnostic operational/structural
 # constraint that the reconcile engine treats as decisive regardless of
-# any cost/schedule trade-off (see orchestrator/master.py).
+# any cost/schedule trade-off (see orchestrator/chief_of_staff.py).
 Stance = Literal["yes", "no", "conditional", "blocker"]
 
 
@@ -45,6 +45,10 @@ class ConsiliumState(TypedDict):
     # as the human-readable scenario text for display; agents never parse it.
     facts: dict
     routed_agents: list[str]
+    # agent_id -> the Chief of Staff's stated reason for NOT engaging them
+    # (P3.5: real LLM routing, selective by design -- see docs/00's
+    # "Selective routing" rule).
+    skipped_agents: dict
     routing_reasoning: str
     positions: Annotated[list[AgentPosition], operator.add]
     conflict: Optional[Conflict]
@@ -58,6 +62,7 @@ def initial_state(seed_input: str, facts: Optional[dict] = None) -> ConsiliumSta
         input=seed_input,
         facts=facts or {},
         routed_agents=[],
+        skipped_agents={},
         routing_reasoning="",
         positions=[],
         conflict=None,

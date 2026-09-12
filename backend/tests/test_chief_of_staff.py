@@ -1,0 +1,143 @@
+from orchestrator.chief_of_staff import ReconciliationDraft, RoutingDecision, _enforce_blocker_policy
+from orchestrator.graph import build_graph
+from orchestrator.state import initial_state
+
+
+def test_router_selects_a_genuine_subset(monkeypatch, seed_input, seed_facts):
+    """A mocked "smart" router engages only finance+delivery -- the graph
+    must run exactly those two, not fall back to "engage everyone". The
+    two engaged agents' own narration calls are left to fall back
+    deterministically so only routing is under test here."""
+    from model.llm import LLMUnavailableError
+
+    def fake_call_structured(system, user, response_model, config=None, temperature=0.2):
+        if response_model is RoutingDecision:
+            return RoutingDecision(
+                rationale="Only a cost/schedule question -- no governance or capacity angle here.",
+                engaged={"finance": "Cost impact", "delivery": "Schedule impact"},
+                skipped={"pmo": "No governance angle", "operations": "No capacity angle"},
+            )
+        raise LLMUnavailableError("mocked: only routing is under test here")
+
+    monkeypatch.setattr("model.llm.call_structured", fake_call_structured)
+
+    compiled = build_graph()
+    result = compiled.invoke(initial_state(seed_input, seed_facts), config={"recursion_limit": 10})
+
+    assert set(result["routed_agents"]) == {"finance", "delivery"}
+    assert set(result["skipped_agents"]) == {"pmo", "operations"}
+    assert {p["agent"] for p in result["positions"]} == {"finance", "delivery"}
+
+
+def test_router_falls_back_to_engaging_everyone_when_model_unusable(seed_input, seed_facts):
+    """The default autouse mock raises LLMUnavailableError for every call --
+    confirms the graceful-degradation path, not a crash."""
+    compiled = build_graph()
+
+    result = compiled.invoke(initial_state(seed_input, seed_facts), config={"recursion_limit": 10})
+
+    assert set(result["routed_agents"]) == {"finance", "delivery", "pmo", "operations"}
+    assert result["skipped_agents"] == {}
+
+
+def test_narration_cannot_override_the_computed_stance(monkeypatch, seed_facts):
+    """A misbehaving/adversarial narration response that includes a stance
+    field must be silently ignored -- NarrationResult has no such field."""
+    from agents.finance import FinanceAgent, FinanceConfig
+    from orchestrator.state import initial_state as _initial_state
+
+    def fake_call_structured(system, user, response_model, config=None, temperature=0.2):
+        # Simulates a model that "helpfully" tries to flip the stance --
+        # extra keys a pydantic model doesn't declare are dropped, not errors.
+        return response_model.model_validate(
+            {"reasoning": "Actually this looks fine to me.", "lead_figure": "All clear", "stance": "yes"}
+        )
+
+    monkeypatch.setattr("model.llm.call_structured", fake_call_structured)
+
+    agent = FinanceAgent(agent_id="finance", config=FinanceConfig(lens="test", rules_summary=[]))
+    state = _initial_state("scenario", {"finance": seed_facts["finance"]})
+
+    update = agent.run(state)
+
+    position = update["positions"][0]
+    assert position["stance"] == "no"  # unchanged: the seed's 15% supplier-cost breach
+    assert position["reasoning"] == "Actually this looks fine to me."  # narration DID take effect on prose
+
+
+def test_blocker_policy_enforced_even_when_model_recommends_proceeding():
+    """Direct unit test of the safety net: an LLM reconciliation that
+    doesn't decline in the presence of a blocker gets overridden."""
+    blockers = [
+        {
+            "agent": "operations",
+            "stance": "blocker",
+            "recommendation": "Blocked",
+            "reasoning": "Licence not provisioned.",
+            "driving_constraint": "Licence not provisioned for the new date",
+            "lead_figure": "Licence gap",
+        }
+    ]
+    noncompliant = {
+        "recommendation": "Proceed with the accelerated timeline -- the upside is worth it.",
+        "why": "Delivery's revenue protection outweighs the concerns.",
+        "trade_off": "Speed vs cost.",
+        "assumptions": ["x"],
+        "not_considered": ["y"],
+    }
+
+    enforced = _enforce_blocker_policy(noncompliant, blockers)
+
+    assert "decline" in enforced["recommendation"].lower()
+    assert "operations" in enforced["recommendation"]
+
+
+def test_blocker_policy_leaves_a_compliant_recommendation_untouched():
+    blockers = [
+        {
+            "agent": "operations",
+            "stance": "blocker",
+            "recommendation": "Blocked",
+            "reasoning": "Licence not provisioned.",
+            "driving_constraint": "Licence not provisioned for the new date",
+            "lead_figure": "Licence gap",
+        }
+    ]
+    compliant = {
+        "recommendation": "Decline as scoped until the licence is sorted.",
+        "why": "Blocker.",
+        "trade_off": "n/a",
+        "assumptions": ["x"],
+        "not_considered": ["y"],
+    }
+
+    enforced = _enforce_blocker_policy(compliant, blockers)
+
+    assert enforced["recommendation"] == compliant["recommendation"]
+
+
+def test_reconcile_via_mocked_llm_still_enforced_end_to_end(monkeypatch, seed_input, seed_facts):
+    """Full graph run: a mocked reconcile model tries to recommend
+    proceeding despite the seed's Operations blocker -- the final
+    reconciliation must still decline. Routing and narration are left to
+    fall back deterministically (LLMUnavailableError) so only the
+    reconcile step's behaviour is under test here."""
+    from model.llm import LLMUnavailableError
+
+    def fake_call_structured(system, user, response_model, config=None, temperature=0.2):
+        if response_model is ReconciliationDraft:
+            return ReconciliationDraft(
+                recommendation="Proceed -- the numbers work out in our favour.",
+                why="Ignoring the blocker for this test.",
+                trade_off="Cost vs schedule.",
+                assumptions=["illustrative"],
+                not_considered=["alternatives"],
+            )
+        raise LLMUnavailableError("mocked: only reconcile is under test here")
+
+    monkeypatch.setattr("model.llm.call_structured", fake_call_structured)
+
+    compiled = build_graph()
+    result = compiled.invoke(initial_state(seed_input, seed_facts), config={"recursion_limit": 10})
+
+    assert "decline" in result["reconciliation"]["recommendation"].lower()

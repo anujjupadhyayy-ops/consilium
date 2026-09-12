@@ -1,44 +1,121 @@
 from __future__ import annotations
 
-from agents.registry import list_enabled_agent_ids
+from pydantic import BaseModel
 
 from .state import AgentPosition, Conflict, ConsiliumState, Reconciliation
 from .termination import assert_bounded
 from .trace import make_trace_event, next_step
 
-# P2's routing is still deterministic: route to every currently-enabled
-# agent in the manifest. Real selective/LLM-driven routing (the master
-# saying "operations isn't needed here") is P4 scope -- swap this
-# function's body then; route_node's trace/state contract stays the same.
-ROUTING_REASONING = (
-    "Supplier milestone variations touch cost, schedule, governance, and "
-    "operational capacity -- all currently-enabled agents are relevant here."
-)
-
 OPERATIONAL_BLOCKER_POLICY = (
     "Consilium's reconciliation policy treats a 'blocker' stance from any "
     "agent as decisive, independent of the cost/schedule trade-off: a plan "
     "that can't be executed is moot regardless of who wins that argument. "
-    "This is a disclosed policy, not a hidden judgement call."
+    "This is a disclosed, system-governed policy -- not something the "
+    "Chief of Staff's own deliberation can override."
+)
+
+# Cheap, disclosed keyword check used to enforce OPERATIONAL_BLOCKER_POLICY
+# on the LLM's own recommendation text -- not an attempt at real NLU
+# compliance-checking, just a defense-in-depth guardrail so the policy
+# holds even if the model doesn't fully comply with its instructions.
+_DECLINE_MARKERS = (
+    "decline", "do not proceed", "don't proceed", "not proceed", "cannot proceed",
+    "can't proceed", "hold", "pause", "blocked", "resolve the blocker",
 )
 
 
+class RoutingDecision(BaseModel):
+    rationale: str
+    engaged: dict[str, str] = {}
+    skipped: dict[str, str] = {}
+    facts: dict[str, dict] = {}
+
+
+class ReconciliationDraft(BaseModel):
+    recommendation: str
+    why: str
+    trade_off: str
+    assumptions: list[str] = []
+    not_considered: list[str] = []
+
+
 def route_node(state: ConsiliumState) -> dict:
-    routed_agents = list_enabled_agent_ids()
+    from agents.registry import load_agents_from_manifest
+
+    agents = load_agents_from_manifest()
     step = next_step(state)
+
+    try:
+        decision = _llm_route(state["input"], agents)
+        engaged = {aid: reason for aid, reason in decision.engaged.items() if aid in {a.id for a in agents}}
+        if not engaged:
+            raise LLMRoutingEmptyError("model engaged no known agents")
+        skipped = decision.skipped
+        rationale = decision.rationale
+        extracted_facts = decision.facts
+    except (LLMUnavailableForRouting, LLMRoutingEmptyError):
+        engaged = {a.id: "Engaged by default (fallback routing -- model unavailable or unusable)" for a in agents}
+        skipped = {}
+        rationale = (
+            "The routing model was unavailable or returned nothing usable, so every "
+            "configured agent was engaged by default rather than guessing who to skip."
+        )
+        extracted_facts = {}
+
+    # Pre-supplied facts (a seed, a test) always win over LLM extraction --
+    # extraction only fills gaps for agents nothing already told us about.
+    merged_facts = {**extracted_facts, **state["facts"]}
+
     event = make_trace_event(
         step=step,
         kind="route",
         agent=None,
-        summary=f"Routed to: {', '.join(routed_agents)}",
-        payload={"routed_agents": routed_agents, "reasoning": ROUTING_REASONING},
+        summary=f"Engaged: {', '.join(engaged) or '(none)'}",
+        payload={"engaged": engaged, "skipped": skipped, "rationale": rationale},
     )
     return {
-        "routed_agents": routed_agents,
-        "routing_reasoning": ROUTING_REASONING,
+        "routed_agents": list(engaged.keys()),
+        "skipped_agents": skipped,
+        "routing_reasoning": rationale,
+        "facts": merged_facts,
         "trace": [event],
         "step_count": state["step_count"] + 1,
     }
+
+
+class LLMUnavailableForRouting(RuntimeError):
+    pass
+
+
+class LLMRoutingEmptyError(RuntimeError):
+    pass
+
+
+def _llm_route(input_text: str, agents: list) -> RoutingDecision:
+    from model.llm import LLMUnavailableError, call_structured
+
+    roster = "\n".join(
+        f'- "{a.id}": lens={a.config.lens!r}; rules={a.config.rules_summary}; '
+        f"facts_schema={a.facts_model.model_json_schema().get('properties', {})}"
+        for a in agents
+    )
+    system = (
+        "You are the Chief of Staff of a back-office decision council. Given a free-text "
+        "decision scenario, decide which specialist agents are relevant and which should be "
+        "explicitly skipped, with a one-line reason each -- selective routing is itself a "
+        "sign of judgement; do not engage an agent that has nothing to add. For every ENGAGED "
+        "agent, extract the numeric/boolean facts their evaluation needs from the scenario, in "
+        "the shape of their facts_schema. If a specific figure isn't stated, make a clearly "
+        "reasonable illustrative estimate consistent with the scenario rather than leaving it "
+        "out.\n\nAvailable agents:\n" + roster + "\n\n"
+        'Respond with ONLY a JSON object: {"rationale": str, "engaged": {agent_id: reason}, '
+        '"skipped": {agent_id: reason}, "facts": {agent_id: {...fields matching that agent\'s '
+        "facts_schema...}}}."
+    )
+    try:
+        return call_structured(system, f"Scenario: {input_text}", RoutingDecision)
+    except LLMUnavailableError as exc:
+        raise LLMUnavailableForRouting(str(exc)) from exc
 
 
 def detect_conflict(positions: list[AgentPosition]) -> Conflict:
@@ -69,6 +146,9 @@ def detect_conflict(positions: list[AgentPosition]) -> Conflict:
 
 
 def build_reconciliation(positions: list[AgentPosition]) -> Reconciliation:
+    """Deterministic fallback (P2 logic) -- used when the reconcile model
+    is unavailable. Rule-based over structured data, not a template: it
+    still names the real trade-off and applies the blocker policy."""
     blockers = [p for p in positions if p["stance"] == "blocker"]
     yes_side = next((p for p in positions if p["stance"] == "yes"), None)
     no_side = next((p for p in positions if p["stance"] == "no"), None)
@@ -89,9 +169,6 @@ def build_reconciliation(positions: list[AgentPosition]) -> Reconciliation:
             "then re-run this decision via the appropriate governance gate."
         )
         why = f"{blocker_detail} raise a hard blocker that makes any cost/schedule trade-off moot until resolved. {OPERATIONAL_BLOCKER_POLICY}"
-    elif yes_side and no_side:
-        recommendation = f"Hold -- {no_side['agent']}'s objection stands"
-        why = no_side["reasoning"]
     elif no_side:
         recommendation = f"Hold -- {no_side['agent']}'s objection stands"
         why = no_side["reasoning"]
@@ -108,9 +185,8 @@ def build_reconciliation(positions: list[AgentPosition]) -> Reconciliation:
         why=why,
         trade_off=trade_off,
         assumptions=[
-            "Facts for this scenario are illustrative example inputs feeding real agent "
-            "logic, not live 3PP/EVM/PRINCE2 system data -- a fork wires these to real "
-            "data sources.",
+            "Facts for this scenario are illustrative estimates feeding real agent logic, "
+            "not live 3PP/EVM/PRINCE2 system data -- a fork wires these to real data sources.",
         ],
         not_considered=[
             "Alternative suppliers",
@@ -119,12 +195,88 @@ def build_reconciliation(positions: list[AgentPosition]) -> Reconciliation:
     )
 
 
+def _llm_reconcile(input_text: str, positions: list[AgentPosition], conflict: Conflict, blockers: list[AgentPosition]) -> Reconciliation:
+    from model.llm import LLMUnavailableError, call_structured
+
+    positions_desc = "\n".join(
+        f"- {p['agent']} ({p['stance']}): {p['reasoning']} [driving constraint: {p['driving_constraint']}]"
+        for p in positions
+    )
+    policy_clause = (
+        "A HARD BLOCKER has been raised. Non-negotiable policy: your recommendation MUST NOT "
+        "propose proceeding as currently scoped -- say so explicitly (e.g. 'decline'/'do not "
+        "proceed'/'hold') and explain that the blocker makes any cost/schedule trade-off moot "
+        "until it's resolved. "
+        if blockers
+        else ""
+    )
+    system = (
+        "You are the Chief of Staff adjudicating a back-office decision council. Weigh the "
+        "specialists' positions and produce ONE defensible recommendation. Name the real "
+        "trade-off using the agents' actual driving constraints -- never write in generalities. "
+        "Always state what was assumed and what was not considered. " + policy_clause +
+        'Respond with ONLY a JSON object: {"recommendation": str, "why": str, "trade_off": str, '
+        '"assumptions": [str], "not_considered": [str]}.'
+    )
+    user = f"Scenario: {input_text}\n\nPositions:\n{positions_desc}\n\nDetected conflict: {conflict['summary']}"
+
+    try:
+        draft = call_structured(system, user, ReconciliationDraft)
+    except LLMUnavailableError as exc:
+        raise LLMUnavailableForReconcile(str(exc)) from exc
+
+    return Reconciliation(
+        recommendation=draft.recommendation,
+        why=draft.why,
+        trade_off=draft.trade_off,
+        assumptions=draft.assumptions or ["Illustrative facts, not live system data."],
+        not_considered=draft.not_considered or ["Alternatives outside the scenario as given."],
+    )
+
+
+class LLMUnavailableForReconcile(RuntimeError):
+    pass
+
+
+def _enforce_blocker_policy(reconciliation: Reconciliation, blockers: list[AgentPosition]) -> Reconciliation:
+    if not blockers:
+        return reconciliation
+    text = reconciliation["recommendation"].lower()
+    if any(marker in text for marker in _DECLINE_MARKERS):
+        return reconciliation
+    blocker_detail = "; ".join(f"{p['agent']} ({p['driving_constraint']})" for p in blockers)
+    forced = (
+        f"Decline as currently scoped -- {blocker_detail}. Resolve the blocker(s), "
+        "then re-run this decision via the appropriate governance gate."
+    )
+    return Reconciliation(
+        recommendation=forced,
+        why=f"{reconciliation['why']} {OPERATIONAL_BLOCKER_POLICY}",
+        trade_off=reconciliation["trade_off"],
+        assumptions=reconciliation["assumptions"],
+        not_considered=reconciliation["not_considered"],
+    )
+
+
 def reconcile_node(state: ConsiliumState) -> dict:
     assert_bounded(state)
 
     step = next_step(state)
-    conflict = detect_conflict(state["positions"])
-    reconciliation = build_reconciliation(state["positions"])
+    positions = state["positions"]
+    conflict = detect_conflict(positions)
+    blockers = [p for p in positions if p["stance"] == "blocker"]
+
+    try:
+        reconciliation = _llm_reconcile(state["input"], positions, conflict, blockers)
+        if len(reconciliation["recommendation"].strip()) < 15:
+            # A one-word "yes"/"no" isn't a defensible recommendation --
+            # some small local models under-follow the prompt; fall back
+            # rather than ship an unusably thin verdict.
+            reconciliation = build_reconciliation(positions)
+    except LLMUnavailableForReconcile:
+        reconciliation = build_reconciliation(positions)
+
+    reconciliation = _enforce_blocker_policy(reconciliation, blockers)
 
     conflict_event = make_trace_event(step, "conflict", None, conflict["summary"], dict(conflict))
     reconciliation_event = make_trace_event(
