@@ -3,6 +3,9 @@
 *.key
 backend/model/runtime_settings.json
 
+# Audit ledger -- holds inbound trigger content; a fork starts with an empty chain
+backend/trigger_audit.jsonl
+
 # Python
 __pycache__/
 *.pyc
