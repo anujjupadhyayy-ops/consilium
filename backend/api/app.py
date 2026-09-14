@@ -4,14 +4,17 @@ lives in this file."""
 from __future__ import annotations
 
 import json
+import os
 import time
 from pathlib import Path
 from typing import Any, Iterator, Optional
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, Header, HTTPException
 from fastapi.responses import StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
+
+from audit import ledger
 
 from agents.registry import get_agent, get_agent_config_raw, load_agents_from_manifest, save_agent_config, UnknownAgentError
 from orchestrator.graph import build_graph
@@ -198,6 +201,9 @@ HOSTED_PROVIDER_BASE_URLS = {
     "openai": "https://api.openai.com/v1",
     "anthropic": "https://api.anthropic.com/v1",
     "openrouter": "https://openrouter.ai/api/v1",
+    "groq": "https://api.groq.com/openai/v1",
+    "together": "https://api.together.xyz/v1",
+    "gemini": "https://generativelanguage.googleapis.com/v1beta/openai",
 }
 
 
@@ -256,6 +262,52 @@ def test_model_settings() -> dict:
 
 # ---------------------------------------------------------------- trigger --
 
+def _match_agents(text: str) -> dict[str, list[str]]:
+    """Which agents each config's own trigger_keywords convene for this
+    inbound text -- the same mechanism a real inbox/webhook connector feeds."""
+    lowered = text.lower()
+    matched: dict[str, list[str]] = {}
+    for agent in load_agents_from_manifest():
+        hits = [kw for kw in agent.config.trigger_keywords if kw.lower() in lowered]
+        if hits:
+            matched[agent.id] = hits
+    return matched
+
+
+def _convene_and_record(*, source: str, actor: str, subject: str, body: str, auth_ok: bool) -> dict:
+    """The one path every trigger goes through. Matches keywords, then writes
+    the event to the tamper-evident audit ledger BEFORE returning -- so a
+    rejected (auth_ok=False) attempt is recorded too. Recommend-only: this
+    convenes/flags the relevant specialists, it never auto-executes a run or
+    touches a real system."""
+    matched = _match_agents(f"{subject} {body}") if auth_ok else {}
+    entry = ledger.record({
+        "kind": "trigger",
+        "source": source,
+        "actor": actor,
+        "subject": subject,
+        "body": body,
+        "auth_ok": auth_ok,
+        "matched": matched,
+        "convened": list(matched.keys()),
+        "run_text": body,
+        "recommend_only": True,
+    })
+    return {
+        "event_id": entry["seq"],
+        "entry_hash": entry["entry_hash"],
+        "recorded_at": entry["ts"],
+        "auth_ok": auth_ok,
+        "source": source,
+        "actor": actor,
+        "subject": subject,
+        "body": body,
+        "matched": matched,
+        "convened": list(matched.keys()),
+        "run_text": body,
+    }
+
+
 class InboundEmailRequest(BaseModel):
     from_: str = "Rahul Mehta · Delivery Partners Ltd (3PP supplier)"
     subject: str = "Re: proposal -- accelerate Milestone 4 by 3 weeks"
@@ -267,25 +319,67 @@ class InboundEmailRequest(BaseModel):
 
 @app.post("/trigger/inbound-email")
 def trigger_inbound_email(req: InboundEmailRequest) -> dict:
-    """Roadmap: real inbox = OAuth read-only (see Settings). This is the
-    simulated version -- matches trigger_keywords from each agent's own
-    config against the (simulated) email, same mechanism a real inbox
-    connector would use."""
-    text = f"{req.subject} {req.body}".lower()
-    matched: dict[str, list[str]] = {}
-    for agent in load_agents_from_manifest():
-        hits = [kw for kw in agent.config.trigger_keywords if kw.lower() in text]
-        if hits:
-            matched[agent.id] = hits
+    """Simulated-inbox demo trigger (real inbox = OAuth, roadmap -- see
+    Settings). Kept for the Dashboard's built-in demo; delegates to the same
+    audited core as the webhook, so it too lands in the ledger."""
+    return _convene_and_record(
+        source="inbound-email (simulated)", actor=req.from_,
+        subject=req.subject, body=req.body, auth_ok=True,
+    )
 
+
+class WebhookRequest(BaseModel):
+    """A real, credential-free inbound. Point a mail-forwarding rule, an
+    Apps Script, Zapier/Make, or `curl` at this endpoint -- the sender's own
+    tool owns the auth, so Consilium never stores anyone's mailbox
+    credentials (a cleaner posture than OAuth for a recommend-only demo)."""
+    source: str = "webhook"
+    actor: str = ""
+    subject: str = ""
+    body: str
+
+
+@app.post("/trigger/webhook")
+def trigger_webhook(
+    req: WebhookRequest,
+    x_consilium_token: Optional[str] = Header(default=None),
+) -> dict:
+    """Optional shared-secret gate: set CONSILIUM_WEBHOOK_TOKEN and callers
+    must send it as the X-Consilium-Token header. Every call is recorded to
+    the audit chain first -- including a rejected one -- then an unauthorised
+    call gets a 401. With no token configured the endpoint is open (fine for
+    a local demo)."""
+    expected = os.environ.get("CONSILIUM_WEBHOOK_TOKEN")
+    auth_ok = expected is None or x_consilium_token == expected
+
+    result = _convene_and_record(
+        source=req.source or "webhook", actor=req.actor,
+        subject=req.subject, body=req.body, auth_ok=auth_ok,
+    )
+    if not auth_ok:
+        raise HTTPException(
+            status_code=401,
+            detail=f"Invalid or missing X-Consilium-Token (rejected attempt logged as event #{result['event_id']}).",
+        )
+    return result
+
+
+@app.get("/trigger/audit")
+def get_trigger_audit(limit: int = 100, before_seq: Optional[int] = None) -> dict:
+    """The audit surface: newest-first trigger events plus the chain's
+    verification status, so the log can be read and independently checked in
+    one call."""
     return {
-        "from": req.from_,
-        "subject": req.subject,
-        "body": req.body,
-        "matched": matched,
-        "convened": list(matched.keys()),
-        "run_text": req.body,
+        "chain": ledger.verify_chain(),
+        "entries": ledger.read_entries(limit=limit, before_seq=before_seq),
     }
+
+
+@app.get("/trigger/audit/verify")
+def verify_trigger_audit() -> dict:
+    """Recompute the whole chain and report whether it's intact -- the
+    tamper-evidence check on its own."""
+    return ledger.verify_chain()
 
 
 # Mounted last so it never shadows the API routes above -- serves
