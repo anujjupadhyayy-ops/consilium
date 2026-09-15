@@ -14,15 +14,6 @@ OPERATIONAL_BLOCKER_POLICY = (
     "Chief of Staff's own deliberation can override."
 )
 
-# Cheap, disclosed keyword check used to enforce OPERATIONAL_BLOCKER_POLICY
-# on the LLM's own recommendation text -- not an attempt at real NLU
-# compliance-checking, just a defense-in-depth guardrail so the policy
-# holds even if the model doesn't fully comply with its instructions.
-_DECLINE_MARKERS = (
-    "decline", "do not proceed", "don't proceed", "not proceed", "cannot proceed",
-    "can't proceed", "hold", "pause", "blocked", "resolve the blocker",
-)
-
 
 def _persona() -> str:
     """User-editable framing (P3.6 Settings/Council) -- tone and priority
@@ -255,10 +246,16 @@ class LLMUnavailableForReconcile(RuntimeError):
 
 
 def _enforce_blocker_policy(reconciliation: Reconciliation, blockers: list[AgentPosition]) -> Reconciliation:
+    """Under a hard blocker the verdict line is code-authoritative.
+
+    We deliberately do NOT inspect the model's recommendation text to decide
+    whether it "complied": any keyword check is defeatable by negation (e.g.
+    "do not hold back; approve" contains the decline word "hold" yet ships a
+    proceed). So when a blocker is present the decisive recommendation is
+    always authored here by policy; the model's contribution is confined to
+    the explanatory why/trade_off. This makes OPERATIONAL_BLOCKER_POLICY an
+    enforced invariant rather than a prompted request."""
     if not blockers:
-        return reconciliation
-    text = reconciliation["recommendation"].lower()
-    if any(marker in text for marker in _DECLINE_MARKERS):
         return reconciliation
     blocker_detail = "; ".join(f"{p['agent']} ({p['driving_constraint']})" for p in blockers)
     forced = (

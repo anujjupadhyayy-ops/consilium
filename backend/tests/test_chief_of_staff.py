@@ -92,8 +92,8 @@ def test_blocker_policy_enforced_even_when_model_recommends_proceeding():
     assert "operations" in enforced["recommendation"]
 
 
-def test_blocker_policy_leaves_a_compliant_recommendation_untouched():
-    blockers = [
+def _operations_blocker():
+    return [
         {
             "agent": "operations",
             "stance": "blocker",
@@ -103,17 +103,49 @@ def test_blocker_policy_leaves_a_compliant_recommendation_untouched():
             "lead_figure": "Licence gap",
         }
     ]
+
+
+def test_blocker_policy_normalizes_even_a_compliant_recommendation():
+    """The verdict is code-authoritative under a blocker: even a model line
+    that already declines is replaced by the system-authored verdict, so the
+    decisive text never depends on classifying the model's prose. The model's
+    why/trade_off are preserved for provenance."""
+    blockers = _operations_blocker()
     compliant = {
         "recommendation": "Decline as scoped until the licence is sorted.",
-        "why": "Blocker.",
-        "trade_off": "n/a",
+        "why": "The licence gap is decisive.",
+        "trade_off": "Speed vs governance.",
         "assumptions": ["x"],
         "not_considered": ["y"],
     }
 
     enforced = _enforce_blocker_policy(compliant, blockers)
 
-    assert enforced["recommendation"] == compliant["recommendation"]
+    assert "decline" in enforced["recommendation"].lower()
+    assert "operations" in enforced["recommendation"]
+    assert enforced["trade_off"] == compliant["trade_off"]
+    assert compliant["why"] in enforced["why"]
+
+
+def test_blocker_policy_survives_negation_bypass():
+    """Regression for the negation bypass: a recommendation that embeds a
+    decline word inside a negation ("do not hold back") must NOT slip a
+    proceed past the blocker. The old keyword check matched the substring
+    "hold" and waved this through; the code-authoritative verdict does not."""
+    blockers = _operations_blocker()
+    negation_attack = {
+        "recommendation": "Proceed now and do not hold back -- approve the accelerated timeline.",
+        "why": "The upside is worth it.",
+        "trade_off": "Speed vs cost.",
+        "assumptions": ["x"],
+        "not_considered": ["y"],
+    }
+
+    enforced = _enforce_blocker_policy(negation_attack, blockers)
+
+    assert "decline" in enforced["recommendation"].lower()
+    assert "operations" in enforced["recommendation"]
+    assert "proceed now" not in enforced["recommendation"].lower()
 
 
 def test_reconcile_via_mocked_llm_still_enforced_end_to_end(monkeypatch, seed_input, seed_facts):
