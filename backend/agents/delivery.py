@@ -122,6 +122,60 @@ class DeliveryAgent(ConfigurableAgent):
             backing=backing,
         )
 
+    # ---------------------------------------------------- P3.6 rules path --
+
+    def derive(self, raw_facts: dict[str, Any]) -> dict[str, Any]:
+        """rag_{before,after}_severity are cheap ordinal versions of the two
+        RAG facts, always available once both are stated -- used by every
+        rule's `when` for the "did it improve" comparison (the evaluator
+        has no ordinal-string comparison, only numeric/boolean/==/!=).
+
+        crar_before/after/reduction/direction/abs_reduction need ALL SIX
+        of is_resourced, is_on_critical_path, is_revenue_tagged,
+        revenue_value, reported_rag_before, reported_rag_after -- exactly
+        the fields evaluate() read to compute the same formula -- and are
+        omitted entirely (not partially computed) if any one is missing.
+        """
+        derived: dict[str, Any] = {}
+        before, after = raw_facts.get("reported_rag_before"), raw_facts.get("reported_rag_after")
+        if before is not None and after is not None:
+            derived["rag_before_severity"] = _SEVERITY[before]
+            derived["rag_after_severity"] = _SEVERITY[after]
+
+        is_resourced = raw_facts.get("is_resourced")
+        is_on_critical_path = raw_facts.get("is_on_critical_path")
+        is_revenue_tagged = raw_facts.get("is_revenue_tagged")
+        revenue_value = raw_facts.get("revenue_value")
+        needed = (before, after, is_resourced, is_on_critical_path, is_revenue_tagged, revenue_value)
+        if any(v is None for v in needed):
+            return derived
+
+        cfg: DeliveryConfig = self.config
+        floor_severity = _SEVERITY[cfg.unresourced_floor_rag]
+        effective_before = _SEVERITY[before] if is_resourced else max(_SEVERITY[before], floor_severity)
+        effective_after = _SEVERITY[after] if is_resourced else max(_SEVERITY[after], floor_severity)
+
+        def crar(effective_severity: int) -> float:
+            at_risk = revenue_value if (is_revenue_tagged and effective_severity >= _SEVERITY["amber"]) else 0.0
+            return at_risk if is_on_critical_path else 0.0
+
+        crar_before, crar_after = crar(effective_before), crar(effective_after)
+        reduction = crar_before - crar_after
+        derived.update({
+            "crar_before": crar_before,
+            "crar_after": crar_after,
+            "crar_reduction": reduction,
+            "crar_abs_reduction": abs(reduction),
+            "crar_direction": "reduced" if reduction > 0 else ("increased" if reduction < 0 else "unchanged"),
+        })
+        return derived
+
+    def derived_field_names(self) -> set[str]:
+        return {
+            "rag_before_severity", "rag_after_severity", "crar_before", "crar_after",
+            "crar_reduction", "crar_abs_reduction", "crar_direction",
+        }
+
     def _effective_rag(self, reported: RAG, is_resourced: bool) -> RAG:
         if is_resourced:
             return reported
