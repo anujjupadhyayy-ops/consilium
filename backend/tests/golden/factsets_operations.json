@@ -265,1345 +265,14 @@
   },
   {
     "facts": {
-      "capacity_utilisation_pct_if_accepted": 27.88,
-      "third_party_spend_pct_of_budget": 32.57,
-      "savings_delivery_ratio": 0.571,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": true
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Savings delivery (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 148.81,
-      "third_party_spend_pct_of_budget": 15.86,
-      "savings_delivery_ratio": 0.913,
-      "licence_provisioned_for_new_date": false,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Capacity, Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 18.56,
-      "third_party_spend_pct_of_budget": 88.95,
-      "savings_delivery_ratio": 0.267,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Savings delivery, Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 28.51,
-      "third_party_spend_pct_of_budget": 101.53,
-      "savings_delivery_ratio": 0.77,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Third-party spend, Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 131.26,
-      "third_party_spend_pct_of_budget": 50.98,
-      "savings_delivery_ratio": 1.297,
-      "licence_provisioned_for_new_date": false,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Capacity, Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 30.23,
-      "third_party_spend_pct_of_budget": 23.97,
-      "savings_delivery_ratio": 0.977,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": true
-    },
-    "stance": "yes",
-    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (GREEN)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 141.07,
-      "third_party_spend_pct_of_budget": 149.95,
-      "savings_delivery_ratio": 0.339,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 97.31,
-      "third_party_spend_pct_of_budget": 146.95,
-      "savings_delivery_ratio": 0.947,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Third-party spend, Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 134.99,
-      "third_party_spend_pct_of_budget": 113.27,
-      "savings_delivery_ratio": 0.946,
-      "licence_provisioned_for_new_date": false,
-      "supplier_sla_in_place": true
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 107.58,
-      "third_party_spend_pct_of_budget": 48.77,
-      "savings_delivery_ratio": 0.85,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Capacity, Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 73.23,
-      "third_party_spend_pct_of_budget": 49.1,
-      "savings_delivery_ratio": 1.088,
-      "licence_provisioned_for_new_date": false,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 95.04,
-      "third_party_spend_pct_of_budget": 16.09,
-      "savings_delivery_ratio": 0.363,
-      "licence_provisioned_for_new_date": false,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Savings delivery, Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 125.15,
-      "third_party_spend_pct_of_budget": 103.87,
-      "savings_delivery_ratio": 0.483,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 140.67,
-      "third_party_spend_pct_of_budget": 46.39,
-      "savings_delivery_ratio": 0.052,
-      "licence_provisioned_for_new_date": false,
-      "supplier_sla_in_place": true
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Capacity, Savings delivery, Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 64.58,
-      "third_party_spend_pct_of_budget": 107.74,
-      "savings_delivery_ratio": 0.239,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": true
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Third-party spend, Savings delivery (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 2.5,
-      "third_party_spend_pct_of_budget": 38.47,
-      "savings_delivery_ratio": 0.108,
+      "capacity_utilisation_pct_if_accepted": 43.82,
+      "third_party_spend_pct_of_budget": 79.71,
+      "savings_delivery_ratio": 0.631,
       "licence_provisioned_for_new_date": false,
       "supplier_sla_in_place": true
     },
     "stance": "blocker",
     "driving_constraint": "Weakest signal: Savings delivery, Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 20.95,
-      "third_party_spend_pct_of_budget": 48.42,
-      "savings_delivery_ratio": 1.434,
-      "licence_provisioned_for_new_date": false,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 28.58,
-      "third_party_spend_pct_of_budget": 104.69,
-      "savings_delivery_ratio": 0.745,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": true
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Third-party spend (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 90.16,
-      "third_party_spend_pct_of_budget": 24.11,
-      "savings_delivery_ratio": 0.031,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Savings delivery, Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 54.59,
-      "third_party_spend_pct_of_budget": 98.35,
-      "savings_delivery_ratio": 1.288,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 127.66,
-      "third_party_spend_pct_of_budget": 136.48,
-      "savings_delivery_ratio": 1.29,
-      "licence_provisioned_for_new_date": false,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 6.51,
-      "third_party_spend_pct_of_budget": 78.78,
-      "savings_delivery_ratio": 0.145,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": true
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Savings delivery (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 89.98,
-      "third_party_spend_pct_of_budget": 72.41,
-      "savings_delivery_ratio": 0.606,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Savings delivery, Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 57.02,
-      "third_party_spend_pct_of_budget": 56.85,
-      "savings_delivery_ratio": 0.164,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Savings delivery, Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 71.26,
-      "third_party_spend_pct_of_budget": 57.06,
-      "savings_delivery_ratio": 1.337,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 101.3,
-      "third_party_spend_pct_of_budget": 52.01,
-      "savings_delivery_ratio": 1.064,
-      "licence_provisioned_for_new_date": false,
-      "supplier_sla_in_place": true
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Capacity, Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 121.49,
-      "third_party_spend_pct_of_budget": 142.31,
-      "savings_delivery_ratio": 1.079,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": true
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Capacity, Third-party spend (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 3.33,
-      "third_party_spend_pct_of_budget": 144.8,
-      "savings_delivery_ratio": 0.136,
-      "licence_provisioned_for_new_date": false,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 56.51,
-      "third_party_spend_pct_of_budget": 92.39,
-      "savings_delivery_ratio": 0.736,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": true
-    },
-    "stance": "conditional",
-    "driving_constraint": "Weakest signal: Savings delivery (AMBER)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 107.71,
-      "third_party_spend_pct_of_budget": 89.19,
-      "savings_delivery_ratio": 0.156,
-      "licence_provisioned_for_new_date": false,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Capacity, Savings delivery, Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 109.0,
-      "third_party_spend_pct_of_budget": 35.42,
-      "savings_delivery_ratio": 0.434,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Capacity, Savings delivery, Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 83.8,
-      "third_party_spend_pct_of_budget": 19.65,
-      "savings_delivery_ratio": 1.357,
-      "licence_provisioned_for_new_date": false,
-      "supplier_sla_in_place": true
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 8.29,
-      "third_party_spend_pct_of_budget": 105.6,
-      "savings_delivery_ratio": 0.661,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 23.4,
-      "third_party_spend_pct_of_budget": 116.15,
-      "savings_delivery_ratio": 1.285,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Third-party spend, Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 76.47,
-      "third_party_spend_pct_of_budget": 109.67,
-      "savings_delivery_ratio": 1.024,
-      "licence_provisioned_for_new_date": false,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Third-party spend, Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 11.92,
-      "third_party_spend_pct_of_budget": 89.01,
-      "savings_delivery_ratio": 1.396,
-      "licence_provisioned_for_new_date": false,
-      "supplier_sla_in_place": true
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 6.09,
-      "third_party_spend_pct_of_budget": 42.92,
-      "savings_delivery_ratio": 0.245,
-      "licence_provisioned_for_new_date": false,
-      "supplier_sla_in_place": true
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Savings delivery, Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 108.49,
-      "third_party_spend_pct_of_budget": 12.8,
-      "savings_delivery_ratio": 0.298,
-      "licence_provisioned_for_new_date": false,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Capacity, Savings delivery, Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 10.97,
-      "third_party_spend_pct_of_budget": 118.07,
-      "savings_delivery_ratio": 0.179,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 121.4,
-      "third_party_spend_pct_of_budget": 0.42,
-      "savings_delivery_ratio": 0.573,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Capacity, Savings delivery, Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 39.78,
-      "third_party_spend_pct_of_budget": 37.44,
-      "savings_delivery_ratio": 1.191,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 66.17,
-      "third_party_spend_pct_of_budget": 87.8,
-      "savings_delivery_ratio": 0.308,
-      "licence_provisioned_for_new_date": false,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Savings delivery, Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 25.98,
-      "third_party_spend_pct_of_budget": 0.61,
-      "savings_delivery_ratio": 0.208,
-      "licence_provisioned_for_new_date": false,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Savings delivery, Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 14.28,
-      "third_party_spend_pct_of_budget": 27.83,
-      "savings_delivery_ratio": 1.07,
-      "licence_provisioned_for_new_date": false,
-      "supplier_sla_in_place": true
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 10.56,
-      "third_party_spend_pct_of_budget": 24.87,
-      "savings_delivery_ratio": 0.028,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": true
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Savings delivery (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 41.52,
-      "third_party_spend_pct_of_budget": 3.67,
-      "savings_delivery_ratio": 0.957,
-      "licence_provisioned_for_new_date": false,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 96.82,
-      "third_party_spend_pct_of_budget": 124.4,
-      "savings_delivery_ratio": 0.406,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 104.46,
-      "third_party_spend_pct_of_budget": 59.22,
-      "savings_delivery_ratio": 0.073,
-      "licence_provisioned_for_new_date": false,
-      "supplier_sla_in_place": true
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Capacity, Savings delivery, Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 136.92,
-      "third_party_spend_pct_of_budget": 148.85,
-      "savings_delivery_ratio": 0.059,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": true
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 76.09,
-      "third_party_spend_pct_of_budget": 3.78,
-      "savings_delivery_ratio": 0.045,
-      "licence_provisioned_for_new_date": false,
-      "supplier_sla_in_place": true
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Savings delivery, Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 3.67,
-      "third_party_spend_pct_of_budget": 64.1,
-      "savings_delivery_ratio": 1.433,
-      "licence_provisioned_for_new_date": false,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 31.19,
-      "third_party_spend_pct_of_budget": 108.58,
-      "savings_delivery_ratio": 1.133,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": true
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Third-party spend (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 15.43,
-      "third_party_spend_pct_of_budget": 118.09,
-      "savings_delivery_ratio": 1.318,
-      "licence_provisioned_for_new_date": false,
-      "supplier_sla_in_place": true
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Third-party spend, Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 53.94,
-      "third_party_spend_pct_of_budget": 35.97,
-      "savings_delivery_ratio": 1.431,
-      "licence_provisioned_for_new_date": false,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 38.92,
-      "third_party_spend_pct_of_budget": 114.12,
-      "savings_delivery_ratio": 0.703,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": true
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Third-party spend (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 27.26,
-      "third_party_spend_pct_of_budget": 78.66,
-      "savings_delivery_ratio": 1.205,
-      "licence_provisioned_for_new_date": false,
-      "supplier_sla_in_place": true
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 21.73,
-      "third_party_spend_pct_of_budget": 18.62,
-      "savings_delivery_ratio": 1.336,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": true
-    },
-    "stance": "yes",
-    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (GREEN)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 5.75,
-      "third_party_spend_pct_of_budget": 17.32,
-      "savings_delivery_ratio": 0.366,
-      "licence_provisioned_for_new_date": false,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Savings delivery, Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 73.51,
-      "third_party_spend_pct_of_budget": 137.35,
-      "savings_delivery_ratio": 0.226,
-      "licence_provisioned_for_new_date": false,
-      "supplier_sla_in_place": true
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 129.82,
-      "third_party_spend_pct_of_budget": 16.64,
-      "savings_delivery_ratio": 0.684,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": true
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Capacity, Savings delivery (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 51.17,
-      "third_party_spend_pct_of_budget": 139.03,
-      "savings_delivery_ratio": 0.425,
-      "licence_provisioned_for_new_date": false,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 58.25,
-      "third_party_spend_pct_of_budget": 58.14,
-      "savings_delivery_ratio": 0.733,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": true
-    },
-    "stance": "conditional",
-    "driving_constraint": "Weakest signal: Savings delivery (AMBER)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 88.19,
-      "third_party_spend_pct_of_budget": 126.73,
-      "savings_delivery_ratio": 0.808,
-      "licence_provisioned_for_new_date": false,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Third-party spend, Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 21.98,
-      "third_party_spend_pct_of_budget": 93.36,
-      "savings_delivery_ratio": 1.234,
-      "licence_provisioned_for_new_date": false,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 8.24,
-      "third_party_spend_pct_of_budget": 57.59,
-      "savings_delivery_ratio": 0.955,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 80.55,
-      "third_party_spend_pct_of_budget": 57.81,
-      "savings_delivery_ratio": 1.464,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": true
-    },
-    "stance": "yes",
-    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (GREEN)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 128.26,
-      "third_party_spend_pct_of_budget": 85.64,
-      "savings_delivery_ratio": 0.261,
-      "licence_provisioned_for_new_date": false,
-      "supplier_sla_in_place": true
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Capacity, Savings delivery, Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 59.09,
-      "third_party_spend_pct_of_budget": 24.34,
-      "savings_delivery_ratio": 1.167,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 121.64,
-      "third_party_spend_pct_of_budget": 17.3,
-      "savings_delivery_ratio": 1.492,
-      "licence_provisioned_for_new_date": false,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Capacity, Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 14.4,
-      "third_party_spend_pct_of_budget": 118.86,
-      "savings_delivery_ratio": 0.602,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": true
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Third-party spend, Savings delivery (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 36.13,
-      "third_party_spend_pct_of_budget": 55.4,
-      "savings_delivery_ratio": 1.461,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": true
-    },
-    "stance": "yes",
-    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (GREEN)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 38.35,
-      "third_party_spend_pct_of_budget": 91.47,
-      "savings_delivery_ratio": 1.497,
-      "licence_provisioned_for_new_date": false,
-      "supplier_sla_in_place": true
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 74.61,
-      "third_party_spend_pct_of_budget": 15.59,
-      "savings_delivery_ratio": 0.935,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 99.23,
-      "third_party_spend_pct_of_budget": 34.07,
-      "savings_delivery_ratio": 0.382,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": true
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Savings delivery (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 22.89,
-      "third_party_spend_pct_of_budget": 63.57,
-      "savings_delivery_ratio": 1.179,
-      "licence_provisioned_for_new_date": false,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 100.6,
-      "third_party_spend_pct_of_budget": 85.28,
-      "savings_delivery_ratio": 1.117,
-      "licence_provisioned_for_new_date": false,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Capacity, Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 7.99,
-      "third_party_spend_pct_of_budget": 106.92,
-      "savings_delivery_ratio": 1.214,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Third-party spend, Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 60.32,
-      "third_party_spend_pct_of_budget": 140.29,
-      "savings_delivery_ratio": 0.223,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 31.18,
-      "third_party_spend_pct_of_budget": 145.2,
-      "savings_delivery_ratio": 0.341,
-      "licence_provisioned_for_new_date": false,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 134.28,
-      "third_party_spend_pct_of_budget": 72.06,
-      "savings_delivery_ratio": 0.799,
-      "licence_provisioned_for_new_date": false,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Capacity, Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 146.02,
-      "third_party_spend_pct_of_budget": 126.2,
-      "savings_delivery_ratio": 0.91,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": true
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Capacity, Third-party spend (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 35.72,
-      "third_party_spend_pct_of_budget": 117.71,
-      "savings_delivery_ratio": 0.442,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": true
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Third-party spend, Savings delivery (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 101.61,
-      "third_party_spend_pct_of_budget": 68.88,
-      "savings_delivery_ratio": 0.128,
-      "licence_provisioned_for_new_date": false,
-      "supplier_sla_in_place": true
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Capacity, Savings delivery, Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 122.49,
-      "third_party_spend_pct_of_budget": 26.59,
-      "savings_delivery_ratio": 0.145,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Capacity, Savings delivery, Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 37.6,
-      "third_party_spend_pct_of_budget": 68.45,
-      "savings_delivery_ratio": 0.255,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": true
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Savings delivery (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 80.76,
-      "third_party_spend_pct_of_budget": 47.21,
-      "savings_delivery_ratio": 0.57,
-      "licence_provisioned_for_new_date": false,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Savings delivery, Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 125.56,
-      "third_party_spend_pct_of_budget": 65.57,
-      "savings_delivery_ratio": 1.47,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Capacity, Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 112.41,
-      "third_party_spend_pct_of_budget": 71.02,
-      "savings_delivery_ratio": 0.392,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Capacity, Savings delivery, Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 3.57,
-      "third_party_spend_pct_of_budget": 69.98,
-      "savings_delivery_ratio": 0.154,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Savings delivery, Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 74.21,
-      "third_party_spend_pct_of_budget": 111.45,
-      "savings_delivery_ratio": 0.251,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 5.73,
-      "third_party_spend_pct_of_budget": 112.33,
-      "savings_delivery_ratio": 0.649,
-      "licence_provisioned_for_new_date": false,
-      "supplier_sla_in_place": true
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 18.04,
-      "third_party_spend_pct_of_budget": 116.19,
-      "savings_delivery_ratio": 0.339,
-      "licence_provisioned_for_new_date": false,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 25.34,
-      "third_party_spend_pct_of_budget": 86.24,
-      "savings_delivery_ratio": 0.461,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": true
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Savings delivery (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 91.44,
-      "third_party_spend_pct_of_budget": 97.79,
-      "savings_delivery_ratio": 1.147,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 110.5,
-      "third_party_spend_pct_of_budget": 124.69,
-      "savings_delivery_ratio": 1.127,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 77.63,
-      "third_party_spend_pct_of_budget": 32.94,
-      "savings_delivery_ratio": 1.311,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 74.24,
-      "third_party_spend_pct_of_budget": 100.99,
-      "savings_delivery_ratio": 0.789,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Third-party spend, Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 108.5,
-      "third_party_spend_pct_of_budget": 80.2,
-      "savings_delivery_ratio": 0.911,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": true
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Capacity (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 133.7,
-      "third_party_spend_pct_of_budget": 103.86,
-      "savings_delivery_ratio": 1.357,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": true
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Capacity, Third-party spend (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 46.35,
-      "third_party_spend_pct_of_budget": 47.51,
-      "savings_delivery_ratio": 0.831,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 69.23,
-      "third_party_spend_pct_of_budget": 70.15,
-      "savings_delivery_ratio": 1.158,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": true
-    },
-    "stance": "yes",
-    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (GREEN)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 28.57,
-      "third_party_spend_pct_of_budget": 81.06,
-      "savings_delivery_ratio": 0.203,
-      "licence_provisioned_for_new_date": false,
-      "supplier_sla_in_place": true
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Savings delivery, Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 82.73,
-      "third_party_spend_pct_of_budget": 14.26,
-      "savings_delivery_ratio": 0.632,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": true
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Savings delivery (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 136.78,
-      "third_party_spend_pct_of_budget": 42.94,
-      "savings_delivery_ratio": 0.73,
-      "licence_provisioned_for_new_date": false,
-      "supplier_sla_in_place": true
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Capacity, Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 138.24,
-      "third_party_spend_pct_of_budget": 138.49,
-      "savings_delivery_ratio": 0.819,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": true
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Capacity, Third-party spend (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 114.47,
-      "third_party_spend_pct_of_budget": 145.55,
-      "savings_delivery_ratio": 1.28,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": true
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Capacity, Third-party spend (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 9.83,
-      "third_party_spend_pct_of_budget": 78.68,
-      "savings_delivery_ratio": 1.151,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": true
-    },
-    "stance": "yes",
-    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (GREEN)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 64.22,
-      "third_party_spend_pct_of_budget": 120.52,
-      "savings_delivery_ratio": 0.031,
-      "licence_provisioned_for_new_date": false,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 38.83,
-      "third_party_spend_pct_of_budget": 45.72,
-      "savings_delivery_ratio": 0.019,
-      "licence_provisioned_for_new_date": false,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Savings delivery, Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 120.11,
-      "third_party_spend_pct_of_budget": 53.96,
-      "savings_delivery_ratio": 0.352,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Capacity, Savings delivery, Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 2.92,
-      "third_party_spend_pct_of_budget": 77.96,
-      "savings_delivery_ratio": 0.027,
-      "licence_provisioned_for_new_date": false,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Savings delivery, Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 24.27,
-      "third_party_spend_pct_of_budget": 7.68,
-      "savings_delivery_ratio": 0.658,
-      "licence_provisioned_for_new_date": false,
-      "supplier_sla_in_place": true
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Savings delivery, Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 40.2,
-      "third_party_spend_pct_of_budget": 124.8,
-      "savings_delivery_ratio": 0.378,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": true
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Third-party spend, Savings delivery (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 139.15,
-      "third_party_spend_pct_of_budget": 78.7,
-      "savings_delivery_ratio": 0.959,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": true
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Capacity (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 111.9,
-      "third_party_spend_pct_of_budget": 131.66,
-      "savings_delivery_ratio": 0.301,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": true
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 39.95,
-      "third_party_spend_pct_of_budget": 56.35,
-      "savings_delivery_ratio": 1.414,
-      "licence_provisioned_for_new_date": false,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 104.07,
-      "third_party_spend_pct_of_budget": 77.1,
-      "savings_delivery_ratio": 0.355,
-      "licence_provisioned_for_new_date": false,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Capacity, Savings delivery, Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 16.5,
-      "third_party_spend_pct_of_budget": 13.96,
-      "savings_delivery_ratio": 0.201,
-      "licence_provisioned_for_new_date": false,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Savings delivery, Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 71.58,
-      "third_party_spend_pct_of_budget": 116.53,
-      "savings_delivery_ratio": 0.174,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": true
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Third-party spend, Savings delivery (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 103.14,
-      "third_party_spend_pct_of_budget": 57.78,
-      "savings_delivery_ratio": 1.475,
-      "licence_provisioned_for_new_date": false,
-      "supplier_sla_in_place": true
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Capacity, Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 59.96,
-      "third_party_spend_pct_of_budget": 42.02,
-      "savings_delivery_ratio": 1.494,
-      "licence_provisioned_for_new_date": true,
-      "supplier_sla_in_place": false
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Supplier/SLA & licence-kit control (RED)"
-  },
-  {
-    "facts": {
-      "capacity_utilisation_pct_if_accepted": 7.78,
-      "third_party_spend_pct_of_budget": 36.06,
-      "savings_delivery_ratio": 0.997,
-      "licence_provisioned_for_new_date": false,
-      "supplier_sla_in_place": true
-    },
-    "stance": "blocker",
-    "driving_constraint": "Weakest signal: Supplier/SLA & licence-kit control (RED)"
   },
   {
     "facts": {
@@ -2352,5 +1021,2436 @@
     },
     "stance": "blocker",
     "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 70.51,
+      "third_party_spend_pct_of_budget": 131.53,
+      "savings_delivery_ratio": 1.138,
+      "licence_provisioned_for_new_date": false,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Third-party spend, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 24.21,
+      "third_party_spend_pct_of_budget": 85.91,
+      "savings_delivery_ratio": 0.554,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Savings delivery, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 126.87,
+      "third_party_spend_pct_of_budget": 85.4,
+      "savings_delivery_ratio": 0.275,
+      "licence_provisioned_for_new_date": false,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Capacity, Savings delivery, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 34.16,
+      "third_party_spend_pct_of_budget": 4.56,
+      "savings_delivery_ratio": 1.188,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "yes",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (GREEN)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 33.11,
+      "third_party_spend_pct_of_budget": 121.85,
+      "savings_delivery_ratio": 0.916,
+      "licence_provisioned_for_new_date": false,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Third-party spend, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 75.6,
+      "third_party_spend_pct_of_budget": 75.61,
+      "savings_delivery_ratio": 0.124,
+      "licence_provisioned_for_new_date": false,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Savings delivery, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 47.43,
+      "third_party_spend_pct_of_budget": 135.07,
+      "savings_delivery_ratio": 0.335,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Third-party spend, Savings delivery (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 71.09,
+      "third_party_spend_pct_of_budget": 14.57,
+      "savings_delivery_ratio": 0.289,
+      "licence_provisioned_for_new_date": false,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Savings delivery, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 100.28,
+      "third_party_spend_pct_of_budget": 77.69,
+      "savings_delivery_ratio": 0.935,
+      "licence_provisioned_for_new_date": false,
+      "supplier_sla_in_place": true
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Capacity, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 2.81,
+      "third_party_spend_pct_of_budget": 8.75,
+      "savings_delivery_ratio": 0.975,
+      "licence_provisioned_for_new_date": false,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 16.8,
+      "third_party_spend_pct_of_budget": 6.52,
+      "savings_delivery_ratio": 1.402,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "yes",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (GREEN)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 110.58,
+      "third_party_spend_pct_of_budget": 105.42,
+      "savings_delivery_ratio": 0.825,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 145.87,
+      "third_party_spend_pct_of_budget": 72.94,
+      "savings_delivery_ratio": 0.265,
+      "licence_provisioned_for_new_date": false,
+      "supplier_sla_in_place": true
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Capacity, Savings delivery, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 124.75,
+      "third_party_spend_pct_of_budget": 126.27,
+      "savings_delivery_ratio": 0.12,
+      "licence_provisioned_for_new_date": false,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 111.3,
+      "third_party_spend_pct_of_budget": 38.89,
+      "savings_delivery_ratio": 0.194,
+      "licence_provisioned_for_new_date": false,
+      "supplier_sla_in_place": true
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Capacity, Savings delivery, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 130.1,
+      "third_party_spend_pct_of_budget": 47.7,
+      "savings_delivery_ratio": 1.455,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Capacity, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 87.08,
+      "third_party_spend_pct_of_budget": 3.53,
+      "savings_delivery_ratio": 0.833,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 141.05,
+      "third_party_spend_pct_of_budget": 73.41,
+      "savings_delivery_ratio": 1.161,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Capacity, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 112.92,
+      "third_party_spend_pct_of_budget": 86.87,
+      "savings_delivery_ratio": 0.914,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Capacity, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 128.58,
+      "third_party_spend_pct_of_budget": 144.7,
+      "savings_delivery_ratio": 1.368,
+      "licence_provisioned_for_new_date": false,
+      "supplier_sla_in_place": true
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 19.9,
+      "third_party_spend_pct_of_budget": 103.61,
+      "savings_delivery_ratio": 1.163,
+      "licence_provisioned_for_new_date": false,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Third-party spend, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 97.64,
+      "third_party_spend_pct_of_budget": 29.02,
+      "savings_delivery_ratio": 0.893,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 120.26,
+      "third_party_spend_pct_of_budget": 148.65,
+      "savings_delivery_ratio": 1.124,
+      "licence_provisioned_for_new_date": false,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 144.59,
+      "third_party_spend_pct_of_budget": 147.02,
+      "savings_delivery_ratio": 1.393,
+      "licence_provisioned_for_new_date": false,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 117.63,
+      "third_party_spend_pct_of_budget": 45.35,
+      "savings_delivery_ratio": 0.633,
+      "licence_provisioned_for_new_date": false,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Capacity, Savings delivery, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 115.18,
+      "third_party_spend_pct_of_budget": 71.09,
+      "savings_delivery_ratio": 0.747,
+      "licence_provisioned_for_new_date": false,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Capacity, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 139.5,
+      "third_party_spend_pct_of_budget": 107.16,
+      "savings_delivery_ratio": 0.009,
+      "licence_provisioned_for_new_date": false,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 80.84,
+      "third_party_spend_pct_of_budget": 58.58,
+      "savings_delivery_ratio": 1.436,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 109.52,
+      "third_party_spend_pct_of_budget": 105.84,
+      "savings_delivery_ratio": 0.142,
+      "licence_provisioned_for_new_date": false,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 79.68,
+      "third_party_spend_pct_of_budget": 146.56,
+      "savings_delivery_ratio": 1.324,
+      "licence_provisioned_for_new_date": false,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Third-party spend, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 62.45,
+      "third_party_spend_pct_of_budget": 6.71,
+      "savings_delivery_ratio": 1.048,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 107.04,
+      "third_party_spend_pct_of_budget": 126.13,
+      "savings_delivery_ratio": 0.842,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 103.78,
+      "third_party_spend_pct_of_budget": 44.31,
+      "savings_delivery_ratio": 1.102,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Capacity, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 42.1,
+      "third_party_spend_pct_of_budget": 36.19,
+      "savings_delivery_ratio": 0.504,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Savings delivery, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 138.66,
+      "third_party_spend_pct_of_budget": 38.92,
+      "savings_delivery_ratio": 0.196,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Capacity, Savings delivery, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 4.14,
+      "third_party_spend_pct_of_budget": 54.2,
+      "savings_delivery_ratio": 0.581,
+      "licence_provisioned_for_new_date": false,
+      "supplier_sla_in_place": true
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Savings delivery, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 91.43,
+      "third_party_spend_pct_of_budget": 131.43,
+      "savings_delivery_ratio": 0.052,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Third-party spend, Savings delivery (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 4.73,
+      "third_party_spend_pct_of_budget": 98.73,
+      "savings_delivery_ratio": 0.523,
+      "licence_provisioned_for_new_date": false,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Savings delivery, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 1.16,
+      "third_party_spend_pct_of_budget": 1.39,
+      "savings_delivery_ratio": 0.644,
+      "licence_provisioned_for_new_date": false,
+      "supplier_sla_in_place": true
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Savings delivery, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 30.57,
+      "third_party_spend_pct_of_budget": 36.49,
+      "savings_delivery_ratio": 0.327,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Savings delivery (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 87.98,
+      "third_party_spend_pct_of_budget": 32.32,
+      "savings_delivery_ratio": 0.101,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Savings delivery (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 75.82,
+      "third_party_spend_pct_of_budget": 91.9,
+      "savings_delivery_ratio": 0.063,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Savings delivery (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 130.19,
+      "third_party_spend_pct_of_budget": 76.13,
+      "savings_delivery_ratio": 1.117,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Capacity (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 103.87,
+      "third_party_spend_pct_of_budget": 113.33,
+      "savings_delivery_ratio": 1.365,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 89.15,
+      "third_party_spend_pct_of_budget": 35.99,
+      "savings_delivery_ratio": 0.606,
+      "licence_provisioned_for_new_date": false,
+      "supplier_sla_in_place": true
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Savings delivery, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 6.09,
+      "third_party_spend_pct_of_budget": 68.46,
+      "savings_delivery_ratio": 0.853,
+      "licence_provisioned_for_new_date": false,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 44.13,
+      "third_party_spend_pct_of_budget": 17.35,
+      "savings_delivery_ratio": 1.073,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "yes",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (GREEN)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 96.97,
+      "third_party_spend_pct_of_budget": 3.13,
+      "savings_delivery_ratio": 0.762,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 142.48,
+      "third_party_spend_pct_of_budget": 145.5,
+      "savings_delivery_ratio": 0.104,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 60.12,
+      "third_party_spend_pct_of_budget": 94.16,
+      "savings_delivery_ratio": 0.184,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Savings delivery, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 103.91,
+      "third_party_spend_pct_of_budget": 84.12,
+      "savings_delivery_ratio": 1.449,
+      "licence_provisioned_for_new_date": false,
+      "supplier_sla_in_place": true
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Capacity, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 12.29,
+      "third_party_spend_pct_of_budget": 17.09,
+      "savings_delivery_ratio": 1.364,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "yes",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (GREEN)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 123.82,
+      "third_party_spend_pct_of_budget": 69.9,
+      "savings_delivery_ratio": 1.491,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Capacity (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 99.17,
+      "third_party_spend_pct_of_budget": 105.64,
+      "savings_delivery_ratio": 0.458,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 117.56,
+      "third_party_spend_pct_of_budget": 80.04,
+      "savings_delivery_ratio": 1.396,
+      "licence_provisioned_for_new_date": false,
+      "supplier_sla_in_place": true
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Capacity, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 6.44,
+      "third_party_spend_pct_of_budget": 79.8,
+      "savings_delivery_ratio": 0.273,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Savings delivery, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 66.91,
+      "third_party_spend_pct_of_budget": 142.5,
+      "savings_delivery_ratio": 1.123,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Third-party spend (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 23.89,
+      "third_party_spend_pct_of_budget": 102.95,
+      "savings_delivery_ratio": 0.229,
+      "licence_provisioned_for_new_date": false,
+      "supplier_sla_in_place": true
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 140.68,
+      "third_party_spend_pct_of_budget": 131.06,
+      "savings_delivery_ratio": 1.27,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 48.2,
+      "third_party_spend_pct_of_budget": 139.67,
+      "savings_delivery_ratio": 0.526,
+      "licence_provisioned_for_new_date": false,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 62.5,
+      "third_party_spend_pct_of_budget": 15.69,
+      "savings_delivery_ratio": 1.352,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "yes",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (GREEN)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 142.07,
+      "third_party_spend_pct_of_budget": 15.27,
+      "savings_delivery_ratio": 1.239,
+      "licence_provisioned_for_new_date": false,
+      "supplier_sla_in_place": true
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Capacity, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 115.11,
+      "third_party_spend_pct_of_budget": 73.36,
+      "savings_delivery_ratio": 1.236,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Capacity (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 38.57,
+      "third_party_spend_pct_of_budget": 32.66,
+      "savings_delivery_ratio": 0.223,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Savings delivery (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 53.16,
+      "third_party_spend_pct_of_budget": 127.34,
+      "savings_delivery_ratio": 0.746,
+      "licence_provisioned_for_new_date": false,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Third-party spend, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 16.23,
+      "third_party_spend_pct_of_budget": 121.53,
+      "savings_delivery_ratio": 0.721,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Third-party spend, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 112.07,
+      "third_party_spend_pct_of_budget": 43.18,
+      "savings_delivery_ratio": 1.412,
+      "licence_provisioned_for_new_date": false,
+      "supplier_sla_in_place": true
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Capacity, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 106.26,
+      "third_party_spend_pct_of_budget": 70.14,
+      "savings_delivery_ratio": 0.678,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Capacity, Savings delivery, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 66.23,
+      "third_party_spend_pct_of_budget": 128.91,
+      "savings_delivery_ratio": 1.157,
+      "licence_provisioned_for_new_date": false,
+      "supplier_sla_in_place": true
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Third-party spend, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 147.61,
+      "third_party_spend_pct_of_budget": 104.94,
+      "savings_delivery_ratio": 0.099,
+      "licence_provisioned_for_new_date": false,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 120.19,
+      "third_party_spend_pct_of_budget": 11.99,
+      "savings_delivery_ratio": 1.118,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Capacity (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 25.45,
+      "third_party_spend_pct_of_budget": 86.98,
+      "savings_delivery_ratio": 0.817,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 144.79,
+      "third_party_spend_pct_of_budget": 118.68,
+      "savings_delivery_ratio": 0.812,
+      "licence_provisioned_for_new_date": false,
+      "supplier_sla_in_place": true
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 123.46,
+      "third_party_spend_pct_of_budget": 91.27,
+      "savings_delivery_ratio": 0.582,
+      "licence_provisioned_for_new_date": false,
+      "supplier_sla_in_place": true
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Capacity, Savings delivery, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 37.15,
+      "third_party_spend_pct_of_budget": 96.4,
+      "savings_delivery_ratio": 0.801,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "conditional",
+    "driving_constraint": "Weakest signal: Third-party spend, Savings delivery (AMBER)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 60.56,
+      "third_party_spend_pct_of_budget": 135.04,
+      "savings_delivery_ratio": 1.187,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Third-party spend, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 49.55,
+      "third_party_spend_pct_of_budget": 62.88,
+      "savings_delivery_ratio": 0.716,
+      "licence_provisioned_for_new_date": false,
+      "supplier_sla_in_place": true
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 119.23,
+      "third_party_spend_pct_of_budget": 132.56,
+      "savings_delivery_ratio": 0.83,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 123.71,
+      "third_party_spend_pct_of_budget": 1.98,
+      "savings_delivery_ratio": 0.884,
+      "licence_provisioned_for_new_date": false,
+      "supplier_sla_in_place": true
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Capacity, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 131.98,
+      "third_party_spend_pct_of_budget": 1.31,
+      "savings_delivery_ratio": 0.632,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Capacity, Savings delivery (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 0.55,
+      "third_party_spend_pct_of_budget": 137.74,
+      "savings_delivery_ratio": 1.494,
+      "licence_provisioned_for_new_date": false,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Third-party spend, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 17.92,
+      "third_party_spend_pct_of_budget": 148.68,
+      "savings_delivery_ratio": 1.256,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Third-party spend, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 84.03,
+      "third_party_spend_pct_of_budget": 41.69,
+      "savings_delivery_ratio": 0.991,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 97.35,
+      "third_party_spend_pct_of_budget": 1.13,
+      "savings_delivery_ratio": 0.075,
+      "licence_provisioned_for_new_date": false,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Savings delivery, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 127.48,
+      "third_party_spend_pct_of_budget": 12.45,
+      "savings_delivery_ratio": 0.87,
+      "licence_provisioned_for_new_date": false,
+      "supplier_sla_in_place": true
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Capacity, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 3.66,
+      "third_party_spend_pct_of_budget": 73.76,
+      "savings_delivery_ratio": 1.396,
+      "licence_provisioned_for_new_date": false,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 6.5,
+      "third_party_spend_pct_of_budget": 141.68,
+      "savings_delivery_ratio": 1.006,
+      "licence_provisioned_for_new_date": false,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Third-party spend, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 38.89,
+      "third_party_spend_pct_of_budget": 82.98,
+      "savings_delivery_ratio": 0.199,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Savings delivery (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 92.5,
+      "third_party_spend_pct_of_budget": 114.84,
+      "savings_delivery_ratio": 1.142,
+      "licence_provisioned_for_new_date": false,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Third-party spend, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 22.84,
+      "third_party_spend_pct_of_budget": 21.26,
+      "savings_delivery_ratio": 0.413,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Savings delivery (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 68.06,
+      "third_party_spend_pct_of_budget": 47.65,
+      "savings_delivery_ratio": 0.156,
+      "licence_provisioned_for_new_date": false,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Savings delivery, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 96.41,
+      "third_party_spend_pct_of_budget": 79.61,
+      "savings_delivery_ratio": 0.283,
+      "licence_provisioned_for_new_date": false,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Savings delivery, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 59.1,
+      "third_party_spend_pct_of_budget": 107.57,
+      "savings_delivery_ratio": 0.39,
+      "licence_provisioned_for_new_date": false,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 93.52,
+      "third_party_spend_pct_of_budget": 114.59,
+      "savings_delivery_ratio": 1.033,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Third-party spend (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 46.31,
+      "third_party_spend_pct_of_budget": 89.41,
+      "savings_delivery_ratio": 1.425,
+      "licence_provisioned_for_new_date": false,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 80.45,
+      "third_party_spend_pct_of_budget": 35.81,
+      "savings_delivery_ratio": 0.708,
+      "licence_provisioned_for_new_date": false,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 31.59,
+      "third_party_spend_pct_of_budget": 134.82,
+      "savings_delivery_ratio": 0.852,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Third-party spend (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 125.08,
+      "third_party_spend_pct_of_budget": 136.64,
+      "savings_delivery_ratio": 0.333,
+      "licence_provisioned_for_new_date": false,
+      "supplier_sla_in_place": true
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 38.52,
+      "third_party_spend_pct_of_budget": 19.78,
+      "savings_delivery_ratio": 0.564,
+      "licence_provisioned_for_new_date": false,
+      "supplier_sla_in_place": true
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Savings delivery, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 29.81,
+      "third_party_spend_pct_of_budget": 57.01,
+      "savings_delivery_ratio": 0.102,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Savings delivery (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 7.07,
+      "third_party_spend_pct_of_budget": 137.48,
+      "savings_delivery_ratio": 1.059,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Third-party spend, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 78.85,
+      "third_party_spend_pct_of_budget": 75.99,
+      "savings_delivery_ratio": 0.678,
+      "licence_provisioned_for_new_date": false,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Savings delivery, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 2.59,
+      "third_party_spend_pct_of_budget": 135.0,
+      "savings_delivery_ratio": 0.183,
+      "licence_provisioned_for_new_date": false,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 78.9,
+      "third_party_spend_pct_of_budget": 12.66,
+      "savings_delivery_ratio": 0.853,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "conditional",
+    "driving_constraint": "Weakest signal: Savings delivery (AMBER)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 39.76,
+      "third_party_spend_pct_of_budget": 129.6,
+      "savings_delivery_ratio": 0.475,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 80.89,
+      "third_party_spend_pct_of_budget": 88.6,
+      "savings_delivery_ratio": 0.917,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "yes",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (GREEN)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 71.56,
+      "third_party_spend_pct_of_budget": 120.38,
+      "savings_delivery_ratio": 1.386,
+      "licence_provisioned_for_new_date": false,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Third-party spend, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 141.32,
+      "third_party_spend_pct_of_budget": 14.74,
+      "savings_delivery_ratio": 0.067,
+      "licence_provisioned_for_new_date": false,
+      "supplier_sla_in_place": true
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Capacity, Savings delivery, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 37.6,
+      "third_party_spend_pct_of_budget": 64.71,
+      "savings_delivery_ratio": 0.418,
+      "licence_provisioned_for_new_date": false,
+      "supplier_sla_in_place": true
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Savings delivery, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 111.19,
+      "third_party_spend_pct_of_budget": 124.4,
+      "savings_delivery_ratio": 0.905,
+      "licence_provisioned_for_new_date": false,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 68.7,
+      "third_party_spend_pct_of_budget": 65.79,
+      "savings_delivery_ratio": 1.354,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "yes",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (GREEN)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 129.05,
+      "third_party_spend_pct_of_budget": 77.58,
+      "savings_delivery_ratio": 1.079,
+      "licence_provisioned_for_new_date": false,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Capacity, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 103.91,
+      "third_party_spend_pct_of_budget": 146.67,
+      "savings_delivery_ratio": 1.307,
+      "licence_provisioned_for_new_date": false,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 3.14,
+      "third_party_spend_pct_of_budget": 86.87,
+      "savings_delivery_ratio": 0.077,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Savings delivery, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 138.41,
+      "third_party_spend_pct_of_budget": 19.7,
+      "savings_delivery_ratio": 0.04,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Capacity, Savings delivery, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 78.43,
+      "third_party_spend_pct_of_budget": 77.68,
+      "savings_delivery_ratio": 0.248,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Savings delivery, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 148.38,
+      "third_party_spend_pct_of_budget": 28.49,
+      "savings_delivery_ratio": 0.231,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Capacity, Savings delivery (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 78.59,
+      "third_party_spend_pct_of_budget": 51.59,
+      "savings_delivery_ratio": 0.636,
+      "licence_provisioned_for_new_date": false,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Savings delivery, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 115.87,
+      "third_party_spend_pct_of_budget": 67.06,
+      "savings_delivery_ratio": 1.145,
+      "licence_provisioned_for_new_date": false,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Capacity, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 138.35,
+      "third_party_spend_pct_of_budget": 121.85,
+      "savings_delivery_ratio": 0.081,
+      "licence_provisioned_for_new_date": false,
+      "supplier_sla_in_place": true
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 72.45,
+      "third_party_spend_pct_of_budget": 35.42,
+      "savings_delivery_ratio": 1.479,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": false
+    },
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Supplier/SLA & licence-kit control (RED)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 47.74,
+      "third_party_spend_pct_of_budget": 50.72,
+      "savings_delivery_ratio": 1.089,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "yes",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (GREEN)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 2.62,
+      "third_party_spend_pct_of_budget": 84.69,
+      "savings_delivery_ratio": 1.262,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "yes",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (GREEN)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 23.73,
+      "third_party_spend_pct_of_budget": 11.27,
+      "savings_delivery_ratio": 1.297,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "yes",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (GREEN)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 48.2,
+      "third_party_spend_pct_of_budget": 33.2,
+      "savings_delivery_ratio": 0.971,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "yes",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (GREEN)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 86.41,
+      "third_party_spend_pct_of_budget": 66.82,
+      "savings_delivery_ratio": 1.151,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "yes",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (GREEN)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 43.65,
+      "third_party_spend_pct_of_budget": 93.35,
+      "savings_delivery_ratio": 1.236,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "yes",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (GREEN)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 40.0,
+      "third_party_spend_pct_of_budget": 91.79,
+      "savings_delivery_ratio": 1.288,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "yes",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (GREEN)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 46.04,
+      "third_party_spend_pct_of_budget": 75.71,
+      "savings_delivery_ratio": 1.174,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "yes",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (GREEN)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 11.99,
+      "third_party_spend_pct_of_budget": 0.0,
+      "savings_delivery_ratio": 0.981,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "yes",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (GREEN)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 88.96,
+      "third_party_spend_pct_of_budget": 63.17,
+      "savings_delivery_ratio": 0.945,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "yes",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (GREEN)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 73.51,
+      "third_party_spend_pct_of_budget": 66.65,
+      "savings_delivery_ratio": 1.039,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "yes",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (GREEN)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 61.98,
+      "third_party_spend_pct_of_budget": 57.99,
+      "savings_delivery_ratio": 1.201,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "yes",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (GREEN)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 18.33,
+      "third_party_spend_pct_of_budget": 58.27,
+      "savings_delivery_ratio": 1.046,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "yes",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (GREEN)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 30.35,
+      "third_party_spend_pct_of_budget": 42.41,
+      "savings_delivery_ratio": 0.98,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "yes",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (GREEN)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 34.31,
+      "third_party_spend_pct_of_budget": 93.44,
+      "savings_delivery_ratio": 1.16,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "yes",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (GREEN)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 83.99,
+      "third_party_spend_pct_of_budget": 46.7,
+      "savings_delivery_ratio": 1.187,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "yes",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (GREEN)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 35.69,
+      "third_party_spend_pct_of_budget": 57.86,
+      "savings_delivery_ratio": 1.127,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "yes",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (GREEN)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 43.63,
+      "third_party_spend_pct_of_budget": 48.33,
+      "savings_delivery_ratio": 0.995,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "yes",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (GREEN)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 65.95,
+      "third_party_spend_pct_of_budget": 56.86,
+      "savings_delivery_ratio": 1.035,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "yes",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (GREEN)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 80.74,
+      "third_party_spend_pct_of_budget": 0.52,
+      "savings_delivery_ratio": 1.211,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "yes",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (GREEN)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 8.07,
+      "third_party_spend_pct_of_budget": 84.22,
+      "savings_delivery_ratio": 1.103,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "yes",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (GREEN)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 81.57,
+      "third_party_spend_pct_of_budget": 62.14,
+      "savings_delivery_ratio": 0.936,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "yes",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (GREEN)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 70.81,
+      "third_party_spend_pct_of_budget": 11.65,
+      "savings_delivery_ratio": 1.223,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "yes",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (GREEN)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 12.35,
+      "third_party_spend_pct_of_budget": 49.97,
+      "savings_delivery_ratio": 1.114,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "yes",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (GREEN)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 67.73,
+      "third_party_spend_pct_of_budget": 14.79,
+      "savings_delivery_ratio": 1.092,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "yes",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (GREEN)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 8.14,
+      "third_party_spend_pct_of_budget": 43.05,
+      "savings_delivery_ratio": 1.096,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "yes",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (GREEN)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 18.17,
+      "third_party_spend_pct_of_budget": 29.57,
+      "savings_delivery_ratio": 1.129,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "yes",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (GREEN)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 51.38,
+      "third_party_spend_pct_of_budget": 73.47,
+      "savings_delivery_ratio": 1.146,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "yes",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (GREEN)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 0.4,
+      "third_party_spend_pct_of_budget": 92.32,
+      "savings_delivery_ratio": 1.013,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "yes",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (GREEN)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 48.2,
+      "third_party_spend_pct_of_budget": 80.04,
+      "savings_delivery_ratio": 1.296,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "yes",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (GREEN)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 68.21,
+      "third_party_spend_pct_of_budget": 52.66,
+      "savings_delivery_ratio": 1.025,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "yes",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (GREEN)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 20.32,
+      "third_party_spend_pct_of_budget": 65.25,
+      "savings_delivery_ratio": 1.275,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "yes",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (GREEN)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 84.11,
+      "third_party_spend_pct_of_budget": 36.2,
+      "savings_delivery_ratio": 0.906,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "yes",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (GREEN)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 15.09,
+      "third_party_spend_pct_of_budget": 11.81,
+      "savings_delivery_ratio": 1.04,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "yes",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (GREEN)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 57.62,
+      "third_party_spend_pct_of_budget": 77.75,
+      "savings_delivery_ratio": 1.233,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "yes",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (GREEN)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 28.87,
+      "third_party_spend_pct_of_budget": 2.55,
+      "savings_delivery_ratio": 1.193,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "yes",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (GREEN)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 48.08,
+      "third_party_spend_pct_of_budget": 20.08,
+      "savings_delivery_ratio": 1.104,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "yes",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (GREEN)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 41.66,
+      "third_party_spend_pct_of_budget": 63.88,
+      "savings_delivery_ratio": 1.287,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "yes",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (GREEN)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 71.78,
+      "third_party_spend_pct_of_budget": 1.98,
+      "savings_delivery_ratio": 1.299,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "yes",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (GREEN)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 74.59,
+      "third_party_spend_pct_of_budget": 62.33,
+      "savings_delivery_ratio": 0.916,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "yes",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (GREEN)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 83.03,
+      "third_party_spend_pct_of_budget": 31.1,
+      "savings_delivery_ratio": 1.291,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "yes",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (GREEN)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 46.72,
+      "third_party_spend_pct_of_budget": 91.91,
+      "savings_delivery_ratio": 0.975,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "yes",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (GREEN)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 39.82,
+      "third_party_spend_pct_of_budget": 9.15,
+      "savings_delivery_ratio": 1.062,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "yes",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (GREEN)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 66.82,
+      "third_party_spend_pct_of_budget": 47.33,
+      "savings_delivery_ratio": 0.987,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "yes",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (GREEN)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 81.68,
+      "third_party_spend_pct_of_budget": 50.21,
+      "savings_delivery_ratio": 1.203,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "yes",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (GREEN)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 72.94,
+      "third_party_spend_pct_of_budget": 74.25,
+      "savings_delivery_ratio": 0.967,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "yes",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (GREEN)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 41.08,
+      "third_party_spend_pct_of_budget": 14.86,
+      "savings_delivery_ratio": 1.022,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "yes",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (GREEN)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 19.71,
+      "third_party_spend_pct_of_budget": 16.86,
+      "savings_delivery_ratio": 1.254,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "yes",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (GREEN)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 7.88,
+      "third_party_spend_pct_of_budget": 40.52,
+      "savings_delivery_ratio": 1.294,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "yes",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (GREEN)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 62.22,
+      "third_party_spend_pct_of_budget": 72.05,
+      "savings_delivery_ratio": 1.167,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "yes",
+    "driving_constraint": "Weakest signal: Capacity, Third-party spend, Savings delivery, Supplier/SLA & licence-kit control (GREEN)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 2.73,
+      "third_party_spend_pct_of_budget": 51.71,
+      "savings_delivery_ratio": 0.733,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "conditional",
+    "driving_constraint": "Weakest signal: Savings delivery (AMBER)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 97.81,
+      "third_party_spend_pct_of_budget": 28.39,
+      "savings_delivery_ratio": 1.03,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "conditional",
+    "driving_constraint": "Weakest signal: Capacity (AMBER)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 45.27,
+      "third_party_spend_pct_of_budget": 78.59,
+      "savings_delivery_ratio": 0.806,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "conditional",
+    "driving_constraint": "Weakest signal: Savings delivery (AMBER)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 27.19,
+      "third_party_spend_pct_of_budget": 63.28,
+      "savings_delivery_ratio": 0.812,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "conditional",
+    "driving_constraint": "Weakest signal: Savings delivery (AMBER)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 18.63,
+      "third_party_spend_pct_of_budget": 33.48,
+      "savings_delivery_ratio": 0.803,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "conditional",
+    "driving_constraint": "Weakest signal: Savings delivery (AMBER)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 36.36,
+      "third_party_spend_pct_of_budget": 76.63,
+      "savings_delivery_ratio": 0.806,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "conditional",
+    "driving_constraint": "Weakest signal: Savings delivery (AMBER)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 10.17,
+      "third_party_spend_pct_of_budget": 97.96,
+      "savings_delivery_ratio": 0.961,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "conditional",
+    "driving_constraint": "Weakest signal: Third-party spend (AMBER)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 97.05,
+      "third_party_spend_pct_of_budget": 44.52,
+      "savings_delivery_ratio": 1.133,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "conditional",
+    "driving_constraint": "Weakest signal: Capacity (AMBER)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 70.08,
+      "third_party_spend_pct_of_budget": 28.99,
+      "savings_delivery_ratio": 0.787,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "conditional",
+    "driving_constraint": "Weakest signal: Savings delivery (AMBER)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 51.92,
+      "third_party_spend_pct_of_budget": 16.31,
+      "savings_delivery_ratio": 0.873,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "conditional",
+    "driving_constraint": "Weakest signal: Savings delivery (AMBER)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 88.84,
+      "third_party_spend_pct_of_budget": 34.39,
+      "savings_delivery_ratio": 0.882,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "conditional",
+    "driving_constraint": "Weakest signal: Savings delivery (AMBER)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 90.49,
+      "third_party_spend_pct_of_budget": 12.03,
+      "savings_delivery_ratio": 1.102,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "conditional",
+    "driving_constraint": "Weakest signal: Capacity (AMBER)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 99.34,
+      "third_party_spend_pct_of_budget": 56.39,
+      "savings_delivery_ratio": 1.264,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "conditional",
+    "driving_constraint": "Weakest signal: Capacity (AMBER)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 85.89,
+      "third_party_spend_pct_of_budget": 97.32,
+      "savings_delivery_ratio": 1.199,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "conditional",
+    "driving_constraint": "Weakest signal: Third-party spend (AMBER)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 90.66,
+      "third_party_spend_pct_of_budget": 42.86,
+      "savings_delivery_ratio": 0.938,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "conditional",
+    "driving_constraint": "Weakest signal: Capacity (AMBER)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 70.55,
+      "third_party_spend_pct_of_budget": 66.47,
+      "savings_delivery_ratio": 0.855,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "conditional",
+    "driving_constraint": "Weakest signal: Savings delivery (AMBER)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 51.78,
+      "third_party_spend_pct_of_budget": 96.07,
+      "savings_delivery_ratio": 1.045,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "conditional",
+    "driving_constraint": "Weakest signal: Third-party spend (AMBER)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 66.45,
+      "third_party_spend_pct_of_budget": 84.85,
+      "savings_delivery_ratio": 0.753,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "conditional",
+    "driving_constraint": "Weakest signal: Savings delivery (AMBER)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 9.6,
+      "third_party_spend_pct_of_budget": 0.72,
+      "savings_delivery_ratio": 0.739,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "conditional",
+    "driving_constraint": "Weakest signal: Savings delivery (AMBER)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 38.37,
+      "third_party_spend_pct_of_budget": 91.37,
+      "savings_delivery_ratio": 0.81,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "conditional",
+    "driving_constraint": "Weakest signal: Savings delivery (AMBER)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 97.87,
+      "third_party_spend_pct_of_budget": 36.27,
+      "savings_delivery_ratio": 1.198,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "conditional",
+    "driving_constraint": "Weakest signal: Capacity (AMBER)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 25.52,
+      "third_party_spend_pct_of_budget": 78.19,
+      "savings_delivery_ratio": 0.747,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "conditional",
+    "driving_constraint": "Weakest signal: Savings delivery (AMBER)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 87.48,
+      "third_party_spend_pct_of_budget": 36.24,
+      "savings_delivery_ratio": 0.804,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "conditional",
+    "driving_constraint": "Weakest signal: Savings delivery (AMBER)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 93.29,
+      "third_party_spend_pct_of_budget": 64.93,
+      "savings_delivery_ratio": 1.148,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "conditional",
+    "driving_constraint": "Weakest signal: Capacity (AMBER)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 97.5,
+      "third_party_spend_pct_of_budget": 48.34,
+      "savings_delivery_ratio": 0.928,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "conditional",
+    "driving_constraint": "Weakest signal: Capacity (AMBER)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 96.92,
+      "third_party_spend_pct_of_budget": 38.19,
+      "savings_delivery_ratio": 1.005,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "conditional",
+    "driving_constraint": "Weakest signal: Capacity (AMBER)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 74.28,
+      "third_party_spend_pct_of_budget": 61.57,
+      "savings_delivery_ratio": 0.781,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "conditional",
+    "driving_constraint": "Weakest signal: Savings delivery (AMBER)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 26.09,
+      "third_party_spend_pct_of_budget": 96.28,
+      "savings_delivery_ratio": 1.184,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "conditional",
+    "driving_constraint": "Weakest signal: Third-party spend (AMBER)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 98.08,
+      "third_party_spend_pct_of_budget": 46.98,
+      "savings_delivery_ratio": 1.254,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "conditional",
+    "driving_constraint": "Weakest signal: Capacity (AMBER)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 4.92,
+      "third_party_spend_pct_of_budget": 95.01,
+      "savings_delivery_ratio": 0.949,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "conditional",
+    "driving_constraint": "Weakest signal: Third-party spend (AMBER)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 97.05,
+      "third_party_spend_pct_of_budget": 10.53,
+      "savings_delivery_ratio": 1.263,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "conditional",
+    "driving_constraint": "Weakest signal: Capacity (AMBER)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 24.47,
+      "third_party_spend_pct_of_budget": 59.16,
+      "savings_delivery_ratio": 0.779,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "conditional",
+    "driving_constraint": "Weakest signal: Savings delivery (AMBER)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 39.32,
+      "third_party_spend_pct_of_budget": 25.93,
+      "savings_delivery_ratio": 0.753,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "conditional",
+    "driving_constraint": "Weakest signal: Savings delivery (AMBER)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 22.76,
+      "third_party_spend_pct_of_budget": 29.25,
+      "savings_delivery_ratio": 0.738,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "conditional",
+    "driving_constraint": "Weakest signal: Savings delivery (AMBER)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 12.28,
+      "third_party_spend_pct_of_budget": 72.19,
+      "savings_delivery_ratio": 0.734,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "conditional",
+    "driving_constraint": "Weakest signal: Savings delivery (AMBER)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 4.36,
+      "third_party_spend_pct_of_budget": 97.92,
+      "savings_delivery_ratio": 1.056,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "conditional",
+    "driving_constraint": "Weakest signal: Third-party spend (AMBER)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 60.08,
+      "third_party_spend_pct_of_budget": 95.63,
+      "savings_delivery_ratio": 1.138,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "conditional",
+    "driving_constraint": "Weakest signal: Third-party spend (AMBER)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 91.58,
+      "third_party_spend_pct_of_budget": 65.51,
+      "savings_delivery_ratio": 0.96,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "conditional",
+    "driving_constraint": "Weakest signal: Capacity (AMBER)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 90.52,
+      "third_party_spend_pct_of_budget": 63.91,
+      "savings_delivery_ratio": 1.217,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "conditional",
+    "driving_constraint": "Weakest signal: Capacity (AMBER)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 71.46,
+      "third_party_spend_pct_of_budget": 95.47,
+      "savings_delivery_ratio": 1.109,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "conditional",
+    "driving_constraint": "Weakest signal: Third-party spend (AMBER)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 62.87,
+      "third_party_spend_pct_of_budget": 99.02,
+      "savings_delivery_ratio": 1.203,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "conditional",
+    "driving_constraint": "Weakest signal: Third-party spend (AMBER)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 76.42,
+      "third_party_spend_pct_of_budget": 95.54,
+      "savings_delivery_ratio": 0.921,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "conditional",
+    "driving_constraint": "Weakest signal: Third-party spend (AMBER)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 67.32,
+      "third_party_spend_pct_of_budget": 39.48,
+      "savings_delivery_ratio": 0.738,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "conditional",
+    "driving_constraint": "Weakest signal: Savings delivery (AMBER)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 32.64,
+      "third_party_spend_pct_of_budget": 98.85,
+      "savings_delivery_ratio": 1.27,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "conditional",
+    "driving_constraint": "Weakest signal: Third-party spend (AMBER)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 46.89,
+      "third_party_spend_pct_of_budget": 16.63,
+      "savings_delivery_ratio": 0.864,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "conditional",
+    "driving_constraint": "Weakest signal: Savings delivery (AMBER)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 37.75,
+      "third_party_spend_pct_of_budget": 18.27,
+      "savings_delivery_ratio": 0.89,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "conditional",
+    "driving_constraint": "Weakest signal: Savings delivery (AMBER)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 22.18,
+      "third_party_spend_pct_of_budget": 14.15,
+      "savings_delivery_ratio": 0.72,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "conditional",
+    "driving_constraint": "Weakest signal: Savings delivery (AMBER)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 64.37,
+      "third_party_spend_pct_of_budget": 52.82,
+      "savings_delivery_ratio": 0.778,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "conditional",
+    "driving_constraint": "Weakest signal: Savings delivery (AMBER)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 25.02,
+      "third_party_spend_pct_of_budget": 26.39,
+      "savings_delivery_ratio": 0.726,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "conditional",
+    "driving_constraint": "Weakest signal: Savings delivery (AMBER)"
+  },
+  {
+    "facts": {
+      "capacity_utilisation_pct_if_accepted": 4.53,
+      "third_party_spend_pct_of_budget": 6.39,
+      "savings_delivery_ratio": 0.79,
+      "licence_provisioned_for_new_date": true,
+      "supplier_sla_in_place": true
+    },
+    "stance": "conditional",
+    "driving_constraint": "Weakest signal: Savings delivery (AMBER)"
   }
 ]

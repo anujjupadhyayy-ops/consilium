@@ -735,7 +735,34 @@
       "continued_business_case_justified": false,
       "portfolio_contention": false,
       "tolerance_variances_pct": {
-        "risk": 13.07
+        "time": 20.96
+      }
+    },
+    "stance": "no",
+    "driving_constraint": "Continued business case: not justified"
+  },
+  {
+    "facts": {
+      "is_contract_variation": false,
+      "continued_business_case_justified": false,
+      "portfolio_contention": true,
+      "tolerance_variances_pct": {
+        "scope": -23.77,
+        "quality": -0.8,
+        "time": 25.83
+      }
+    },
+    "stance": "no",
+    "driving_constraint": "Continued business case: not justified"
+  },
+  {
+    "facts": {
+      "is_contract_variation": false,
+      "continued_business_case_justified": false,
+      "portfolio_contention": false,
+      "tolerance_variances_pct": {
+        "cost": -11.17,
+        "quality": 29.63
       }
     },
     "stance": "no",
@@ -745,10 +772,9 @@
     "facts": {
       "is_contract_variation": true,
       "continued_business_case_justified": false,
-      "portfolio_contention": true,
+      "portfolio_contention": false,
       "tolerance_variances_pct": {
-        "cost": 8.68,
-        "benefit": -6.78
+        "scope": 9.03
       }
     },
     "stance": "no",
@@ -758,24 +784,10 @@
     "facts": {
       "is_contract_variation": true,
       "continued_business_case_justified": false,
-      "portfolio_contention": true,
+      "portfolio_contention": false,
       "tolerance_variances_pct": {
-        "quality": 0.38,
-        "scope": 20.67
-      }
-    },
-    "stance": "no",
-    "driving_constraint": "Continued business case: not justified"
-  },
-  {
-    "facts": {
-      "is_contract_variation": true,
-      "continued_business_case_justified": false,
-      "portfolio_contention": true,
-      "tolerance_variances_pct": {
-        "time": 13.15,
-        "quality": 17.78,
-        "scope": 23.19
+        "risk": -8.86,
+        "quality": -13.78
       }
     },
     "stance": "no",
@@ -785,24 +797,11 @@
     "facts": {
       "is_contract_variation": false,
       "continued_business_case_justified": true,
-      "portfolio_contention": false,
+      "portfolio_contention": true,
       "tolerance_variances_pct": {
-        "cost": -8.5,
-        "benefit": 1.81,
-        "time": 26.55
-      }
-    },
-    "stance": "no",
-    "driving_constraint": "time variance +27% vs 10% tolerance (hard reject)"
-  },
-  {
-    "facts": {
-      "is_contract_variation": false,
-      "continued_business_case_justified": true,
-      "portfolio_contention": false,
-      "tolerance_variances_pct": {
-        "cost": 0.11,
-        "benefit": 23.69
+        "quality": 5.3,
+        "risk": 6.31,
+        "cost": -6.06
       }
     },
     "stance": "yes",
@@ -811,63 +810,12 @@
   {
     "facts": {
       "is_contract_variation": true,
-      "continued_business_case_justified": true,
-      "portfolio_contention": true,
-      "tolerance_variances_pct": {
-        "time": -27.62
-      }
-    },
-    "stance": "conditional",
-    "driving_constraint": "Requires Change Control Gate 2 (contract variation) sign-off before proceeding"
-  },
-  {
-    "facts": {
-      "is_contract_variation": false,
-      "continued_business_case_justified": true,
-      "portfolio_contention": true,
-      "tolerance_variances_pct": {
-        "scope": 23.1,
-        "quality": 29.01
-      }
-    },
-    "stance": "no",
-    "driving_constraint": "scope variance +23% vs 5% tolerance (hard reject)"
-  },
-  {
-    "facts": {
-      "is_contract_variation": true,
       "continued_business_case_justified": false,
       "portfolio_contention": true,
       "tolerance_variances_pct": {
-        "scope": 24.75,
-        "quality": -7.13
-      }
-    },
-    "stance": "no",
-    "driving_constraint": "Continued business case: not justified"
-  },
-  {
-    "facts": {
-      "is_contract_variation": false,
-      "continued_business_case_justified": true,
-      "portfolio_contention": true,
-      "tolerance_variances_pct": {
-        "scope": -17.66,
-        "benefit": -29.3
-      }
-    },
-    "stance": "no",
-    "driving_constraint": "benefit variance -29% vs 10% tolerance (hard reject)"
-  },
-  {
-    "facts": {
-      "is_contract_variation": false,
-      "continued_business_case_justified": false,
-      "portfolio_contention": true,
-      "tolerance_variances_pct": {
-        "scope": -25.05,
-        "time": 15.4,
-        "quality": 8.48
+        "cost": 13.1,
+        "benefit": -21.48,
+        "scope": -9.21
       }
     },
     "stance": "no",
@@ -879,9 +827,9 @@
       "continued_business_case_justified": true,
       "portfolio_contention": false,
       "tolerance_variances_pct": {
-        "quality": 14.6,
-        "benefit": 25.88,
-        "risk": 25.76
+        "time": 15.26,
+        "cost": -15.77,
+        "risk": 25.67
       }
     },
     "stance": "no",
@@ -890,561 +838,28 @@
   {
     "facts": {
       "is_contract_variation": true,
-      "continued_business_case_justified": false,
-      "portfolio_contention": false,
-      "tolerance_variances_pct": {
-        "quality": 6.47,
-        "scope": -20.83
-      }
-    },
-    "stance": "no",
-    "driving_constraint": "Continued business case: not justified"
-  },
-  {
-    "facts": {
-      "is_contract_variation": true,
       "continued_business_case_justified": true,
-      "portfolio_contention": false,
-      "tolerance_variances_pct": {
-        "risk": -22.53,
-        "time": -22.12
-      }
-    },
-    "stance": "conditional",
-    "driving_constraint": "Requires Change Control Gate 2 (contract variation) sign-off before proceeding"
-  },
-  {
-    "facts": {
-      "is_contract_variation": true,
-      "continued_business_case_justified": true,
-      "portfolio_contention": false,
-      "tolerance_variances_pct": {
-        "benefit": -13.9,
-        "time": 0.49
-      }
-    },
-    "stance": "conditional",
-    "driving_constraint": "Requires Change Control Gate 1 (tolerance exception), Change Control Gate 2 (contract variation) sign-off before proceeding"
-  },
-  {
-    "facts": {
-      "is_contract_variation": true,
-      "continued_business_case_justified": true,
-      "portfolio_contention": true,
-      "tolerance_variances_pct": {
-        "scope": -25.2,
-        "benefit": 21.04
-      }
-    },
-    "stance": "conditional",
-    "driving_constraint": "Requires Change Control Gate 2 (contract variation) sign-off before proceeding"
-  },
-  {
-    "facts": {
-      "is_contract_variation": false,
-      "continued_business_case_justified": true,
-      "portfolio_contention": true,
-      "tolerance_variances_pct": {
-        "time": -10.67,
-        "cost": 18.06
-      }
-    },
-    "stance": "conditional",
-    "driving_constraint": "Requires Change Control Gate 1 (tolerance exception) sign-off before proceeding"
-  },
-  {
-    "facts": {
-      "is_contract_variation": false,
-      "continued_business_case_justified": false,
-      "portfolio_contention": true,
-      "tolerance_variances_pct": {
-        "scope": -5.34,
-        "benefit": 0.5
-      }
-    },
-    "stance": "no",
-    "driving_constraint": "Continued business case: not justified"
-  },
-  {
-    "facts": {
-      "is_contract_variation": true,
-      "continued_business_case_justified": true,
-      "portfolio_contention": true,
-      "tolerance_variances_pct": {
-        "scope": 14.46,
-        "time": -24.73,
-        "quality": -5.3
-      }
-    },
-    "stance": "no",
-    "driving_constraint": "scope variance +14% vs 5% tolerance (hard reject)"
-  },
-  {
-    "facts": {
-      "is_contract_variation": false,
-      "continued_business_case_justified": false,
-      "portfolio_contention": true,
-      "tolerance_variances_pct": {
-        "cost": -11.12
-      }
-    },
-    "stance": "no",
-    "driving_constraint": "Continued business case: not justified"
-  },
-  {
-    "facts": {
-      "is_contract_variation": true,
-      "continued_business_case_justified": false,
-      "portfolio_contention": true,
-      "tolerance_variances_pct": {
-        "risk": 4.71,
-        "cost": -16.22,
-        "benefit": 20.4
-      }
-    },
-    "stance": "no",
-    "driving_constraint": "Continued business case: not justified"
-  },
-  {
-    "facts": {
-      "is_contract_variation": true,
-      "continued_business_case_justified": true,
-      "portfolio_contention": false,
-      "tolerance_variances_pct": {
-        "cost": 14.21
-      }
-    },
-    "stance": "conditional",
-    "driving_constraint": "Requires Change Control Gate 1 (tolerance exception), Change Control Gate 2 (contract variation) sign-off before proceeding"
-  },
-  {
-    "facts": {
-      "is_contract_variation": false,
-      "continued_business_case_justified": true,
-      "portfolio_contention": false,
-      "tolerance_variances_pct": {
-        "risk": -8.27
-      }
-    },
-    "stance": "yes",
-    "driving_constraint": "Within all delegated tolerances; no gate required"
-  },
-  {
-    "facts": {
-      "is_contract_variation": false,
-      "continued_business_case_justified": true,
-      "portfolio_contention": false,
-      "tolerance_variances_pct": {
-        "time": -6.93,
-        "benefit": 2.08,
-        "risk": 19.51
-      }
-    },
-    "stance": "conditional",
-    "driving_constraint": "Requires Change Control Gate 1 (tolerance exception) sign-off before proceeding"
-  },
-  {
-    "facts": {
-      "is_contract_variation": true,
-      "continued_business_case_justified": false,
-      "portfolio_contention": true,
-      "tolerance_variances_pct": {
-        "risk": -14.89,
-        "quality": 22.67
-      }
-    },
-    "stance": "no",
-    "driving_constraint": "Continued business case: not justified"
-  },
-  {
-    "facts": {
-      "is_contract_variation": false,
-      "continued_business_case_justified": false,
-      "portfolio_contention": false,
-      "tolerance_variances_pct": {
-        "time": -16.65,
-        "cost": 23.62
-      }
-    },
-    "stance": "no",
-    "driving_constraint": "Continued business case: not justified"
-  },
-  {
-    "facts": {
-      "is_contract_variation": true,
-      "continued_business_case_justified": false,
-      "portfolio_contention": true,
-      "tolerance_variances_pct": {
-        "risk": 12.45,
-        "cost": -28.34
-      }
-    },
-    "stance": "no",
-    "driving_constraint": "Continued business case: not justified"
-  },
-  {
-    "facts": {
-      "is_contract_variation": false,
-      "continued_business_case_justified": false,
-      "portfolio_contention": true,
-      "tolerance_variances_pct": {
-        "cost": 23.06,
-        "time": -10.97
-      }
-    },
-    "stance": "no",
-    "driving_constraint": "Continued business case: not justified"
-  },
-  {
-    "facts": {
-      "is_contract_variation": false,
-      "continued_business_case_justified": false,
-      "portfolio_contention": false,
-      "tolerance_variances_pct": {
-        "quality": -13.53,
-        "scope": -23.37,
-        "time": -28.07
-      }
-    },
-    "stance": "no",
-    "driving_constraint": "Continued business case: not justified"
-  },
-  {
-    "facts": {
-      "is_contract_variation": false,
-      "continued_business_case_justified": true,
-      "portfolio_contention": true,
-      "tolerance_variances_pct": {
-        "cost": 10.41
-      }
-    },
-    "stance": "conditional",
-    "driving_constraint": "Requires Change Control Gate 1 (tolerance exception) sign-off before proceeding"
-  },
-  {
-    "facts": {
-      "is_contract_variation": true,
-      "continued_business_case_justified": false,
-      "portfolio_contention": false,
-      "tolerance_variances_pct": {
-        "scope": 29.87,
-        "cost": 17.05,
-        "quality": -18.01
-      }
-    },
-    "stance": "no",
-    "driving_constraint": "Continued business case: not justified"
-  },
-  {
-    "facts": {
-      "is_contract_variation": true,
-      "continued_business_case_justified": false,
-      "portfolio_contention": false,
-      "tolerance_variances_pct": {
-        "cost": 6.74
-      }
-    },
-    "stance": "no",
-    "driving_constraint": "Continued business case: not justified"
-  },
-  {
-    "facts": {
-      "is_contract_variation": true,
-      "continued_business_case_justified": false,
-      "portfolio_contention": true,
-      "tolerance_variances_pct": {
-        "scope": -25.48,
-        "quality": 21.13
-      }
-    },
-    "stance": "no",
-    "driving_constraint": "Continued business case: not justified"
-  },
-  {
-    "facts": {
-      "is_contract_variation": true,
-      "continued_business_case_justified": true,
-      "portfolio_contention": false,
-      "tolerance_variances_pct": {
-        "benefit": -20.31,
-        "time": 28.94,
-        "quality": -9.31
-      }
-    },
-    "stance": "no",
-    "driving_constraint": "benefit variance -20% vs 10% tolerance (hard reject)"
-  },
-  {
-    "facts": {
-      "is_contract_variation": true,
-      "continued_business_case_justified": false,
-      "portfolio_contention": false,
-      "tolerance_variances_pct": {
-        "scope": 1.17,
-        "time": -29.88
-      }
-    },
-    "stance": "no",
-    "driving_constraint": "Continued business case: not justified"
-  },
-  {
-    "facts": {
-      "is_contract_variation": true,
-      "continued_business_case_justified": true,
-      "portfolio_contention": false,
-      "tolerance_variances_pct": {
-        "time": 2.42,
-        "cost": 28.19
-      }
-    },
-    "stance": "no",
-    "driving_constraint": "cost variance +28% vs 10% tolerance (hard reject)"
-  },
-  {
-    "facts": {
-      "is_contract_variation": false,
-      "continued_business_case_justified": false,
-      "portfolio_contention": true,
-      "tolerance_variances_pct": {
-        "time": 23.97
-      }
-    },
-    "stance": "no",
-    "driving_constraint": "Continued business case: not justified"
-  },
-  {
-    "facts": {
-      "is_contract_variation": false,
-      "continued_business_case_justified": true,
-      "portfolio_contention": true,
-      "tolerance_variances_pct": {
-        "scope": 11.27
-      }
-    },
-    "stance": "no",
-    "driving_constraint": "scope variance +11% vs 5% tolerance (hard reject)"
-  },
-  {
-    "facts": {
-      "is_contract_variation": true,
-      "continued_business_case_justified": true,
-      "portfolio_contention": false,
-      "tolerance_variances_pct": {
-        "risk": 15.06,
-        "time": -25.43,
-        "cost": -1.31
-      }
-    },
-    "stance": "conditional",
-    "driving_constraint": "Requires Change Control Gate 1 (tolerance exception), Change Control Gate 2 (contract variation) sign-off before proceeding"
-  },
-  {
-    "facts": {
-      "is_contract_variation": true,
-      "continued_business_case_justified": false,
-      "portfolio_contention": true,
-      "tolerance_variances_pct": {
-        "risk": -24.74,
-        "time": -15.28
-      }
-    },
-    "stance": "no",
-    "driving_constraint": "Continued business case: not justified"
-  },
-  {
-    "facts": {
-      "is_contract_variation": false,
-      "continued_business_case_justified": true,
-      "portfolio_contention": false,
-      "tolerance_variances_pct": {
-        "cost": 12.82,
-        "quality": 15.91,
-        "time": -29.87
-      }
-    },
-    "stance": "conditional",
-    "driving_constraint": "Requires Change Control Gate 1 (tolerance exception) sign-off before proceeding"
-  },
-  {
-    "facts": {
-      "is_contract_variation": false,
-      "continued_business_case_justified": false,
-      "portfolio_contention": false,
-      "tolerance_variances_pct": {
-        "quality": 19.78,
-        "benefit": 1.16,
-        "time": -9.44
-      }
-    },
-    "stance": "no",
-    "driving_constraint": "Continued business case: not justified"
-  },
-  {
-    "facts": {
-      "is_contract_variation": true,
-      "continued_business_case_justified": false,
-      "portfolio_contention": false,
-      "tolerance_variances_pct": {
-        "risk": -14.61
-      }
-    },
-    "stance": "no",
-    "driving_constraint": "Continued business case: not justified"
-  },
-  {
-    "facts": {
-      "is_contract_variation": false,
-      "continued_business_case_justified": false,
-      "portfolio_contention": false,
-      "tolerance_variances_pct": {
-        "risk": -12.82,
-        "cost": 2.01,
-        "time": -20.81
-      }
-    },
-    "stance": "no",
-    "driving_constraint": "Continued business case: not justified"
-  },
-  {
-    "facts": {
-      "is_contract_variation": true,
-      "continued_business_case_justified": true,
-      "portfolio_contention": true,
-      "tolerance_variances_pct": {
-        "risk": 19.36,
-        "benefit": 11.8
-      }
-    },
-    "stance": "conditional",
-    "driving_constraint": "Requires Change Control Gate 1 (tolerance exception), Change Control Gate 2 (contract variation) sign-off before proceeding"
-  },
-  {
-    "facts": {
-      "is_contract_variation": false,
-      "continued_business_case_justified": true,
-      "portfolio_contention": true,
-      "tolerance_variances_pct": {
-        "time": -28.59
-      }
-    },
-    "stance": "yes",
-    "driving_constraint": "Within all delegated tolerances; no gate required"
-  },
-  {
-    "facts": {
-      "is_contract_variation": false,
-      "continued_business_case_justified": false,
-      "portfolio_contention": false,
-      "tolerance_variances_pct": {
-        "scope": -10.14
-      }
-    },
-    "stance": "no",
-    "driving_constraint": "Continued business case: not justified"
-  },
-  {
-    "facts": {
-      "is_contract_variation": false,
-      "continued_business_case_justified": false,
-      "portfolio_contention": false,
-      "tolerance_variances_pct": {
-        "cost": 28.4
-      }
-    },
-    "stance": "no",
-    "driving_constraint": "Continued business case: not justified"
-  },
-  {
-    "facts": {
-      "is_contract_variation": false,
-      "continued_business_case_justified": false,
-      "portfolio_contention": false,
-      "tolerance_variances_pct": {
-        "scope": -29.41
-      }
-    },
-    "stance": "no",
-    "driving_constraint": "Continued business case: not justified"
-  },
-  {
-    "facts": {
-      "is_contract_variation": false,
-      "continued_business_case_justified": false,
-      "portfolio_contention": false,
-      "tolerance_variances_pct": {
-        "time": 1.96,
-        "scope": -20.21,
-        "risk": 9.85
-      }
-    },
-    "stance": "no",
-    "driving_constraint": "Continued business case: not justified"
-  },
-  {
-    "facts": {
-      "is_contract_variation": false,
-      "continued_business_case_justified": false,
-      "portfolio_contention": false,
-      "tolerance_variances_pct": {
-        "risk": 13.52,
-        "time": -2.02
-      }
-    },
-    "stance": "no",
-    "driving_constraint": "Continued business case: not justified"
-  },
-  {
-    "facts": {
-      "is_contract_variation": true,
-      "continued_business_case_justified": false,
-      "portfolio_contention": true,
-      "tolerance_variances_pct": {
-        "benefit": -5.08,
-        "time": 3.33
-      }
-    },
-    "stance": "no",
-    "driving_constraint": "Continued business case: not justified"
-  },
-  {
-    "facts": {
-      "is_contract_variation": true,
-      "continued_business_case_justified": false,
-      "portfolio_contention": true,
-      "tolerance_variances_pct": {
-        "cost": 23.15
-      }
-    },
-    "stance": "no",
-    "driving_constraint": "Continued business case: not justified"
-  },
-  {
-    "facts": {
-      "is_contract_variation": true,
-      "continued_business_case_justified": false,
       "portfolio_contention": false,
       "tolerance_variances_pct": {
         "scope": -15.27,
-        "benefit": -1.98,
-        "time": -15.53
+        "time": -1.98
       }
     },
-    "stance": "no",
-    "driving_constraint": "Continued business case: not justified"
+    "stance": "conditional",
+    "driving_constraint": "Requires Change Control Gate 2 (contract variation) sign-off before proceeding"
   },
   {
     "facts": {
       "is_contract_variation": true,
-      "continued_business_case_justified": false,
-      "portfolio_contention": false,
+      "continued_business_case_justified": true,
+      "portfolio_contention": true,
       "tolerance_variances_pct": {
-        "cost": -25.71,
-        "time": 21.88,
-        "scope": -27.36
+        "quality": -18.41,
+        "cost": 1.05
       }
     },
     "stance": "no",
-    "driving_constraint": "Continued business case: not justified"
+    "driving_constraint": "quality variance -18% vs 5% tolerance (hard reject)"
   },
   {
     "facts": {
@@ -2930,5 +2345,1006 @@
     },
     "stance": "conditional",
     "driving_constraint": "Requires Change Control Gate 1 (tolerance exception), Change Control Gate 2 (contract variation) sign-off before proceeding"
+  },
+  {
+    "facts": {
+      "is_contract_variation": false,
+      "continued_business_case_justified": true,
+      "portfolio_contention": true,
+      "tolerance_variances_pct": {
+        "scope": -16.97
+      }
+    },
+    "stance": "yes",
+    "driving_constraint": "Within all delegated tolerances; no gate required"
+  },
+  {
+    "facts": {
+      "is_contract_variation": false,
+      "continued_business_case_justified": false,
+      "portfolio_contention": false,
+      "tolerance_variances_pct": {
+        "risk": -23.66
+      }
+    },
+    "stance": "no",
+    "driving_constraint": "Continued business case: not justified"
+  },
+  {
+    "facts": {
+      "is_contract_variation": false,
+      "continued_business_case_justified": false,
+      "portfolio_contention": true,
+      "tolerance_variances_pct": {
+        "time": -28.9,
+        "cost": 22.5,
+        "risk": -9.61
+      }
+    },
+    "stance": "no",
+    "driving_constraint": "Continued business case: not justified"
+  },
+  {
+    "facts": {
+      "is_contract_variation": true,
+      "continued_business_case_justified": true,
+      "portfolio_contention": true,
+      "tolerance_variances_pct": {
+        "scope": 9.09
+      }
+    },
+    "stance": "conditional",
+    "driving_constraint": "Requires Change Control Gate 1 (tolerance exception), Change Control Gate 2 (contract variation) sign-off before proceeding"
+  },
+  {
+    "facts": {
+      "is_contract_variation": false,
+      "continued_business_case_justified": true,
+      "portfolio_contention": true,
+      "tolerance_variances_pct": {
+        "time": 16.9,
+        "cost": 3.79
+      }
+    },
+    "stance": "conditional",
+    "driving_constraint": "Requires Change Control Gate 1 (tolerance exception) sign-off before proceeding"
+  },
+  {
+    "facts": {
+      "is_contract_variation": false,
+      "continued_business_case_justified": true,
+      "portfolio_contention": true,
+      "tolerance_variances_pct": {
+        "cost": 25.11,
+        "benefit": 9.7,
+        "risk": 13.03
+      }
+    },
+    "stance": "no",
+    "driving_constraint": "cost variance +25% vs 10% tolerance (hard reject)"
+  },
+  {
+    "facts": {
+      "is_contract_variation": false,
+      "continued_business_case_justified": false,
+      "portfolio_contention": true,
+      "tolerance_variances_pct": {
+        "quality": -27.57,
+        "scope": -29.79
+      }
+    },
+    "stance": "no",
+    "driving_constraint": "Continued business case: not justified"
+  },
+  {
+    "facts": {
+      "is_contract_variation": false,
+      "continued_business_case_justified": false,
+      "portfolio_contention": false,
+      "tolerance_variances_pct": {
+        "risk": -13.79
+      }
+    },
+    "stance": "no",
+    "driving_constraint": "Continued business case: not justified"
+  },
+  {
+    "facts": {
+      "is_contract_variation": true,
+      "continued_business_case_justified": false,
+      "portfolio_contention": true,
+      "tolerance_variances_pct": {
+        "benefit": -28.02
+      }
+    },
+    "stance": "no",
+    "driving_constraint": "Continued business case: not justified"
+  },
+  {
+    "facts": {
+      "is_contract_variation": false,
+      "continued_business_case_justified": false,
+      "portfolio_contention": true,
+      "tolerance_variances_pct": {
+        "scope": -0.86,
+        "risk": -18.57
+      }
+    },
+    "stance": "no",
+    "driving_constraint": "Continued business case: not justified"
+  },
+  {
+    "facts": {
+      "is_contract_variation": true,
+      "continued_business_case_justified": false,
+      "portfolio_contention": true,
+      "tolerance_variances_pct": {
+        "time": 21.6,
+        "scope": 15.52,
+        "quality": -0.69
+      }
+    },
+    "stance": "no",
+    "driving_constraint": "Continued business case: not justified"
+  },
+  {
+    "facts": {
+      "is_contract_variation": false,
+      "continued_business_case_justified": true,
+      "portfolio_contention": false,
+      "tolerance_variances_pct": {
+        "quality": -6.58,
+        "risk": -14.63,
+        "time": -27.28
+      }
+    },
+    "stance": "conditional",
+    "driving_constraint": "Requires Change Control Gate 1 (tolerance exception) sign-off before proceeding"
+  },
+  {
+    "facts": {
+      "is_contract_variation": false,
+      "continued_business_case_justified": true,
+      "portfolio_contention": false,
+      "tolerance_variances_pct": {
+        "quality": 10.52,
+        "cost": -9.2,
+        "scope": 12.55
+      }
+    },
+    "stance": "no",
+    "driving_constraint": "scope variance +13% vs 5% tolerance (hard reject)"
+  },
+  {
+    "facts": {
+      "is_contract_variation": true,
+      "continued_business_case_justified": true,
+      "portfolio_contention": false,
+      "tolerance_variances_pct": {
+        "cost": -18.95,
+        "risk": 6.63,
+        "quality": 14.61
+      }
+    },
+    "stance": "conditional",
+    "driving_constraint": "Requires Change Control Gate 2 (contract variation) sign-off before proceeding"
+  },
+  {
+    "facts": {
+      "is_contract_variation": true,
+      "continued_business_case_justified": false,
+      "portfolio_contention": true,
+      "tolerance_variances_pct": {
+        "benefit": -12.64,
+        "time": 10.86,
+        "quality": -17.46
+      }
+    },
+    "stance": "no",
+    "driving_constraint": "Continued business case: not justified"
+  },
+  {
+    "facts": {
+      "is_contract_variation": false,
+      "continued_business_case_justified": false,
+      "portfolio_contention": false,
+      "tolerance_variances_pct": {
+        "time": -17.45,
+        "risk": -2.58
+      }
+    },
+    "stance": "no",
+    "driving_constraint": "Continued business case: not justified"
+  },
+  {
+    "facts": {
+      "is_contract_variation": true,
+      "continued_business_case_justified": false,
+      "portfolio_contention": true,
+      "tolerance_variances_pct": {
+        "cost": 2.97
+      }
+    },
+    "stance": "no",
+    "driving_constraint": "Continued business case: not justified"
+  },
+  {
+    "facts": {
+      "is_contract_variation": true,
+      "continued_business_case_justified": false,
+      "portfolio_contention": false,
+      "tolerance_variances_pct": {
+        "cost": 17.23,
+        "benefit": -22.83
+      }
+    },
+    "stance": "no",
+    "driving_constraint": "Continued business case: not justified"
+  },
+  {
+    "facts": {
+      "is_contract_variation": true,
+      "continued_business_case_justified": false,
+      "portfolio_contention": true,
+      "tolerance_variances_pct": {
+        "quality": -14.09
+      }
+    },
+    "stance": "no",
+    "driving_constraint": "Continued business case: not justified"
+  },
+  {
+    "facts": {
+      "is_contract_variation": true,
+      "continued_business_case_justified": true,
+      "portfolio_contention": true,
+      "tolerance_variances_pct": {
+        "quality": 26.43
+      }
+    },
+    "stance": "conditional",
+    "driving_constraint": "Requires Change Control Gate 2 (contract variation) sign-off before proceeding"
+  },
+  {
+    "facts": {
+      "is_contract_variation": true,
+      "continued_business_case_justified": false,
+      "portfolio_contention": true,
+      "tolerance_variances_pct": {
+        "benefit": -0.94,
+        "quality": 17.28
+      }
+    },
+    "stance": "no",
+    "driving_constraint": "Continued business case: not justified"
+  },
+  {
+    "facts": {
+      "is_contract_variation": false,
+      "continued_business_case_justified": true,
+      "portfolio_contention": false,
+      "tolerance_variances_pct": {
+        "quality": -11.8,
+        "risk": -14.51
+      }
+    },
+    "stance": "no",
+    "driving_constraint": "quality variance -12% vs 5% tolerance (hard reject)"
+  },
+  {
+    "facts": {
+      "is_contract_variation": true,
+      "continued_business_case_justified": false,
+      "portfolio_contention": true,
+      "tolerance_variances_pct": {
+        "quality": 24.77,
+        "time": 29.54
+      }
+    },
+    "stance": "no",
+    "driving_constraint": "Continued business case: not justified"
+  },
+  {
+    "facts": {
+      "is_contract_variation": true,
+      "continued_business_case_justified": false,
+      "portfolio_contention": true,
+      "tolerance_variances_pct": {
+        "risk": 13.08
+      }
+    },
+    "stance": "no",
+    "driving_constraint": "Continued business case: not justified"
+  },
+  {
+    "facts": {
+      "is_contract_variation": true,
+      "continued_business_case_justified": true,
+      "portfolio_contention": true,
+      "tolerance_variances_pct": {
+        "time": 13.43,
+        "benefit": 15.33
+      }
+    },
+    "stance": "conditional",
+    "driving_constraint": "Requires Change Control Gate 1 (tolerance exception), Change Control Gate 2 (contract variation) sign-off before proceeding"
+  },
+  {
+    "facts": {
+      "is_contract_variation": false,
+      "continued_business_case_justified": false,
+      "portfolio_contention": true,
+      "tolerance_variances_pct": {
+        "scope": -14.92,
+        "time": -15.57
+      }
+    },
+    "stance": "no",
+    "driving_constraint": "Continued business case: not justified"
+  },
+  {
+    "facts": {
+      "is_contract_variation": false,
+      "continued_business_case_justified": true,
+      "portfolio_contention": true,
+      "tolerance_variances_pct": {
+        "quality": 29.86,
+        "time": 19.07,
+        "cost": -19.1
+      }
+    },
+    "stance": "conditional",
+    "driving_constraint": "Requires Change Control Gate 1 (tolerance exception) sign-off before proceeding"
+  },
+  {
+    "facts": {
+      "is_contract_variation": false,
+      "continued_business_case_justified": true,
+      "portfolio_contention": true,
+      "tolerance_variances_pct": {
+        "cost": -28.15
+      }
+    },
+    "stance": "yes",
+    "driving_constraint": "Within all delegated tolerances; no gate required"
+  },
+  {
+    "facts": {
+      "is_contract_variation": true,
+      "continued_business_case_justified": true,
+      "portfolio_contention": false,
+      "tolerance_variances_pct": {
+        "scope": -20.95,
+        "quality": -10.67,
+        "risk": 21.93
+      }
+    },
+    "stance": "no",
+    "driving_constraint": "quality variance -11% vs 5% tolerance (hard reject)"
+  },
+  {
+    "facts": {
+      "is_contract_variation": false,
+      "continued_business_case_justified": true,
+      "portfolio_contention": false,
+      "tolerance_variances_pct": {
+        "benefit": 9.41
+      }
+    },
+    "stance": "yes",
+    "driving_constraint": "Within all delegated tolerances; no gate required"
+  },
+  {
+    "facts": {
+      "is_contract_variation": false,
+      "continued_business_case_justified": true,
+      "portfolio_contention": false,
+      "tolerance_variances_pct": {
+        "quality": 21.59,
+        "benefit": 16.27
+      }
+    },
+    "stance": "yes",
+    "driving_constraint": "Within all delegated tolerances; no gate required"
+  },
+  {
+    "facts": {
+      "is_contract_variation": false,
+      "continued_business_case_justified": false,
+      "portfolio_contention": true,
+      "tolerance_variances_pct": {
+        "risk": 7.35
+      }
+    },
+    "stance": "no",
+    "driving_constraint": "Continued business case: not justified"
+  },
+  {
+    "facts": {
+      "is_contract_variation": true,
+      "continued_business_case_justified": true,
+      "portfolio_contention": true,
+      "tolerance_variances_pct": {
+        "benefit": -4.1,
+        "quality": 1.29,
+        "cost": 28.99
+      }
+    },
+    "stance": "no",
+    "driving_constraint": "cost variance +29% vs 10% tolerance (hard reject)"
+  },
+  {
+    "facts": {
+      "is_contract_variation": false,
+      "continued_business_case_justified": true,
+      "portfolio_contention": false,
+      "tolerance_variances_pct": {
+        "scope": 15.9
+      }
+    },
+    "stance": "no",
+    "driving_constraint": "scope variance +16% vs 5% tolerance (hard reject)"
+  },
+  {
+    "facts": {
+      "is_contract_variation": true,
+      "continued_business_case_justified": true,
+      "portfolio_contention": false,
+      "tolerance_variances_pct": {
+        "scope": 18.66
+      }
+    },
+    "stance": "no",
+    "driving_constraint": "scope variance +19% vs 5% tolerance (hard reject)"
+  },
+  {
+    "facts": {
+      "is_contract_variation": true,
+      "continued_business_case_justified": true,
+      "portfolio_contention": true,
+      "tolerance_variances_pct": {
+        "quality": -16.26,
+        "cost": -5.02
+      }
+    },
+    "stance": "no",
+    "driving_constraint": "quality variance -16% vs 5% tolerance (hard reject)"
+  },
+  {
+    "facts": {
+      "is_contract_variation": true,
+      "continued_business_case_justified": true,
+      "portfolio_contention": false,
+      "tolerance_variances_pct": {
+        "risk": -17.52,
+        "cost": -25.9
+      }
+    },
+    "stance": "conditional",
+    "driving_constraint": "Requires Change Control Gate 2 (contract variation) sign-off before proceeding"
+  },
+  {
+    "facts": {
+      "is_contract_variation": true,
+      "continued_business_case_justified": true,
+      "portfolio_contention": false,
+      "tolerance_variances_pct": {
+        "benefit": 10.7,
+        "risk": -5.41,
+        "time": 23.3
+      }
+    },
+    "stance": "no",
+    "driving_constraint": "time variance +23% vs 10% tolerance (hard reject)"
+  },
+  {
+    "facts": {
+      "is_contract_variation": false,
+      "continued_business_case_justified": false,
+      "portfolio_contention": true,
+      "tolerance_variances_pct": {
+        "cost": 10.24,
+        "quality": 4.11,
+        "risk": 14.67
+      }
+    },
+    "stance": "no",
+    "driving_constraint": "Continued business case: not justified"
+  },
+  {
+    "facts": {
+      "is_contract_variation": false,
+      "continued_business_case_justified": true,
+      "portfolio_contention": false,
+      "tolerance_variances_pct": {
+        "time": 2.98
+      }
+    },
+    "stance": "yes",
+    "driving_constraint": "Within all delegated tolerances; no gate required"
+  },
+  {
+    "facts": {
+      "is_contract_variation": false,
+      "continued_business_case_justified": true,
+      "portfolio_contention": false,
+      "tolerance_variances_pct": {
+        "benefit": 5.9
+      }
+    },
+    "stance": "yes",
+    "driving_constraint": "Within all delegated tolerances; no gate required"
+  },
+  {
+    "facts": {
+      "is_contract_variation": false,
+      "continued_business_case_justified": true,
+      "portfolio_contention": false,
+      "tolerance_variances_pct": {
+        "benefit": 8.06,
+        "quality": 2.16
+      }
+    },
+    "stance": "yes",
+    "driving_constraint": "Within all delegated tolerances; no gate required"
+  },
+  {
+    "facts": {
+      "is_contract_variation": false,
+      "continued_business_case_justified": true,
+      "portfolio_contention": true,
+      "tolerance_variances_pct": {
+        "scope": 1.365
+      }
+    },
+    "stance": "yes",
+    "driving_constraint": "Within all delegated tolerances; no gate required"
+  },
+  {
+    "facts": {
+      "is_contract_variation": false,
+      "continued_business_case_justified": true,
+      "portfolio_contention": false,
+      "tolerance_variances_pct": {
+        "scope": -2.49
+      }
+    },
+    "stance": "yes",
+    "driving_constraint": "Within all delegated tolerances; no gate required"
+  },
+  {
+    "facts": {
+      "is_contract_variation": false,
+      "continued_business_case_justified": true,
+      "portfolio_contention": false,
+      "tolerance_variances_pct": {
+        "cost": 3.45
+      }
+    },
+    "stance": "yes",
+    "driving_constraint": "Within all delegated tolerances; no gate required"
+  },
+  {
+    "facts": {
+      "is_contract_variation": false,
+      "continued_business_case_justified": true,
+      "portfolio_contention": false,
+      "tolerance_variances_pct": {
+        "scope": -3.42
+      }
+    },
+    "stance": "yes",
+    "driving_constraint": "Within all delegated tolerances; no gate required"
+  },
+  {
+    "facts": {
+      "is_contract_variation": false,
+      "continued_business_case_justified": true,
+      "portfolio_contention": false,
+      "tolerance_variances_pct": {
+        "cost": -4.85,
+        "benefit": 3.42
+      }
+    },
+    "stance": "yes",
+    "driving_constraint": "Within all delegated tolerances; no gate required"
+  },
+  {
+    "facts": {
+      "is_contract_variation": false,
+      "continued_business_case_justified": true,
+      "portfolio_contention": true,
+      "tolerance_variances_pct": {
+        "quality": 1.97
+      }
+    },
+    "stance": "yes",
+    "driving_constraint": "Within all delegated tolerances; no gate required"
+  },
+  {
+    "facts": {
+      "is_contract_variation": false,
+      "continued_business_case_justified": true,
+      "portfolio_contention": true,
+      "tolerance_variances_pct": {
+        "benefit": 6.36
+      }
+    },
+    "stance": "yes",
+    "driving_constraint": "Within all delegated tolerances; no gate required"
+  },
+  {
+    "facts": {
+      "is_contract_variation": false,
+      "continued_business_case_justified": true,
+      "portfolio_contention": true,
+      "tolerance_variances_pct": {
+        "risk": 2.395
+      }
+    },
+    "stance": "yes",
+    "driving_constraint": "Within all delegated tolerances; no gate required"
+  },
+  {
+    "facts": {
+      "is_contract_variation": false,
+      "continued_business_case_justified": true,
+      "portfolio_contention": false,
+      "tolerance_variances_pct": {
+        "quality": 0.46,
+        "scope": -3.42
+      }
+    },
+    "stance": "yes",
+    "driving_constraint": "Within all delegated tolerances; no gate required"
+  },
+  {
+    "facts": {
+      "is_contract_variation": false,
+      "continued_business_case_justified": true,
+      "portfolio_contention": true,
+      "tolerance_variances_pct": {
+        "benefit": 6.69
+      }
+    },
+    "stance": "yes",
+    "driving_constraint": "Within all delegated tolerances; no gate required"
+  },
+  {
+    "facts": {
+      "is_contract_variation": false,
+      "continued_business_case_justified": true,
+      "portfolio_contention": false,
+      "tolerance_variances_pct": {
+        "cost": -8.46
+      }
+    },
+    "stance": "yes",
+    "driving_constraint": "Within all delegated tolerances; no gate required"
+  },
+  {
+    "facts": {
+      "is_contract_variation": false,
+      "continued_business_case_justified": true,
+      "portfolio_contention": false,
+      "tolerance_variances_pct": {
+        "benefit": 1.08,
+        "cost": -6.97
+      }
+    },
+    "stance": "yes",
+    "driving_constraint": "Within all delegated tolerances; no gate required"
+  },
+  {
+    "facts": {
+      "is_contract_variation": false,
+      "continued_business_case_justified": true,
+      "portfolio_contention": true,
+      "tolerance_variances_pct": {
+        "time": 1.995
+      }
+    },
+    "stance": "yes",
+    "driving_constraint": "Within all delegated tolerances; no gate required"
+  },
+  {
+    "facts": {
+      "is_contract_variation": false,
+      "continued_business_case_justified": true,
+      "portfolio_contention": false,
+      "tolerance_variances_pct": {
+        "time": 2.745,
+        "cost": -6.88
+      }
+    },
+    "stance": "yes",
+    "driving_constraint": "Within all delegated tolerances; no gate required"
+  },
+  {
+    "facts": {
+      "is_contract_variation": false,
+      "continued_business_case_justified": true,
+      "portfolio_contention": true,
+      "tolerance_variances_pct": {
+        "time": 2.46,
+        "quality": 2.33
+      }
+    },
+    "stance": "yes",
+    "driving_constraint": "Within all delegated tolerances; no gate required"
+  },
+  {
+    "facts": {
+      "is_contract_variation": false,
+      "continued_business_case_justified": true,
+      "portfolio_contention": true,
+      "tolerance_variances_pct": {
+        "time": 2.225,
+        "quality": 2.37
+      }
+    },
+    "stance": "yes",
+    "driving_constraint": "Within all delegated tolerances; no gate required"
+  },
+  {
+    "facts": {
+      "is_contract_variation": false,
+      "continued_business_case_justified": true,
+      "portfolio_contention": true,
+      "tolerance_variances_pct": {
+        "benefit": 6.51,
+        "scope": 1.205
+      }
+    },
+    "stance": "yes",
+    "driving_constraint": "Within all delegated tolerances; no gate required"
+  },
+  {
+    "facts": {
+      "is_contract_variation": false,
+      "continued_business_case_justified": true,
+      "portfolio_contention": true,
+      "tolerance_variances_pct": {
+        "scope": 0.715
+      }
+    },
+    "stance": "yes",
+    "driving_constraint": "Within all delegated tolerances; no gate required"
+  },
+  {
+    "facts": {
+      "is_contract_variation": false,
+      "continued_business_case_justified": true,
+      "portfolio_contention": true,
+      "tolerance_variances_pct": {
+        "quality": 2.19
+      }
+    },
+    "stance": "yes",
+    "driving_constraint": "Within all delegated tolerances; no gate required"
+  },
+  {
+    "facts": {
+      "is_contract_variation": false,
+      "continued_business_case_justified": true,
+      "portfolio_contention": true,
+      "tolerance_variances_pct": {
+        "risk": -2.62
+      }
+    },
+    "stance": "yes",
+    "driving_constraint": "Within all delegated tolerances; no gate required"
+  },
+  {
+    "facts": {
+      "is_contract_variation": false,
+      "continued_business_case_justified": true,
+      "portfolio_contention": true,
+      "tolerance_variances_pct": {
+        "quality": 0.2,
+        "cost": 2.72
+      }
+    },
+    "stance": "yes",
+    "driving_constraint": "Within all delegated tolerances; no gate required"
+  },
+  {
+    "facts": {
+      "is_contract_variation": false,
+      "continued_business_case_justified": true,
+      "portfolio_contention": true,
+      "tolerance_variances_pct": {
+        "quality": 3.3
+      }
+    },
+    "stance": "yes",
+    "driving_constraint": "Within all delegated tolerances; no gate required"
+  },
+  {
+    "facts": {
+      "is_contract_variation": false,
+      "continued_business_case_justified": true,
+      "portfolio_contention": true,
+      "tolerance_variances_pct": {
+        "risk": -1.81,
+        "cost": -6.5
+      }
+    },
+    "stance": "yes",
+    "driving_constraint": "Within all delegated tolerances; no gate required"
+  },
+  {
+    "facts": {
+      "is_contract_variation": false,
+      "continued_business_case_justified": true,
+      "portfolio_contention": false,
+      "tolerance_variances_pct": {
+        "cost": -0.27,
+        "risk": -7.23
+      }
+    },
+    "stance": "yes",
+    "driving_constraint": "Within all delegated tolerances; no gate required"
+  },
+  {
+    "facts": {
+      "is_contract_variation": false,
+      "continued_business_case_justified": true,
+      "portfolio_contention": false,
+      "tolerance_variances_pct": {
+        "scope": -1.68
+      }
+    },
+    "stance": "yes",
+    "driving_constraint": "Within all delegated tolerances; no gate required"
+  },
+  {
+    "facts": {
+      "is_contract_variation": false,
+      "continued_business_case_justified": true,
+      "portfolio_contention": true,
+      "tolerance_variances_pct": {
+        "cost": -3.24
+      }
+    },
+    "stance": "yes",
+    "driving_constraint": "Within all delegated tolerances; no gate required"
+  },
+  {
+    "facts": {
+      "is_contract_variation": false,
+      "continued_business_case_justified": true,
+      "portfolio_contention": false,
+      "tolerance_variances_pct": {
+        "cost": -6.15
+      }
+    },
+    "stance": "yes",
+    "driving_constraint": "Within all delegated tolerances; no gate required"
+  },
+  {
+    "facts": {
+      "is_contract_variation": false,
+      "continued_business_case_justified": true,
+      "portfolio_contention": false,
+      "tolerance_variances_pct": {
+        "time": 2.58
+      }
+    },
+    "stance": "yes",
+    "driving_constraint": "Within all delegated tolerances; no gate required"
+  },
+  {
+    "facts": {
+      "is_contract_variation": false,
+      "continued_business_case_justified": true,
+      "portfolio_contention": true,
+      "tolerance_variances_pct": {
+        "scope": 0.605,
+        "time": 1.135
+      }
+    },
+    "stance": "yes",
+    "driving_constraint": "Within all delegated tolerances; no gate required"
+  },
+  {
+    "facts": {
+      "is_contract_variation": false,
+      "continued_business_case_justified": true,
+      "portfolio_contention": true,
+      "tolerance_variances_pct": {
+        "risk": -0.1,
+        "time": 2.645
+      }
+    },
+    "stance": "yes",
+    "driving_constraint": "Within all delegated tolerances; no gate required"
+  },
+  {
+    "facts": {
+      "is_contract_variation": false,
+      "continued_business_case_justified": true,
+      "portfolio_contention": false,
+      "tolerance_variances_pct": {
+        "cost": -5.48,
+        "risk": -0.78
+      }
+    },
+    "stance": "yes",
+    "driving_constraint": "Within all delegated tolerances; no gate required"
+  },
+  {
+    "facts": {
+      "is_contract_variation": false,
+      "continued_business_case_justified": true,
+      "portfolio_contention": false,
+      "tolerance_variances_pct": {
+        "benefit": 2.96
+      }
+    },
+    "stance": "yes",
+    "driving_constraint": "Within all delegated tolerances; no gate required"
+  },
+  {
+    "facts": {
+      "is_contract_variation": false,
+      "continued_business_case_justified": true,
+      "portfolio_contention": true,
+      "tolerance_variances_pct": {
+        "time": -8.16,
+        "cost": 3.24
+      }
+    },
+    "stance": "yes",
+    "driving_constraint": "Within all delegated tolerances; no gate required"
+  },
+  {
+    "facts": {
+      "is_contract_variation": false,
+      "continued_business_case_justified": true,
+      "portfolio_contention": false,
+      "tolerance_variances_pct": {
+        "cost": -6.21
+      }
+    },
+    "stance": "yes",
+    "driving_constraint": "Within all delegated tolerances; no gate required"
+  },
+  {
+    "facts": {
+      "is_contract_variation": false,
+      "continued_business_case_justified": true,
+      "portfolio_contention": true,
+      "tolerance_variances_pct": {
+        "quality": 3.5
+      }
+    },
+    "stance": "yes",
+    "driving_constraint": "Within all delegated tolerances; no gate required"
+  },
+  {
+    "facts": {
+      "is_contract_variation": false,
+      "continued_business_case_justified": true,
+      "portfolio_contention": true,
+      "tolerance_variances_pct": {
+        "cost": -6.19,
+        "time": 4.425
+      }
+    },
+    "stance": "yes",
+    "driving_constraint": "Within all delegated tolerances; no gate required"
+  },
+  {
+    "facts": {
+      "is_contract_variation": false,
+      "continued_business_case_justified": true,
+      "portfolio_contention": true,
+      "tolerance_variances_pct": {
+        "cost": 1.26
+      }
+    },
+    "stance": "yes",
+    "driving_constraint": "Within all delegated tolerances; no gate required"
   }
 ]

@@ -3602,5 +3602,1025 @@
     },
     "stance": "conditional",
     "driving_constraint": "Critical Revenue at Risk unchanged by \u00a30 (\u00a30 -> \u00a30)"
+  },
+  {
+    "facts": {
+      "budget": 4399355.47,
+      "actual_pct": 0.718,
+      "schedule_pct": 0.589,
+      "spend_to_date": 2427620.83,
+      "slip_days_before_change": 20.0,
+      "is_resourced": true,
+      "is_on_critical_path": true,
+      "is_revenue_tagged": true,
+      "revenue_value": 386124.42,
+      "reported_rag_before": "amber",
+      "reported_rag_after": "green"
+    },
+    "stance": "yes",
+    "driving_constraint": "Critical Revenue at Risk reduced by \u00a3386,124 (\u00a3386,124 -> \u00a30)"
+  },
+  {
+    "facts": {
+      "budget": 4565289.78,
+      "actual_pct": 0.592,
+      "schedule_pct": 0.279,
+      "spend_to_date": 923476.94,
+      "slip_days_before_change": 7.4,
+      "is_resourced": true,
+      "is_on_critical_path": true,
+      "is_revenue_tagged": true,
+      "revenue_value": 644942.41,
+      "reported_rag_before": "amber",
+      "reported_rag_after": "green"
+    },
+    "stance": "yes",
+    "driving_constraint": "Critical Revenue at Risk reduced by \u00a3644,942 (\u00a3644,942 -> \u00a30)"
+  },
+  {
+    "facts": {
+      "budget": 1605852.3,
+      "actual_pct": 0.308,
+      "schedule_pct": 0.095,
+      "spend_to_date": 1993677.83,
+      "slip_days_before_change": 55.4,
+      "is_resourced": true,
+      "is_on_critical_path": true,
+      "is_revenue_tagged": true,
+      "revenue_value": 409257.26,
+      "reported_rag_before": "red",
+      "reported_rag_after": "green"
+    },
+    "stance": "yes",
+    "driving_constraint": "Critical Revenue at Risk reduced by \u00a3409,257 (\u00a3409,257 -> \u00a30)"
+  },
+  {
+    "facts": {
+      "budget": 2217312.2,
+      "actual_pct": 0.44,
+      "schedule_pct": 0.29,
+      "spend_to_date": 2933627.82,
+      "slip_days_before_change": 43.2,
+      "is_resourced": true,
+      "is_on_critical_path": true,
+      "is_revenue_tagged": true,
+      "revenue_value": 242792.2,
+      "reported_rag_before": "amber",
+      "reported_rag_after": "green"
+    },
+    "stance": "yes",
+    "driving_constraint": "Critical Revenue at Risk reduced by \u00a3242,792 (\u00a3242,792 -> \u00a30)"
+  },
+  {
+    "facts": {
+      "budget": 2202524.58,
+      "actual_pct": 0.407,
+      "schedule_pct": 0.638,
+      "spend_to_date": 2160062.33,
+      "slip_days_before_change": 47.8,
+      "is_resourced": true,
+      "is_on_critical_path": true,
+      "is_revenue_tagged": true,
+      "revenue_value": 886573.96,
+      "reported_rag_before": "amber",
+      "reported_rag_after": "green"
+    },
+    "stance": "yes",
+    "driving_constraint": "Critical Revenue at Risk reduced by \u00a3886,574 (\u00a3886,574 -> \u00a30)"
+  },
+  {
+    "facts": {
+      "budget": 1655291.54,
+      "actual_pct": 0.666,
+      "schedule_pct": 0.581,
+      "spend_to_date": 2079707.37,
+      "slip_days_before_change": 50.9,
+      "is_resourced": true,
+      "is_on_critical_path": true,
+      "is_revenue_tagged": true,
+      "revenue_value": 28488.63,
+      "reported_rag_before": "amber",
+      "reported_rag_after": "green"
+    },
+    "stance": "yes",
+    "driving_constraint": "Critical Revenue at Risk reduced by \u00a328,489 (\u00a328,489 -> \u00a30)"
+  },
+  {
+    "facts": {
+      "budget": 4531811.57,
+      "actual_pct": 0.104,
+      "schedule_pct": 0.358,
+      "spend_to_date": 1594955.36,
+      "slip_days_before_change": 56.6,
+      "is_resourced": true,
+      "is_on_critical_path": true,
+      "is_revenue_tagged": true,
+      "revenue_value": 773615.69,
+      "reported_rag_before": "red",
+      "reported_rag_after": "green"
+    },
+    "stance": "yes",
+    "driving_constraint": "Critical Revenue at Risk reduced by \u00a3773,616 (\u00a3773,616 -> \u00a30)"
+  },
+  {
+    "facts": {
+      "budget": 3103732.39,
+      "actual_pct": 0.27,
+      "schedule_pct": 0.896,
+      "spend_to_date": 1510533.11,
+      "slip_days_before_change": 53.7,
+      "is_resourced": true,
+      "is_on_critical_path": true,
+      "is_revenue_tagged": true,
+      "revenue_value": 960489.1,
+      "reported_rag_before": "amber",
+      "reported_rag_after": "green"
+    },
+    "stance": "yes",
+    "driving_constraint": "Critical Revenue at Risk reduced by \u00a3960,489 (\u00a3960,489 -> \u00a30)"
+  },
+  {
+    "facts": {
+      "budget": 878898.4,
+      "actual_pct": 0.96,
+      "schedule_pct": 0.776,
+      "spend_to_date": 1945198.07,
+      "slip_days_before_change": 48.2,
+      "is_resourced": true,
+      "is_on_critical_path": true,
+      "is_revenue_tagged": true,
+      "revenue_value": 720122.17,
+      "reported_rag_before": "red",
+      "reported_rag_after": "green"
+    },
+    "stance": "yes",
+    "driving_constraint": "Critical Revenue at Risk reduced by \u00a3720,122 (\u00a3720,122 -> \u00a30)"
+  },
+  {
+    "facts": {
+      "budget": 1277659.29,
+      "actual_pct": 0.304,
+      "schedule_pct": 0.752,
+      "spend_to_date": 169820.9,
+      "slip_days_before_change": 32.3,
+      "is_resourced": true,
+      "is_on_critical_path": true,
+      "is_revenue_tagged": true,
+      "revenue_value": 972157.85,
+      "reported_rag_before": "amber",
+      "reported_rag_after": "green"
+    },
+    "stance": "yes",
+    "driving_constraint": "Critical Revenue at Risk reduced by \u00a3972,158 (\u00a3972,158 -> \u00a30)"
+  },
+  {
+    "facts": {
+      "budget": 2405837.96,
+      "actual_pct": 0.089,
+      "schedule_pct": 0.036,
+      "spend_to_date": 2840643.61,
+      "slip_days_before_change": 44.4,
+      "is_resourced": true,
+      "is_on_critical_path": true,
+      "is_revenue_tagged": true,
+      "revenue_value": 240861.51,
+      "reported_rag_before": "red",
+      "reported_rag_after": "green"
+    },
+    "stance": "yes",
+    "driving_constraint": "Critical Revenue at Risk reduced by \u00a3240,862 (\u00a3240,862 -> \u00a30)"
+  },
+  {
+    "facts": {
+      "budget": 4035513.71,
+      "actual_pct": 0.898,
+      "schedule_pct": 0.924,
+      "spend_to_date": 1557767.17,
+      "slip_days_before_change": 7.8,
+      "is_resourced": true,
+      "is_on_critical_path": true,
+      "is_revenue_tagged": true,
+      "revenue_value": 352504.2,
+      "reported_rag_before": "amber",
+      "reported_rag_after": "green"
+    },
+    "stance": "yes",
+    "driving_constraint": "Critical Revenue at Risk reduced by \u00a3352,504 (\u00a3352,504 -> \u00a30)"
+  },
+  {
+    "facts": {
+      "budget": 4942113.99,
+      "actual_pct": 0.066,
+      "schedule_pct": 0.29,
+      "spend_to_date": 1941480.22,
+      "slip_days_before_change": 28.8,
+      "is_resourced": true,
+      "is_on_critical_path": true,
+      "is_revenue_tagged": true,
+      "revenue_value": 314952.67,
+      "reported_rag_before": "red",
+      "reported_rag_after": "green"
+    },
+    "stance": "yes",
+    "driving_constraint": "Critical Revenue at Risk reduced by \u00a3314,953 (\u00a3314,953 -> \u00a30)"
+  },
+  {
+    "facts": {
+      "budget": 4727111.91,
+      "actual_pct": 0.913,
+      "schedule_pct": 0.381,
+      "spend_to_date": 1833490.36,
+      "slip_days_before_change": 47.7,
+      "is_resourced": true,
+      "is_on_critical_path": true,
+      "is_revenue_tagged": true,
+      "revenue_value": 904711.14,
+      "reported_rag_before": "red",
+      "reported_rag_after": "green"
+    },
+    "stance": "yes",
+    "driving_constraint": "Critical Revenue at Risk reduced by \u00a3904,711 (\u00a3904,711 -> \u00a30)"
+  },
+  {
+    "facts": {
+      "budget": 3965781.26,
+      "actual_pct": 0.037,
+      "schedule_pct": 0.934,
+      "spend_to_date": 2363206.65,
+      "slip_days_before_change": 12.7,
+      "is_resourced": true,
+      "is_on_critical_path": true,
+      "is_revenue_tagged": true,
+      "revenue_value": 946534.59,
+      "reported_rag_before": "amber",
+      "reported_rag_after": "green"
+    },
+    "stance": "yes",
+    "driving_constraint": "Critical Revenue at Risk reduced by \u00a3946,535 (\u00a3946,535 -> \u00a30)"
+  },
+  {
+    "facts": {
+      "budget": 1552201.22,
+      "actual_pct": 0.206,
+      "schedule_pct": 0.012,
+      "spend_to_date": 1164133.78,
+      "slip_days_before_change": 43.1,
+      "is_resourced": true,
+      "is_on_critical_path": true,
+      "is_revenue_tagged": true,
+      "revenue_value": 952407.54,
+      "reported_rag_before": "red",
+      "reported_rag_after": "green"
+    },
+    "stance": "yes",
+    "driving_constraint": "Critical Revenue at Risk reduced by \u00a3952,408 (\u00a3952,408 -> \u00a30)"
+  },
+  {
+    "facts": {
+      "budget": 2324556.31,
+      "actual_pct": 0.832,
+      "schedule_pct": 0.152,
+      "spend_to_date": 256894.64,
+      "slip_days_before_change": 45.4,
+      "is_resourced": true,
+      "is_on_critical_path": true,
+      "is_revenue_tagged": true,
+      "revenue_value": 641663.53,
+      "reported_rag_before": "amber",
+      "reported_rag_after": "green"
+    },
+    "stance": "yes",
+    "driving_constraint": "Critical Revenue at Risk reduced by \u00a3641,664 (\u00a3641,664 -> \u00a30)"
+  },
+  {
+    "facts": {
+      "budget": 2669836.08,
+      "actual_pct": 0.285,
+      "schedule_pct": 0.428,
+      "spend_to_date": 1146303.1,
+      "slip_days_before_change": 23.4,
+      "is_resourced": true,
+      "is_on_critical_path": true,
+      "is_revenue_tagged": true,
+      "revenue_value": 331989.46,
+      "reported_rag_before": "red",
+      "reported_rag_after": "green"
+    },
+    "stance": "yes",
+    "driving_constraint": "Critical Revenue at Risk reduced by \u00a3331,989 (\u00a3331,989 -> \u00a30)"
+  },
+  {
+    "facts": {
+      "budget": 3039918.53,
+      "actual_pct": 0.194,
+      "schedule_pct": 0.368,
+      "spend_to_date": 2640927.79,
+      "slip_days_before_change": 36.5,
+      "is_resourced": true,
+      "is_on_critical_path": true,
+      "is_revenue_tagged": true,
+      "revenue_value": 153759.23,
+      "reported_rag_before": "red",
+      "reported_rag_after": "green"
+    },
+    "stance": "yes",
+    "driving_constraint": "Critical Revenue at Risk reduced by \u00a3153,759 (\u00a3153,759 -> \u00a30)"
+  },
+  {
+    "facts": {
+      "budget": 1722593.08,
+      "actual_pct": 0.353,
+      "schedule_pct": 0.937,
+      "spend_to_date": 1963347.47,
+      "slip_days_before_change": 11.3,
+      "is_resourced": true,
+      "is_on_critical_path": true,
+      "is_revenue_tagged": true,
+      "revenue_value": 269619.79,
+      "reported_rag_before": "amber",
+      "reported_rag_after": "green"
+    },
+    "stance": "yes",
+    "driving_constraint": "Critical Revenue at Risk reduced by \u00a3269,620 (\u00a3269,620 -> \u00a30)"
+  },
+  {
+    "facts": {
+      "budget": 851028.26,
+      "actual_pct": 0.347,
+      "schedule_pct": 0.987,
+      "spend_to_date": 748782.12,
+      "slip_days_before_change": 41.9,
+      "is_resourced": true,
+      "is_on_critical_path": true,
+      "is_revenue_tagged": true,
+      "revenue_value": 922895.86,
+      "reported_rag_before": "amber",
+      "reported_rag_after": "green"
+    },
+    "stance": "yes",
+    "driving_constraint": "Critical Revenue at Risk reduced by \u00a3922,896 (\u00a3922,896 -> \u00a30)"
+  },
+  {
+    "facts": {
+      "budget": 2601983.05,
+      "actual_pct": 0.356,
+      "schedule_pct": 0.297,
+      "spend_to_date": 2705871.02,
+      "slip_days_before_change": 21.3,
+      "is_resourced": true,
+      "is_on_critical_path": true,
+      "is_revenue_tagged": true,
+      "revenue_value": 80860.35,
+      "reported_rag_before": "amber",
+      "reported_rag_after": "green"
+    },
+    "stance": "yes",
+    "driving_constraint": "Critical Revenue at Risk reduced by \u00a380,860 (\u00a380,860 -> \u00a30)"
+  },
+  {
+    "facts": {
+      "budget": 4600969.99,
+      "actual_pct": 0.684,
+      "schedule_pct": 0.077,
+      "spend_to_date": 193951.41,
+      "slip_days_before_change": 57.5,
+      "is_resourced": true,
+      "is_on_critical_path": true,
+      "is_revenue_tagged": true,
+      "revenue_value": 73775.7,
+      "reported_rag_before": "amber",
+      "reported_rag_after": "green"
+    },
+    "stance": "yes",
+    "driving_constraint": "Critical Revenue at Risk reduced by \u00a373,776 (\u00a373,776 -> \u00a30)"
+  },
+  {
+    "facts": {
+      "budget": 1730724.47,
+      "actual_pct": 0.062,
+      "schedule_pct": 0.175,
+      "spend_to_date": 1451546.23,
+      "slip_days_before_change": 5.5,
+      "is_resourced": true,
+      "is_on_critical_path": true,
+      "is_revenue_tagged": true,
+      "revenue_value": 892747.52,
+      "reported_rag_before": "amber",
+      "reported_rag_after": "green"
+    },
+    "stance": "yes",
+    "driving_constraint": "Critical Revenue at Risk reduced by \u00a3892,748 (\u00a3892,748 -> \u00a30)"
+  },
+  {
+    "facts": {
+      "budget": 1566918.37,
+      "actual_pct": 0.395,
+      "schedule_pct": 0.968,
+      "spend_to_date": 2816990.46,
+      "slip_days_before_change": 34.7,
+      "is_resourced": true,
+      "is_on_critical_path": true,
+      "is_revenue_tagged": true,
+      "revenue_value": 117414.96,
+      "reported_rag_before": "red",
+      "reported_rag_after": "green"
+    },
+    "stance": "yes",
+    "driving_constraint": "Critical Revenue at Risk reduced by \u00a3117,415 (\u00a3117,415 -> \u00a30)"
+  },
+  {
+    "facts": {
+      "budget": 1704154.68,
+      "actual_pct": 0.43,
+      "schedule_pct": 0.046,
+      "spend_to_date": 2625351.12,
+      "slip_days_before_change": 31.3,
+      "is_resourced": true,
+      "is_on_critical_path": true,
+      "is_revenue_tagged": true,
+      "revenue_value": 77851.57,
+      "reported_rag_before": "red",
+      "reported_rag_after": "green"
+    },
+    "stance": "yes",
+    "driving_constraint": "Critical Revenue at Risk reduced by \u00a377,852 (\u00a377,852 -> \u00a30)"
+  },
+  {
+    "facts": {
+      "budget": 4824465.64,
+      "actual_pct": 0.094,
+      "schedule_pct": 0.131,
+      "spend_to_date": 950676.2,
+      "slip_days_before_change": 28.1,
+      "is_resourced": true,
+      "is_on_critical_path": true,
+      "is_revenue_tagged": true,
+      "revenue_value": 993641.39,
+      "reported_rag_before": "amber",
+      "reported_rag_after": "green"
+    },
+    "stance": "yes",
+    "driving_constraint": "Critical Revenue at Risk reduced by \u00a3993,641 (\u00a3993,641 -> \u00a30)"
+  },
+  {
+    "facts": {
+      "budget": 2822000.68,
+      "actual_pct": 0.759,
+      "schedule_pct": 0.578,
+      "spend_to_date": 696637.93,
+      "slip_days_before_change": 50.4,
+      "is_resourced": true,
+      "is_on_critical_path": true,
+      "is_revenue_tagged": true,
+      "revenue_value": 763979.31,
+      "reported_rag_before": "red",
+      "reported_rag_after": "green"
+    },
+    "stance": "yes",
+    "driving_constraint": "Critical Revenue at Risk reduced by \u00a3763,979 (\u00a3763,979 -> \u00a30)"
+  },
+  {
+    "facts": {
+      "budget": 2538948.54,
+      "actual_pct": 0.614,
+      "schedule_pct": 0.885,
+      "spend_to_date": 1651981.43,
+      "slip_days_before_change": 30.8,
+      "is_resourced": true,
+      "is_on_critical_path": true,
+      "is_revenue_tagged": true,
+      "revenue_value": 117153.12,
+      "reported_rag_before": "amber",
+      "reported_rag_after": "green"
+    },
+    "stance": "yes",
+    "driving_constraint": "Critical Revenue at Risk reduced by \u00a3117,153 (\u00a3117,153 -> \u00a30)"
+  },
+  {
+    "facts": {
+      "budget": 930171.06,
+      "actual_pct": 0.737,
+      "schedule_pct": 0.755,
+      "spend_to_date": 1663565.53,
+      "slip_days_before_change": 10.8,
+      "is_resourced": true,
+      "is_on_critical_path": true,
+      "is_revenue_tagged": true,
+      "revenue_value": 326567.55,
+      "reported_rag_before": "red",
+      "reported_rag_after": "green"
+    },
+    "stance": "yes",
+    "driving_constraint": "Critical Revenue at Risk reduced by \u00a3326,568 (\u00a3326,568 -> \u00a30)"
+  },
+  {
+    "facts": {
+      "budget": 3468359.78,
+      "actual_pct": 0.968,
+      "schedule_pct": 0.376,
+      "spend_to_date": 655720.65,
+      "slip_days_before_change": 9.6,
+      "is_resourced": true,
+      "is_on_critical_path": true,
+      "is_revenue_tagged": true,
+      "revenue_value": 385111.66,
+      "reported_rag_before": "red",
+      "reported_rag_after": "green"
+    },
+    "stance": "yes",
+    "driving_constraint": "Critical Revenue at Risk reduced by \u00a3385,112 (\u00a3385,112 -> \u00a30)"
+  },
+  {
+    "facts": {
+      "budget": 1813806.16,
+      "actual_pct": 0.021,
+      "schedule_pct": 0.71,
+      "spend_to_date": 832492.45,
+      "slip_days_before_change": 25.8,
+      "is_resourced": true,
+      "is_on_critical_path": true,
+      "is_revenue_tagged": true,
+      "revenue_value": 418303.06,
+      "reported_rag_before": "amber",
+      "reported_rag_after": "green"
+    },
+    "stance": "yes",
+    "driving_constraint": "Critical Revenue at Risk reduced by \u00a3418,303 (\u00a3418,303 -> \u00a30)"
+  },
+  {
+    "facts": {
+      "budget": 2884849.2,
+      "actual_pct": 0.122,
+      "schedule_pct": 0.525,
+      "spend_to_date": 441800.36,
+      "slip_days_before_change": 13.4,
+      "is_resourced": true,
+      "is_on_critical_path": true,
+      "is_revenue_tagged": true,
+      "revenue_value": 893701.27,
+      "reported_rag_before": "amber",
+      "reported_rag_after": "green"
+    },
+    "stance": "yes",
+    "driving_constraint": "Critical Revenue at Risk reduced by \u00a3893,701 (\u00a3893,701 -> \u00a30)"
+  },
+  {
+    "facts": {
+      "budget": 4038981.99,
+      "actual_pct": 0.79,
+      "schedule_pct": 0.252,
+      "spend_to_date": 81743.77,
+      "slip_days_before_change": 33.4,
+      "is_resourced": true,
+      "is_on_critical_path": true,
+      "is_revenue_tagged": true,
+      "revenue_value": 562218.41,
+      "reported_rag_before": "red",
+      "reported_rag_after": "green"
+    },
+    "stance": "yes",
+    "driving_constraint": "Critical Revenue at Risk reduced by \u00a3562,218 (\u00a3562,218 -> \u00a30)"
+  },
+  {
+    "facts": {
+      "budget": 3763238.9,
+      "actual_pct": 0.18,
+      "schedule_pct": 0.011,
+      "spend_to_date": 745555.12,
+      "slip_days_before_change": 57.6,
+      "is_resourced": true,
+      "is_on_critical_path": true,
+      "is_revenue_tagged": true,
+      "revenue_value": 473870.88,
+      "reported_rag_before": "amber",
+      "reported_rag_after": "green"
+    },
+    "stance": "yes",
+    "driving_constraint": "Critical Revenue at Risk reduced by \u00a3473,871 (\u00a3473,871 -> \u00a30)"
+  },
+  {
+    "facts": {
+      "budget": 3689118.31,
+      "actual_pct": 0.53,
+      "schedule_pct": 0.517,
+      "spend_to_date": 378142.18,
+      "slip_days_before_change": 46.7,
+      "is_resourced": true,
+      "is_on_critical_path": true,
+      "is_revenue_tagged": true,
+      "revenue_value": 832560.16,
+      "reported_rag_before": "red",
+      "reported_rag_after": "green"
+    },
+    "stance": "yes",
+    "driving_constraint": "Critical Revenue at Risk reduced by \u00a3832,560 (\u00a3832,560 -> \u00a30)"
+  },
+  {
+    "facts": {
+      "budget": 3475815.84,
+      "actual_pct": 0.085,
+      "schedule_pct": 0.899,
+      "spend_to_date": 1224705.07,
+      "slip_days_before_change": 17.9,
+      "is_resourced": true,
+      "is_on_critical_path": true,
+      "is_revenue_tagged": true,
+      "revenue_value": 275291.61,
+      "reported_rag_before": "red",
+      "reported_rag_after": "green"
+    },
+    "stance": "yes",
+    "driving_constraint": "Critical Revenue at Risk reduced by \u00a3275,292 (\u00a3275,292 -> \u00a30)"
+  },
+  {
+    "facts": {
+      "budget": 170037.31,
+      "actual_pct": 0.835,
+      "schedule_pct": 0.432,
+      "spend_to_date": 1167551.17,
+      "slip_days_before_change": 17.6,
+      "is_resourced": true,
+      "is_on_critical_path": true,
+      "is_revenue_tagged": true,
+      "revenue_value": 100024.12,
+      "reported_rag_before": "amber",
+      "reported_rag_after": "green"
+    },
+    "stance": "yes",
+    "driving_constraint": "Critical Revenue at Risk reduced by \u00a3100,024 (\u00a3100,024 -> \u00a30)"
+  },
+  {
+    "facts": {
+      "budget": 3427922.68,
+      "actual_pct": 0.723,
+      "schedule_pct": 0.803,
+      "spend_to_date": 2842163.98,
+      "slip_days_before_change": 58.4,
+      "is_resourced": true,
+      "is_on_critical_path": true,
+      "is_revenue_tagged": true,
+      "revenue_value": 256535.69,
+      "reported_rag_before": "red",
+      "reported_rag_after": "green"
+    },
+    "stance": "yes",
+    "driving_constraint": "Critical Revenue at Risk reduced by \u00a3256,536 (\u00a3256,536 -> \u00a30)"
+  },
+  {
+    "facts": {
+      "budget": 4989732.53,
+      "actual_pct": 0.784,
+      "schedule_pct": 0.2,
+      "spend_to_date": 2507969.88,
+      "slip_days_before_change": 4.4,
+      "is_resourced": true,
+      "is_on_critical_path": true,
+      "is_revenue_tagged": true,
+      "revenue_value": 576118.97,
+      "reported_rag_before": "red",
+      "reported_rag_after": "green"
+    },
+    "stance": "yes",
+    "driving_constraint": "Critical Revenue at Risk reduced by \u00a3576,119 (\u00a3576,119 -> \u00a30)"
+  },
+  {
+    "facts": {
+      "budget": 4879572.38,
+      "actual_pct": 0.612,
+      "schedule_pct": 0.192,
+      "spend_to_date": 2664503.68,
+      "slip_days_before_change": 56.7,
+      "is_resourced": true,
+      "is_on_critical_path": true,
+      "is_revenue_tagged": true,
+      "revenue_value": 988347.82,
+      "reported_rag_before": "amber",
+      "reported_rag_after": "green"
+    },
+    "stance": "yes",
+    "driving_constraint": "Critical Revenue at Risk reduced by \u00a3988,348 (\u00a3988,348 -> \u00a30)"
+  },
+  {
+    "facts": {
+      "budget": 2348628.75,
+      "actual_pct": 0.91,
+      "schedule_pct": 0.963,
+      "spend_to_date": 817106.18,
+      "slip_days_before_change": 27.9,
+      "is_resourced": true,
+      "is_on_critical_path": true,
+      "is_revenue_tagged": true,
+      "revenue_value": 629313.18,
+      "reported_rag_before": "amber",
+      "reported_rag_after": "green"
+    },
+    "stance": "yes",
+    "driving_constraint": "Critical Revenue at Risk reduced by \u00a3629,313 (\u00a3629,313 -> \u00a30)"
+  },
+  {
+    "facts": {
+      "budget": 3935833.92,
+      "actual_pct": 0.321,
+      "schedule_pct": 0.161,
+      "spend_to_date": 2786698.04,
+      "slip_days_before_change": 8.0,
+      "is_resourced": true,
+      "is_on_critical_path": true,
+      "is_revenue_tagged": true,
+      "revenue_value": 834404.71,
+      "reported_rag_before": "amber",
+      "reported_rag_after": "green"
+    },
+    "stance": "yes",
+    "driving_constraint": "Critical Revenue at Risk reduced by \u00a3834,405 (\u00a3834,405 -> \u00a30)"
+  },
+  {
+    "facts": {
+      "budget": 891445.35,
+      "actual_pct": 0.982,
+      "schedule_pct": 0.345,
+      "spend_to_date": 2478457.09,
+      "slip_days_before_change": 6.6,
+      "is_resourced": true,
+      "is_on_critical_path": true,
+      "is_revenue_tagged": true,
+      "revenue_value": 409422.08,
+      "reported_rag_before": "red",
+      "reported_rag_after": "green"
+    },
+    "stance": "yes",
+    "driving_constraint": "Critical Revenue at Risk reduced by \u00a3409,422 (\u00a3409,422 -> \u00a30)"
+  },
+  {
+    "facts": {
+      "budget": 1335703.61,
+      "actual_pct": 0.568,
+      "schedule_pct": 0.363,
+      "spend_to_date": 2867202.53,
+      "slip_days_before_change": 13.2,
+      "is_resourced": true,
+      "is_on_critical_path": true,
+      "is_revenue_tagged": true,
+      "revenue_value": 883139.67,
+      "reported_rag_before": "amber",
+      "reported_rag_after": "green"
+    },
+    "stance": "yes",
+    "driving_constraint": "Critical Revenue at Risk reduced by \u00a3883,140 (\u00a3883,140 -> \u00a30)"
+  },
+  {
+    "facts": {
+      "budget": 2495583.32,
+      "actual_pct": 0.718,
+      "schedule_pct": 0.253,
+      "spend_to_date": 591478.59,
+      "slip_days_before_change": 32.4,
+      "is_resourced": true,
+      "is_on_critical_path": true,
+      "is_revenue_tagged": true,
+      "revenue_value": 969871.87,
+      "reported_rag_before": "amber",
+      "reported_rag_after": "green"
+    },
+    "stance": "yes",
+    "driving_constraint": "Critical Revenue at Risk reduced by \u00a3969,872 (\u00a3969,872 -> \u00a30)"
+  },
+  {
+    "facts": {
+      "budget": 4624820.08,
+      "actual_pct": 0.638,
+      "schedule_pct": 0.606,
+      "spend_to_date": 1376799.67,
+      "slip_days_before_change": 2.3,
+      "is_resourced": true,
+      "is_on_critical_path": true,
+      "is_revenue_tagged": true,
+      "revenue_value": 909067.94,
+      "reported_rag_before": "amber",
+      "reported_rag_after": "green"
+    },
+    "stance": "yes",
+    "driving_constraint": "Critical Revenue at Risk reduced by \u00a3909,068 (\u00a3909,068 -> \u00a30)"
+  },
+  {
+    "facts": {
+      "budget": 1113586.62,
+      "actual_pct": 0.155,
+      "schedule_pct": 0.533,
+      "spend_to_date": 1452885.17,
+      "slip_days_before_change": 55.7,
+      "is_resourced": true,
+      "is_on_critical_path": true,
+      "is_revenue_tagged": true,
+      "revenue_value": 872069.73,
+      "reported_rag_before": "red",
+      "reported_rag_after": "green"
+    },
+    "stance": "yes",
+    "driving_constraint": "Critical Revenue at Risk reduced by \u00a3872,070 (\u00a3872,070 -> \u00a30)"
+  },
+  {
+    "facts": {
+      "budget": 1407087.73,
+      "actual_pct": 0.014,
+      "schedule_pct": 0.019,
+      "spend_to_date": 138620.36,
+      "slip_days_before_change": 14.1,
+      "is_resourced": true,
+      "is_on_critical_path": true,
+      "is_revenue_tagged": true,
+      "revenue_value": 19741.6,
+      "reported_rag_before": "red",
+      "reported_rag_after": "green"
+    },
+    "stance": "yes",
+    "driving_constraint": "Critical Revenue at Risk reduced by \u00a319,742 (\u00a319,742 -> \u00a30)"
+  },
+  {
+    "facts": {
+      "budget": 1440123.81,
+      "actual_pct": 0.417,
+      "schedule_pct": 0.523,
+      "spend_to_date": 2577138.75,
+      "slip_days_before_change": 40.4,
+      "is_resourced": true,
+      "is_on_critical_path": true,
+      "is_revenue_tagged": true,
+      "revenue_value": 80086.42,
+      "reported_rag_before": "amber",
+      "reported_rag_after": "green"
+    },
+    "stance": "yes",
+    "driving_constraint": "Critical Revenue at Risk reduced by \u00a380,086 (\u00a380,086 -> \u00a30)"
+  },
+  {
+    "facts": {
+      "budget": 473461.51,
+      "actual_pct": 0.478,
+      "schedule_pct": 0.676,
+      "spend_to_date": 277552.89,
+      "slip_days_before_change": 41.4,
+      "is_resourced": true,
+      "is_on_critical_path": true,
+      "is_revenue_tagged": true,
+      "revenue_value": 267133.19,
+      "reported_rag_before": "amber",
+      "reported_rag_after": "green"
+    },
+    "stance": "yes",
+    "driving_constraint": "Critical Revenue at Risk reduced by \u00a3267,133 (\u00a3267,133 -> \u00a30)"
+  },
+  {
+    "facts": {
+      "budget": 2585226.55,
+      "actual_pct": 0.734,
+      "schedule_pct": 0.088,
+      "spend_to_date": 743405.17,
+      "slip_days_before_change": 57.6,
+      "is_resourced": true,
+      "is_on_critical_path": true,
+      "is_revenue_tagged": true,
+      "revenue_value": 723375.6,
+      "reported_rag_before": "red",
+      "reported_rag_after": "green"
+    },
+    "stance": "yes",
+    "driving_constraint": "Critical Revenue at Risk reduced by \u00a3723,376 (\u00a3723,376 -> \u00a30)"
+  },
+  {
+    "facts": {
+      "budget": 3893441.1,
+      "actual_pct": 0.958,
+      "schedule_pct": 0.101,
+      "spend_to_date": 361921.42,
+      "slip_days_before_change": 28.5,
+      "is_resourced": true,
+      "is_on_critical_path": true,
+      "is_revenue_tagged": true,
+      "revenue_value": 162840.47,
+      "reported_rag_before": "amber",
+      "reported_rag_after": "green"
+    },
+    "stance": "yes",
+    "driving_constraint": "Critical Revenue at Risk reduced by \u00a3162,840 (\u00a3162,840 -> \u00a30)"
+  },
+  {
+    "facts": {
+      "budget": 3848954.73,
+      "actual_pct": 0.002,
+      "schedule_pct": 0.562,
+      "spend_to_date": 1703855.76,
+      "slip_days_before_change": 54.9,
+      "is_resourced": true,
+      "is_on_critical_path": true,
+      "is_revenue_tagged": true,
+      "revenue_value": 992896.2,
+      "reported_rag_before": "amber",
+      "reported_rag_after": "green"
+    },
+    "stance": "yes",
+    "driving_constraint": "Critical Revenue at Risk reduced by \u00a3992,896 (\u00a3992,896 -> \u00a30)"
+  },
+  {
+    "facts": {
+      "budget": 461345.82,
+      "actual_pct": 0.339,
+      "schedule_pct": 0.411,
+      "spend_to_date": 1431401.78,
+      "slip_days_before_change": 11.0,
+      "is_resourced": true,
+      "is_on_critical_path": true,
+      "is_revenue_tagged": true,
+      "revenue_value": 314887.48,
+      "reported_rag_before": "red",
+      "reported_rag_after": "green"
+    },
+    "stance": "yes",
+    "driving_constraint": "Critical Revenue at Risk reduced by \u00a3314,887 (\u00a3314,887 -> \u00a30)"
+  },
+  {
+    "facts": {
+      "budget": 1779212.33,
+      "actual_pct": 0.476,
+      "schedule_pct": 0.264,
+      "spend_to_date": 531932.47,
+      "slip_days_before_change": 31.0,
+      "is_resourced": true,
+      "is_on_critical_path": true,
+      "is_revenue_tagged": true,
+      "revenue_value": 529288.84,
+      "reported_rag_before": "red",
+      "reported_rag_after": "green"
+    },
+    "stance": "yes",
+    "driving_constraint": "Critical Revenue at Risk reduced by \u00a3529,289 (\u00a3529,289 -> \u00a30)"
+  },
+  {
+    "facts": {
+      "budget": 2328691.95,
+      "actual_pct": 1.0,
+      "schedule_pct": 0.016,
+      "spend_to_date": 564000.28,
+      "slip_days_before_change": 20.8,
+      "is_resourced": true,
+      "is_on_critical_path": true,
+      "is_revenue_tagged": true,
+      "revenue_value": 843992.03,
+      "reported_rag_before": "red",
+      "reported_rag_after": "green"
+    },
+    "stance": "yes",
+    "driving_constraint": "Critical Revenue at Risk reduced by \u00a3843,992 (\u00a3843,992 -> \u00a30)"
+  },
+  {
+    "facts": {
+      "budget": 3112834.22,
+      "actual_pct": 0.663,
+      "schedule_pct": 0.286,
+      "spend_to_date": 1605353.91,
+      "slip_days_before_change": 9.2,
+      "is_resourced": true,
+      "is_on_critical_path": true,
+      "is_revenue_tagged": true,
+      "revenue_value": 817071.05,
+      "reported_rag_before": "red",
+      "reported_rag_after": "green"
+    },
+    "stance": "yes",
+    "driving_constraint": "Critical Revenue at Risk reduced by \u00a3817,071 (\u00a3817,071 -> \u00a30)"
+  },
+  {
+    "facts": {
+      "budget": 1480600.87,
+      "actual_pct": 0.576,
+      "schedule_pct": 0.949,
+      "spend_to_date": 1540847.98,
+      "slip_days_before_change": 49.4,
+      "is_resourced": true,
+      "is_on_critical_path": true,
+      "is_revenue_tagged": true,
+      "revenue_value": 697009.95,
+      "reported_rag_before": "red",
+      "reported_rag_after": "green"
+    },
+    "stance": "yes",
+    "driving_constraint": "Critical Revenue at Risk reduced by \u00a3697,010 (\u00a3697,010 -> \u00a30)"
+  },
+  {
+    "facts": {
+      "budget": 4281945.06,
+      "actual_pct": 0.536,
+      "schedule_pct": 0.565,
+      "spend_to_date": 2827660.95,
+      "slip_days_before_change": 1.4,
+      "is_resourced": true,
+      "is_on_critical_path": true,
+      "is_revenue_tagged": true,
+      "revenue_value": 416836.6,
+      "reported_rag_before": "amber",
+      "reported_rag_after": "green"
+    },
+    "stance": "yes",
+    "driving_constraint": "Critical Revenue at Risk reduced by \u00a3416,837 (\u00a3416,837 -> \u00a30)"
   }
 ]

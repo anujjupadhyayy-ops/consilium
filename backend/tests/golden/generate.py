@@ -18,6 +18,7 @@ Usage: python tests/golden/generate.py   (from backend/, with the venv active)
 """
 from __future__ import annotations
 
+import collections
 import itertools
 import json
 import random
@@ -35,6 +36,7 @@ from agents.pmo import PMOAgent, PMOConfig  # noqa: E402
 OUT_DIR = Path(__file__).parent
 RNG = random.Random(20260917)  # fixed seed -- reproducible golden files
 MIN_SETS = 200
+MIN_PER_STANCE = 30  # every reachable stance needs >=30 golden cases
 
 
 def _record(agent, facts: dict) -> dict:
@@ -147,6 +149,25 @@ def delivery_factsets() -> list[dict]:
             "reported_rag_after": RNG.choice(rags),
         }))
 
+    # Stance top-up (build step, additions only): "yes" (crar_reduction > 0)
+    # is rare under uniform random sampling of the boolean/RAG space above --
+    # targeted generation to clear >=30 golden cases for this reachable stance.
+    for _ in range(60):
+        before = RNG.choice(["amber", "red"])
+        records.append(_record(agent, {
+            "budget": round(RNG.uniform(100_000, 5_000_000), 2),
+            "actual_pct": round(RNG.uniform(0, 1), 3),
+            "schedule_pct": round(RNG.uniform(0, 1), 3),
+            "spend_to_date": round(RNG.uniform(10_000, 3_000_000), 2),
+            "slip_days_before_change": round(RNG.uniform(0, 60), 1),
+            "is_resourced": True,
+            "is_on_critical_path": True,
+            "is_revenue_tagged": True,
+            "revenue_value": round(RNG.uniform(1_000, 1_000_000), 2),
+            "reported_rag_before": before,
+            "reported_rag_after": "green",
+        }))
+
     return _dedupe(records)
 
 
@@ -200,6 +221,26 @@ def pmo_factsets() -> list[dict]:
             "tolerance_variances_pct": variances,
         }))
 
+    # Stance top-up (build step, additions only): "yes" (compliant, within
+    # tolerance, not a variation) is rare under uniform random sampling of
+    # the breach-heavy [-30,30] variance range above -- targeted generation
+    # to clear >=30 golden cases for this reachable stance.
+    for _ in range(50):
+        n_dims = RNG.randint(0, 2)
+        within_tolerance = {}
+        for d in RNG.sample(dims, n_dims):
+            tolerance = cfg.tolerances_pct[d]
+            direction = cfg.adverse_direction.get(d, "over")
+            # A variance safely on the non-adverse side of the tolerance line.
+            magnitude = round(RNG.uniform(0, tolerance * 0.9), 2)
+            within_tolerance[d] = magnitude if direction == "under" else -magnitude if RNG.random() < 0.5 else magnitude * 0.5
+        records.append(_record(agent, {
+            "is_contract_variation": False,
+            "continued_business_case_justified": True,
+            "portfolio_contention": RNG.choice([True, False]),
+            "tolerance_variances_pct": within_tolerance,
+        }))
+
     return _dedupe(records)
 
 
@@ -249,6 +290,42 @@ def operations_factsets() -> list[dict]:
             "supplier_sla_in_place": RNG.choice([True, False]),
         }))
 
+    # Stance top-up (build step, additions only): "yes" (all four signals
+    # green) and "conditional" (weakest signal amber, none red) are both
+    # rare under uniform random sampling of the full [0,150]/[0,1.5] ranges
+    # above -- targeted generation to clear >=30 golden cases each for these
+    # reachable stances.
+    for _ in range(50):  # all-green -> yes
+        records.append(_record(agent, {
+            "capacity_utilisation_pct_if_accepted": round(RNG.uniform(0, cfg.capacity_amber_threshold_pct - 0.5), 2),
+            "third_party_spend_pct_of_budget": round(RNG.uniform(0, cfg.spend_amber_threshold_pct - 0.5), 2),
+            "savings_delivery_ratio": round(RNG.uniform(cfg.savings_amber_threshold_ratio + 0.005, 1.3), 3),
+            "licence_provisioned_for_new_date": True,
+            "supplier_sla_in_place": True,
+        }))
+    for _ in range(50):  # exactly one signal amber, the rest green -> conditional
+        signal = RNG.choice(["capacity", "spend", "savings"])
+        facts = {
+            "capacity_utilisation_pct_if_accepted": round(RNG.uniform(0, cfg.capacity_amber_threshold_pct - 0.5), 2),
+            "third_party_spend_pct_of_budget": round(RNG.uniform(0, cfg.spend_amber_threshold_pct - 0.5), 2),
+            "savings_delivery_ratio": round(RNG.uniform(cfg.savings_amber_threshold_ratio + 0.005, 1.3), 3),
+            "licence_provisioned_for_new_date": True,
+            "supplier_sla_in_place": True,
+        }
+        if signal == "capacity":
+            facts["capacity_utilisation_pct_if_accepted"] = round(
+                RNG.uniform(cfg.capacity_amber_threshold_pct, cfg.capacity_red_threshold_pct - 0.5), 2
+            )
+        elif signal == "spend":
+            facts["third_party_spend_pct_of_budget"] = round(
+                RNG.uniform(cfg.spend_amber_threshold_pct, cfg.spend_red_threshold_pct - 0.5), 2
+            )
+        else:
+            facts["savings_delivery_ratio"] = round(
+                RNG.uniform(cfg.savings_red_threshold_ratio + 0.005, cfg.savings_amber_threshold_ratio - 0.005), 3
+            )
+        records.append(_record(agent, facts))
+
     return _dedupe(records)
 
 
@@ -282,6 +359,11 @@ def main() -> None:
         assert len(records) >= MIN_SETS, f"{agent_id}: only {len(records)} unique fact sets, need >= {MIN_SETS}"
         for r in records:
             assert set(r["facts"].keys()), f"{agent_id}: empty fact set generated"
+        stance_counts = collections.Counter(r["stance"] for r in records)
+        for stance, count in stance_counts.items():
+            assert count >= MIN_PER_STANCE, (
+                f"{agent_id}: only {count} '{stance}' cases, need >= {MIN_PER_STANCE} per reachable stance"
+            )
         path = OUT_DIR / f"factsets_{agent_id}.json"
         path.write_text(json.dumps(records, indent=2, default=str) + "\n")
         print(f"wrote {path} ({len(records)} fact sets)")
