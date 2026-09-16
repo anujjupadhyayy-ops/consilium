@@ -55,15 +55,18 @@ def test_stream_unavailable_seed_returns_409():
 
 
 def test_stream_supplier_seed_emits_the_full_trace_in_order():
-    """Under the autouse mocked-LLM-unavailable fallback: routing engages
-    everyone, the seed's pre-supplied facts drive real evaluate(), reconcile
-    falls back to the deterministic P2 logic -- same shape as a P1/P2 run."""
+    """Rewrite: no `route` event exists any more (P3.6 deletes routing) --
+    every one of the four agents streams its own `check` event first (no
+    centralised routing stage), and since the seed's pre-supplied facts
+    trigger all four agents' rules, reconcile falls back to the
+    deterministic path with all four `position` events present too."""
     response = client.get("/run/stream?seed_id=supplier_milestone&pace=0")
 
     events = _parse_sse(response.text)
     kinds = [data["kind"] for event, data in events if event == "trace"]
 
-    assert kinds[0] == "route"
+    assert kinds[0] == "check"
+    assert kinds.count("check") == 4
     assert kinds.count("position") == 4
     assert kinds[-2] == "conflict"
     assert kinds[-1] == "reconciliation"
@@ -257,9 +260,13 @@ def test_get_chief_of_staff_config_returns_a_persona():
     assert response.json()["persona"]
 
 
-def test_put_chief_of_staff_config_persists_and_feeds_the_routing_brief(tmp_path, monkeypatch):
-    from model.llm import LLMUnavailableError
+def test_put_chief_of_staff_config_persists_and_feeds_the_reconcile_brief(tmp_path, monkeypatch, seed_input, seed_facts):
+    """Rewrite: persona used to shape the routing brief (deleted with
+    routing); P3.6 §5.6 confines it to reconciliation/narration WORDING
+    only, so this now checks the reconcile prompt instead -- reason:
+    routing (and its persona-fed prompt) no longer exists."""
     from orchestrator import cos_settings
+    from orchestrator.chief_of_staff import ReconciliationDraft
 
     monkeypatch.setattr(cos_settings, "COS_SETTINGS_PATH", tmp_path / "cos_settings.json")
 
@@ -270,16 +277,20 @@ def test_put_chief_of_staff_config_persists_and_feeds_the_routing_brief(tmp_path
     captured = {}
 
     def fake_call_structured(system, user, response_model, config=None, temperature=0.2):
-        captured["system"] = system
+        if response_model is ReconciliationDraft:
+            captured["system"] = system
         raise LLMUnavailableError("stop after capture -- only checking the composed prompt")
+
+    from model.llm import LLMUnavailableError
 
     monkeypatch.setattr("model.llm.call_structured", fake_call_structured)
 
-    from orchestrator.chief_of_staff import route_node
+    from orchestrator.graph import build_graph
     from orchestrator.state import initial_state
 
-    route_node(initial_state("some scenario", {}))
+    build_graph().invoke(initial_state(seed_input, seed_facts), config={"recursion_limit": 10})
 
+    assert "system" in captured, "reconcile must be reached (the seed triggers at least one agent)"
     assert "Always mention pineapple." in captured["system"]
 
 

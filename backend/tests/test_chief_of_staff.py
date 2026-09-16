@@ -1,43 +1,18 @@
-from orchestrator.chief_of_staff import ReconciliationDraft, RoutingDecision, _enforce_blocker_policy
+from orchestrator.chief_of_staff import ReconciliationDraft, _enforce_blocker_policy
 from orchestrator.graph import build_graph
 from orchestrator.state import initial_state
 
-
-def test_router_selects_a_genuine_subset(monkeypatch, seed_input, seed_facts):
-    """A mocked "smart" router engages only finance+delivery -- the graph
-    must run exactly those two, not fall back to "engage everyone". The
-    two engaged agents' own narration calls are left to fall back
-    deterministically so only routing is under test here."""
-    from model.llm import LLMUnavailableError
-
-    def fake_call_structured(system, user, response_model, config=None, temperature=0.2):
-        if response_model is RoutingDecision:
-            return RoutingDecision(
-                rationale="Only a cost/schedule question -- no governance or capacity angle here.",
-                engaged={"finance": "Cost impact", "delivery": "Schedule impact"},
-                skipped={"pmo": "No governance angle", "operations": "No capacity angle"},
-            )
-        raise LLMUnavailableError("mocked: only routing is under test here")
-
-    monkeypatch.setattr("model.llm.call_structured", fake_call_structured)
-
-    compiled = build_graph()
-    result = compiled.invoke(initial_state(seed_input, seed_facts), config={"recursion_limit": 10})
-
-    assert set(result["routed_agents"]) == {"finance", "delivery"}
-    assert set(result["skipped_agents"]) == {"pmo", "operations"}
-    assert {p["agent"] for p in result["positions"]} == {"finance", "delivery"}
-
-
-def test_router_falls_back_to_engaging_everyone_when_model_unusable(seed_input, seed_facts):
-    """The default autouse mock raises LLMUnavailableError for every call --
-    confirms the graceful-degradation path, not a crash."""
-    compiled = build_graph()
-
-    result = compiled.invoke(initial_state(seed_input, seed_facts), config={"recursion_limit": 10})
-
-    assert set(result["routed_agents"]) == {"finance", "delivery", "pmo", "operations"}
-    assert result["skipped_agents"] == {}
+# P3.6-Rules-Trigger-Spec.md §6.6: routing is deleted, not migrated.
+# test_router_selects_a_genuine_subset and
+# test_router_falls_back_to_engaging_everyone_when_model_unusable removed --
+# tests removed behaviour (LLM routing). The first asserted an LLM could
+# select a subset of agents to engage (`routed_agents`/`skipped_agents`,
+# both deleted from ConsiliumState); the second asserted the routing
+# fallback engaged everyone, which is now true unconditionally and by
+# construction (every agent is an unconditional graph edge -- see
+# orchestrator/graph.py), so the assertion is structural, not behavioural,
+# and covered instead by test_graph_integration.py's
+# test_every_registered_agent_produces_a_check_on_every_run.
 
 
 def test_narration_cannot_override_the_computed_stance(monkeypatch, seed_facts):
@@ -55,11 +30,15 @@ def test_narration_cannot_override_the_computed_stance(monkeypatch, seed_facts):
 
     monkeypatch.setattr("model.llm.call_structured", fake_call_structured)
 
-    agent = FinanceAgent(agent_id="finance", config=FinanceConfig(lens="test", rules_summary=[]))
+    from agents.registry import get_agent
+
+    agent = get_agent("finance")
+    assert isinstance(agent, FinanceAgent)
     state = _initial_state("scenario", {"finance": seed_facts["finance"]})
 
     update = agent.run(state)
 
+    assert update["positions"], "finance must trigger on the seed's 15% supplier-cost breach"
     position = update["positions"][0]
     assert position["stance"] == "no"  # unchanged: the seed's 15% supplier-cost breach
     assert position["reasoning"] == "Actually this looks fine to me."  # narration DID take effect on prose
@@ -151,9 +130,9 @@ def test_blocker_policy_survives_negation_bypass():
 def test_reconcile_via_mocked_llm_still_enforced_end_to_end(monkeypatch, seed_input, seed_facts):
     """Full graph run: a mocked reconcile model tries to recommend
     proceeding despite the seed's Operations blocker -- the final
-    reconciliation must still decline. Routing and narration are left to
-    fall back deterministically (LLMUnavailableError) so only the
-    reconcile step's behaviour is under test here."""
+    reconciliation must still decline. Narration is left to fall back
+    deterministically (LLMUnavailableError) so only the reconcile step's
+    behaviour is under test here."""
     from model.llm import LLMUnavailableError
 
     def fake_call_structured(system, user, response_model, config=None, temperature=0.2):

@@ -52,7 +52,9 @@ def load_agents_from_manifest(
         agent_cls = AGENT_KIND_REGISTRY[entry["kind"]]
         raw_config = json.loads((configs_dir / entry["config"]).read_text())
         config = agent_cls.config_model.model_validate(raw_config)
-        agents.append(agent_cls(agent_id=entry["id"], config=config))
+        agent = agent_cls(agent_id=entry["id"], config=config)
+        agent.validate_rules()  # readable RuleError at load, never a silent bad rule
+        agents.append(agent)
     return agents
 
 
@@ -94,6 +96,16 @@ def get_agent_config_raw(
     return json.loads((configs_dir / entry["config"]).read_text())
 
 
+class BlockerRuleImmutableError(ValueError):
+    """A save attempted to add, remove or alter a rule whose stance is
+    `blocker` -- system-governed (P3.6 §5.2). Threshold/config-scalar edits
+    and non-blocker rule edits are unaffected."""
+
+
+def _blocker_rules(rules: list) -> dict:
+    return {r["id"] if isinstance(r, dict) else r.id: r for r in rules if (r["stance"] if isinstance(r, dict) else r.stance) == "blocker"}
+
+
 def save_agent_config(
     agent_id: str,
     config_overrides: dict,
@@ -104,10 +116,12 @@ def save_agent_config(
     `config_overrides` over the currently-persisted config, validates the
     result through that agent kind's Pydantic model (rules count/length,
     numeric bounds -- a malformed config raises pydantic.ValidationError
-    and is never written), then writes the merged, validated config back
-    to configs/*.json so it survives a restart and a fork ships with these
-    as the new defaults. Returns an agent instance built from the saved
-    config, ready to evaluate/narrate immediately.
+    and is never written), rejects any change to a blocker-stance rule
+    (BlockerRuleImmutableError), validates every rule's `when` expression
+    is safe and resolvable (RuleError), then writes the merged, validated
+    config back to configs/*.json so it survives a restart and a fork ships
+    with these as the new defaults. Returns an agent instance built from
+    the saved config, ready to check/narrate immediately.
     """
     manifest_path = Path(manifest_path) if manifest_path else DEFAULT_MANIFEST_PATH
     configs_dir = Path(configs_dir) if configs_dir else DEFAULT_CONFIGS_DIR
@@ -116,9 +130,20 @@ def save_agent_config(
     agent_cls = AGENT_KIND_REGISTRY[entry["kind"]]
     config_path = configs_dir / entry["config"]
     current = json.loads(config_path.read_text())
-    merged = {**current, **config_overrides}
 
+    if "rules" in config_overrides:
+        current_blockers = _blocker_rules(current.get("rules", []))
+        new_blockers = _blocker_rules(config_overrides["rules"])
+        if current_blockers != new_blockers:
+            raise BlockerRuleImmutableError(
+                "blocker-stance rules are system-governed and cannot be added, removed or altered "
+                "via config save (P3.6 §5.2)."
+            )
+
+    merged = {**current, **config_overrides}
     config = agent_cls.config_model.model_validate(merged)  # raises on anything malformed
+    agent = agent_cls(agent_id=agent_id, config=config)
+    agent.validate_rules()  # raises RuleError on an unsafe/unresolvable `when`
 
     config_path.write_text(json.dumps(config.model_dump(), indent=2) + "\n")
-    return agent_cls(agent_id=agent_id, config=config)
+    return agent

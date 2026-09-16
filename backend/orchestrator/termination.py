@@ -2,9 +2,12 @@ from __future__ import annotations
 
 from .state import ConsiliumState
 
-# route (1) must have completed, and only route, before reconcile may run.
-# This is a belt-and-braces guard alongside the graph's own acyclic topology
-# and LangGraph's recursion_limit -- see graph.py.
+# P3.6: the graph is two supersteps -- every agent checks its own rules in
+# parallel (extract -> check -> narrate, internally, no separate routing
+# stage), then reconcile. One prior step (the fan-out) must have completed,
+# and only that one, before reconcile may run. This is a belt-and-braces
+# guard alongside the graph's own acyclic topology and LangGraph's
+# recursion_limit -- see graph.py.
 MAX_PRIOR_STEPS = 1
 
 
