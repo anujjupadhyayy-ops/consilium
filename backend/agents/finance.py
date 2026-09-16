@@ -140,6 +140,25 @@ class FinanceAgent(ConfigurableAgent):
             lead_figure=f"No financial threshold tripped ({facts.budget_forecast_utilisation_pct:g}% 3PP forecast)",
         )
 
+    # ---------------------------------------------------- P3.6 rules path --
+
+    def derive(self, raw_facts: dict[str, Any]) -> dict[str, Any]:
+        """hard_breach_threshold_pct is config-only (always computable);
+        forecast_concern_threshold_pct is the fy_month_elapsed-interpolated
+        early-warning line, omitted when fy_month_elapsed isn't stated --
+        the rule referencing it (forecast_early_warning) then correctly
+        reports fy_month_elapsed as unchecked rather than silently
+        defaulting the interpolation."""
+        cfg: FinanceConfig = self.config
+        derived: dict[str, Any] = {"hard_breach_threshold_pct": 100.0 + cfg.generic_overspend_test_pct}
+        month = raw_facts.get("fy_month_elapsed")
+        if month is not None:
+            derived["forecast_concern_threshold_pct"] = self._early_late_threshold(month)
+        return derived
+
+    def derived_field_names(self) -> set[str]:
+        return {"hard_breach_threshold_pct", "forecast_concern_threshold_pct"}
+
     def _early_late_threshold(self, month_elapsed: int) -> float:
         cfg: FinanceConfig = self.config
         if cfg.late_forecast_month == cfg.early_forecast_month:

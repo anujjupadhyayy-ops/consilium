@@ -25,5 +25,35 @@
   "early_forecast_threshold_pct": 80.0,
   "late_forecast_month": 12,
   "late_forecast_threshold_pct": 100.0,
-  "cost_of_delay_note": "Cost-of-delay lens: weigh the margin/penalty exposure of proceeding against the revenue-at-risk exposure of not proceeding -- Delivery quantifies the schedule side of that trade-off."
+  "cost_of_delay_note": "Cost-of-delay lens: weigh the margin/penalty exposure of proceeding against the revenue-at-risk exposure of not proceeding -- Delivery quantifies the schedule side of that trade-off.",
+  "rules": [
+    {
+      "id": "supplier_cost_high",
+      "description": "{supplier_cost_increase_pct:g}% supplier cost increase (>{supplier_cost_increase_threshold_pct:g}% threshold)",
+      "fields": ["supplier_cost_increase_pct"],
+      "when": "supplier_cost_increase_pct > supplier_cost_increase_threshold_pct",
+      "stance": "no"
+    },
+    {
+      "id": "margin_erosion_high",
+      "description": "{margin_erosion_pts:g}pt margin erosion (>{margin_erosion_threshold_pts:g}pt threshold)",
+      "fields": ["margin_erosion_pts"],
+      "when": "margin_erosion_pts > margin_erosion_threshold_pts",
+      "stance": "no"
+    },
+    {
+      "id": "forecast_hard_breach",
+      "description": "{budget_forecast_utilisation_pct:g}% full-year 3PP forecast (>{hard_breach_threshold_pct:g}% hard breach line)",
+      "fields": ["budget_forecast_utilisation_pct"],
+      "when": "budget_forecast_utilisation_pct > hard_breach_threshold_pct",
+      "stance": "no"
+    },
+    {
+      "id": "forecast_early_warning",
+      "description": "{budget_forecast_utilisation_pct:g}% full-year 3PP forecast in month {fy_month_elapsed} (early-concern threshold {forecast_concern_threshold_pct:g}%)",
+      "fields": ["budget_forecast_utilisation_pct", "fy_month_elapsed"],
+      "when": "budget_forecast_utilisation_pct >= forecast_concern_threshold_pct",
+      "stance": "conditional"
+    }
+  ]
 }
