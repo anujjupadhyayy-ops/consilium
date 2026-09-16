@@ -7,6 +7,7 @@ from pydantic import BaseModel, Field
 from orchestrator.state import AgentPosition
 
 from .base import AgentConfig, ConfigurableAgent
+from .rules import CheckResult
 
 _SEVERITY = {"green": 0, "amber": 1, "red": 2}
 
@@ -99,6 +100,64 @@ class OperationsAgent(ConfigurableAgent):
             reasoning=reasoning,
             driving_constraint=driving_constraint,
             lead_figure=f"{driving_constraint} -- {detail}",
+        )
+
+    # ---------------------------------------------------- P3.6 rules path --
+
+    # Every threshold rule references its own config scalar directly (e.g.
+    # `capacity_utilisation_pct_if_accepted >= capacity_red_threshold_pct`)
+    # -- no arithmetic/flattening needed, so derive() stays the base no-op.
+
+    _RULE_SIGNAL = {
+        "capacity_red": SIGNAL_NAMES["capacity"], "capacity_amber": SIGNAL_NAMES["capacity"],
+        "spend_red": SIGNAL_NAMES["third_party_spend"], "spend_amber": SIGNAL_NAMES["third_party_spend"],
+        "savings_red": SIGNAL_NAMES["savings"], "savings_amber": SIGNAL_NAMES["savings"],
+        "licence_not_provisioned": SIGNAL_NAMES["supplier_sla"], "supplier_sla_not_in_place": SIGNAL_NAMES["supplier_sla"],
+    }
+    _SEVERITY_WORD = {"blocker": "RED", "conditional": "AMBER"}
+    _STANCE_SEVERITY = {"yes": 0, "conditional": 1, "no": 2, "blocker": 3}
+
+    def _position_from_check(self, raw_facts: dict[str, Any], result: CheckResult) -> AgentPosition:
+        """evaluate()'s old driving_constraint names the WEAKEST signal(s)
+        as "Weakest signal: <name(s)> (<RAG>)", joining every signal tied at
+        that severity into one comma-separated name list (never an average,
+        never a per-signal breakdown) -- the base class's generic "; "-join
+        of each fired rule's own rendered description doesn't reproduce
+        that shape when more than one DIFFERENT signal ties, so Operations
+        rebuilds it the same way evaluate() did, via the signal-name lookup
+        above rather than per-rule dynamic text."""
+        if result.stance not in ("blocker", "conditional"):
+            return super()._position_from_check(raw_facts, result)
+
+        top_severity = max(self._STANCE_SEVERITY[f.stance] for f in result.fired)
+        top_fired = [f for f in result.fired if self._STANCE_SEVERITY[f.stance] == top_severity]
+        signal_names: list[str] = []
+        for f in top_fired:
+            name = self._RULE_SIGNAL.get(f.id, f.id)
+            if name not in signal_names:
+                signal_names.append(name)
+
+        driving_constraint = f"Weakest signal: {', '.join(signal_names)} ({self._SEVERITY_WORD[result.stance]})"
+        env: dict[str, Any] = {**raw_facts, **self.derive(raw_facts), **self._config_scalar_env()}
+
+        def render(desc: str) -> str:
+            try:
+                return desc.format(**env)
+            except (KeyError, ValueError, IndexError):
+                return desc
+
+        reasoning = "; ".join(render(f.description) for f in result.fired) + "."
+        recommendation = (
+            "Blocked -- cannot absorb the change as scoped" if result.stance == "blocker"
+            else "Conditional -- feasible, but degrades an operational signal"
+        )
+        return AgentPosition(
+            agent=self.id,
+            stance=result.stance,
+            recommendation=recommendation,
+            reasoning=reasoning,
+            driving_constraint=driving_constraint,
+            lead_figure=driving_constraint,
         )
 
     def _threshold_rag(self, value: float, amber_at: float, red_at: float) -> str:
