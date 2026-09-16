@@ -1,0 +1,8 @@
+{
+  "agents": [
+    {"id": "finance", "kind": "finance", "config": "finance.json", "enabled": true},
+    {"id": "delivery", "kind": "delivery", "config": "delivery.json", "enabled": true},
+    {"id": "pmo", "kind": "pmo", "config": "pmo.json", "enabled": true},
+    {"id": "operations", "kind": "operations", "config": "operations.json", "enabled": true}
+  ]
+}

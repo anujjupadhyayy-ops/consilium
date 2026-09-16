@@ -1,0 +1,38 @@
+{
+  "lens": "Portfolio contention, governance/change-control route, RAID, contract-variation routing.",
+  "rules_summary": [
+    "Any PRINCE2/MSP tolerance breach beyond 2x the delegated tolerance => No (needs a re-baseline, not a change request).",
+    "A tolerance breach within 2x, or any contract variation, => Conditional (proceed via the named gate).",
+    "No tolerance breach and not a contract variation => Yes.",
+    "Missing continued business-case justification => No."
+  ],
+  "user_overridable": true,
+  "trigger_keywords": [
+    "contract variation",
+    "change control",
+    "governance",
+    "tolerance",
+    "compliance",
+    "pme",
+    "gate"
+  ],
+  "tolerances_pct": {
+    "cost": 10.0,
+    "time": 10.0,
+    "scope": 5.0,
+    "quality": 5.0,
+    "risk": 10.0,
+    "benefit": 10.0
+  },
+  "adverse_direction": {
+    "cost": "over",
+    "time": "over",
+    "scope": "over",
+    "quality": "under",
+    "risk": "over",
+    "benefit": "under"
+  },
+  "hard_reject_multiple_of_tolerance": 2.0,
+  "contract_variation_gate_name": "Change Control Gate 2 (contract variation)",
+  "tolerance_breach_gate_name": "Change Control Gate 1 (tolerance exception)"
+}

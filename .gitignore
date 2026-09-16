@@ -1,0 +1,25 @@
+# Environment / secrets
+.env
+*.key
+backend/model/runtime_settings.json
+
+# Audit ledger -- holds inbound trigger content; a fork starts with an empty chain
+backend/trigger_audit.jsonl
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+*.egg-info/
+.mypy_cache/
+.ruff_cache/
+
+# Frontend (P3+)
+node_modules/
+dist/
+build/
+
+# OS
+.DS_Store
