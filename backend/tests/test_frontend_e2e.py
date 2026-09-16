@@ -7,6 +7,7 @@ Skips cleanly if Playwright or its browser isn't installed (e.g. plain CI):
 run `pip install playwright && playwright install chromium` to enable.
 """
 import os
+import shutil
 import socket
 import threading
 import time
@@ -17,6 +18,7 @@ import pytest
 pytest.importorskip("playwright")
 from playwright.sync_api import sync_playwright  # noqa: E402
 import uvicorn  # noqa: E402
+from _pytest.monkeypatch import MonkeyPatch  # noqa: E402
 
 
 def _free_port():
@@ -33,6 +35,23 @@ def base_url(tmp_path_factory):
     # Force the deterministic fallback path (no model) so runs complete fast.
     os.environ["MODEL_PROVIDER"] = "oss"
     os.environ["BASE_URL"] = "http://127.0.0.1:1"
+
+    # Isolate the live server's agent configs from the repo's tracked JSON --
+    # test_agent_rule_editable_after_saving really does PUT /agents/pmo/config
+    # against this server, and without this it silently dirties
+    # backend/agents/configs/pmo.json on disk every time the suite runs
+    # (module-scoped monkeypatch, since pytest's function-scoped `monkeypatch`
+    # fixture can't be requested here).
+    from agents import registry
+
+    configs_dir = tmp_path_factory.mktemp("e2e_configs")
+    shutil.copytree(registry.DEFAULT_CONFIGS_DIR, configs_dir, dirs_exist_ok=True)
+    manifest_path = tmp_path_factory.mktemp("e2e_manifest") / "manifest.json"
+    manifest_path.write_text(registry.DEFAULT_MANIFEST_PATH.read_text())
+    mp = MonkeyPatch()
+    mp.setattr(registry, "DEFAULT_CONFIGS_DIR", configs_dir)
+    mp.setattr(registry, "DEFAULT_MANIFEST_PATH", manifest_path)
+
     from api.app import app
 
     port = _free_port()
@@ -48,6 +67,7 @@ def base_url(tmp_path_factory):
     yield url
     server.should_exit = True
     time.sleep(0.3)
+    mp.undo()
 
 
 @pytest.fixture(scope="module")
