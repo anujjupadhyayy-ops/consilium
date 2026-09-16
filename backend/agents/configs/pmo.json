@@ -34,5 +34,81 @@
   },
   "hard_reject_multiple_of_tolerance": 2.0,
   "contract_variation_gate_name": "Change Control Gate 2 (contract variation)",
-  "tolerance_breach_gate_name": "Change Control Gate 1 (tolerance exception)"
+  "tolerance_breach_gate_name": "Change Control Gate 1 (tolerance exception)",
+  "rules": [
+    {
+      "id": "missing_business_case",
+      "description": "Continued business case: not justified",
+      "fields": ["continued_business_case_justified"],
+      "when": "continued_business_case_justified == False",
+      "stance": "no"
+    },
+    {
+      "id": "cost_tolerance_hard_reject",
+      "description": "cost variance {tv_cost:+.0f}% vs {tol_cost:g}% tolerance (hard reject)",
+      "fields": ["tv_cost"], "when": "tv_cost > tol_cost_hard_reject", "stance": "no"
+    },
+    {
+      "id": "time_tolerance_hard_reject",
+      "description": "time variance {tv_time:+.0f}% vs {tol_time:g}% tolerance (hard reject)",
+      "fields": ["tv_time"], "when": "tv_time > tol_time_hard_reject", "stance": "no"
+    },
+    {
+      "id": "scope_tolerance_hard_reject",
+      "description": "scope variance {tv_scope:+.0f}% vs {tol_scope:g}% tolerance (hard reject)",
+      "fields": ["tv_scope"], "when": "tv_scope > tol_scope_hard_reject", "stance": "no"
+    },
+    {
+      "id": "risk_tolerance_hard_reject",
+      "description": "risk variance {tv_risk:+.0f}% vs {tol_risk:g}% tolerance (hard reject)",
+      "fields": ["tv_risk"], "when": "tv_risk > tol_risk_hard_reject", "stance": "no"
+    },
+    {
+      "id": "quality_tolerance_hard_reject",
+      "description": "quality variance {tv_quality:+.0f}% vs {tol_quality:g}% tolerance (hard reject)",
+      "fields": ["tv_quality"], "when": "tv_quality < neg_tol_quality_hard_reject", "stance": "no"
+    },
+    {
+      "id": "benefit_tolerance_hard_reject",
+      "description": "benefit variance {tv_benefit:+.0f}% vs {tol_benefit:g}% tolerance (hard reject)",
+      "fields": ["tv_benefit"], "when": "tv_benefit < neg_tol_benefit_hard_reject", "stance": "no"
+    },
+    {
+      "id": "cost_tolerance_breach",
+      "description": "cost variance {tv_cost:+.0f}% breaches the {tol_cost:g}% delegated tolerance",
+      "fields": ["tv_cost"], "when": "tv_cost > tol_cost", "stance": "conditional"
+    },
+    {
+      "id": "time_tolerance_breach",
+      "description": "time variance {tv_time:+.0f}% breaches the {tol_time:g}% delegated tolerance",
+      "fields": ["tv_time"], "when": "tv_time > tol_time", "stance": "conditional"
+    },
+    {
+      "id": "scope_tolerance_breach",
+      "description": "scope variance {tv_scope:+.0f}% breaches the {tol_scope:g}% delegated tolerance",
+      "fields": ["tv_scope"], "when": "tv_scope > tol_scope", "stance": "conditional"
+    },
+    {
+      "id": "risk_tolerance_breach",
+      "description": "risk variance {tv_risk:+.0f}% breaches the {tol_risk:g}% delegated tolerance",
+      "fields": ["tv_risk"], "when": "tv_risk > tol_risk", "stance": "conditional"
+    },
+    {
+      "id": "quality_tolerance_breach",
+      "description": "quality variance {tv_quality:+.0f}% breaches the {tol_quality:g}% delegated tolerance",
+      "fields": ["tv_quality"], "when": "tv_quality < neg_tol_quality", "stance": "conditional"
+    },
+    {
+      "id": "benefit_tolerance_breach",
+      "description": "benefit variance {tv_benefit:+.0f}% breaches the {tol_benefit:g}% delegated tolerance",
+      "fields": ["tv_benefit"], "when": "tv_benefit < neg_tol_benefit", "stance": "conditional"
+    },
+    {
+      "id": "contract_variation_gate",
+      "description": "this is a contract variation, which always needs sign-off regardless of tolerance status",
+      "fields": ["is_contract_variation"],
+      "when": "is_contract_variation == True",
+      "stance": "conditional"
+    }
+  ]
 }

@@ -126,11 +126,13 @@ class ConfigurableAgent(ABC):
         return set()
 
     def _config_scalar_env(self) -> dict[str, Any]:
-        """Every plain numeric/boolean config field, resolvable by its own
-        field name in a rule's `when`/`description` (e.g.
-        `capacity_red_threshold_pct`) -- dict/list-shaped config fields
-        (rules_summary, trigger_keywords, rules, ...) are naturally excluded."""
-        return {k: v for k, v in self.config.model_dump().items() if isinstance(v, (int, float, bool))}
+        """Every plain numeric/boolean/string config field, resolvable by
+        its own field name in a rule's `when`/`description` (e.g.
+        `capacity_red_threshold_pct`, or a gate-name string embedded in a
+        description template) -- dict/list-shaped config fields
+        (rules_summary, trigger_keywords, rules, ...) are naturally
+        excluded (isinstance below is False for both)."""
+        return {k: v for k, v in self.config.model_dump().items() if isinstance(v, (int, float, bool, str))}
 
     def allowed_rule_names(self) -> set[str]:
         return set(self.facts_model.model_fields.keys()) | self.derived_field_names() | set(self._config_scalar_env().keys())

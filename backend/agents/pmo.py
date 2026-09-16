@@ -7,6 +7,7 @@ from pydantic import BaseModel, Field, field_validator
 from orchestrator.state import AgentPosition
 
 from .base import AgentConfig, ConfigurableAgent
+from .rules import CheckResult
 
 AdverseDirection = Literal["over", "under"]
 
@@ -119,6 +120,94 @@ class PMOAgent(ConfigurableAgent):
             recommendation="Yes -- compliant, within tolerance, no gate required",
             reasoning="No PRINCE2/MSP tolerance is breached and this isn't a contract variation.",
             driving_constraint="Within all delegated tolerances; no gate required",
+        )
+
+    # ---------------------------------------------------- P3.6 rules path --
+
+    def derive(self, raw_facts: dict[str, Any]) -> dict[str, Any]:
+        """Flattens the dict-shaped `tolerance_variances_pct` fact and the
+        dict-shaped `tolerances_pct`/`adverse_direction` config into scalar
+        names a rule's `when`/`description` can reference directly (the
+        evaluator has no subscript access, by design -- this flattening
+        happens in trusted code, not in an untrusted rule string). A
+        variance dimension omitted from a STATED tolerance_variances_pct
+        dict means "no variance" (PMOFacts' own long-standing docstring),
+        so every configured dimension gets a tv_<dim> whenever the dict
+        itself is stated at all -- but if the dict wasn't stated, no
+        tv_<dim> is produced for any dimension, and every tolerance rule
+        correctly reports it as unchecked rather than assuming zero."""
+        cfg: PMOConfig = self.config
+        derived: dict[str, Any] = {}
+        for dim, tolerance in cfg.tolerances_pct.items():
+            hard_reject = tolerance * cfg.hard_reject_multiple_of_tolerance
+            derived[f"tol_{dim}"] = tolerance
+            derived[f"tol_{dim}_hard_reject"] = hard_reject
+            derived[f"neg_tol_{dim}"] = -tolerance
+            derived[f"neg_tol_{dim}_hard_reject"] = -hard_reject
+
+        variances = raw_facts.get("tolerance_variances_pct")
+        if isinstance(variances, dict):
+            for dim in cfg.tolerances_pct:
+                derived[f"tv_{dim}"] = variances.get(dim, 0.0)
+        return derived
+
+    def derived_field_names(self) -> set[str]:
+        names: set[str] = set()
+        for dim in self.config.tolerances_pct:
+            names |= {f"tol_{dim}", f"tol_{dim}_hard_reject", f"neg_tol_{dim}", f"neg_tol_{dim}_hard_reject", f"tv_{dim}"}
+        return names
+
+    def extra_reasoning_context(self, raw_facts: dict[str, Any]) -> str:
+        """P3.6 change 6: portfolio_contention has no rule of its own --
+        kept as reasoning context on a triggered position, matching
+        evaluate()'s old behaviour exactly (appended only when the agent
+        triggers, never a trigger by itself)."""
+        if raw_facts.get("portfolio_contention") is True:
+            return "It also re-sequences shared resource against another workstream's plan."
+        return ""
+
+    def _position_from_check(self, raw_facts: dict[str, Any], result: CheckResult) -> AgentPosition:
+        """The generic base implementation joins fired rules' descriptions
+        with "; " -- faithful for "no"/"blocker" stances here, but PMO's old
+        `conditional` driving_constraint collapses every breaching dimension
+        onto AT MOST TWO shared gate names ("Requires X, Y sign-off before
+        proceeding"), not a per-dimension list. Overridden only for that
+        stance so the differential test's equivalence holds exactly rather
+        than approximately."""
+        if result.stance != "conditional":
+            return super()._position_from_check(raw_facts, result)
+
+        env: dict[str, Any] = {**raw_facts, **self.derive(raw_facts), **self._config_scalar_env()}
+
+        def render(desc: str) -> str:
+            try:
+                return desc.format(**env)
+            except (KeyError, ValueError, IndexError):
+                return desc
+
+        gate_names: list[str] = []
+        for f in result.fired:
+            if f.stance != "conditional":
+                continue
+            gate_field = "contract_variation_gate_name" if f.id == "contract_variation_gate" else "tolerance_breach_gate_name"
+            gate = env.get(gate_field)
+            if gate and gate not in gate_names:
+                gate_names.append(gate)
+        joined_gates = ", ".join(gate_names)
+
+        reasoning = "; ".join(render(f.description) for f in result.fired) + "."
+        extra = self.extra_reasoning_context(raw_facts)
+        if extra:
+            reasoning = f"{reasoning} {extra}"
+
+        driving_constraint = f"Requires {joined_gates} sign-off before proceeding"
+        return AgentPosition(
+            agent=self.id,
+            stance="conditional",
+            recommendation=f"Conditional yes -- only via {joined_gates}",
+            reasoning=reasoning,
+            driving_constraint=driving_constraint,
+            lead_figure=driving_constraint,
         )
 
     def _tolerance_breaches(self, facts: PMOFacts, cfg: PMOConfig):
