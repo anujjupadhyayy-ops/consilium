@@ -114,10 +114,10 @@ class RetestRequest(BaseModel):
 
 @app.post("/council/retest")
 def council_retest(req: RetestRequest) -> dict:
-    """The live proof that rules are data: re-evaluate one agent's
-    deterministic hard signal against the supplier-milestone scenario with
-    the caller's config/fact overrides layered on -- no LLM, no persistence,
-    just the same evaluate() every test in the suite already exercises."""
+    """The live proof that rules are data: re-check one agent's rules
+    against the supplier-milestone scenario with the caller's config/fact
+    overrides layered on -- no LLM, no persistence, just check() the same
+    way every run does."""
     base_agent = get_agent(req.agent_id)
     if base_agent is None:
         raise HTTPException(status_code=404, detail=f"Unknown agent '{req.agent_id}'.")
@@ -134,11 +134,27 @@ def council_retest(req: RetestRequest) -> dict:
 
     agent = type(base_agent)(agent_id=base_agent.id, config=config)
     try:
-        position = agent.evaluate(facts)
+        agent.validate_rules()
+        result = agent.check(facts)
     except Exception as exc:
         raise HTTPException(status_code=422, detail=f"Invalid fact override: {exc}") from exc
 
-    return dict(position)
+    if result.stance is None:
+        return {
+            "agent": agent.id,
+            "stance": None,
+            "triggered": False,
+            "recommendation": "All rules checked, none tripped" if not result.unchecked else "No rule triggered",
+            "reasoning": (
+                "No rule fired on these facts."
+                + (f" Couldn't check: {', '.join(result.unchecked)}." if result.unchecked else "")
+            ),
+            "driving_constraint": "",
+            "lead_figure": "",
+        }
+
+    position = agent._position_from_check(facts, result)
+    return {**dict(position), "triggered": True}
 
 
 @app.get("/agents/{agent_id}/config")

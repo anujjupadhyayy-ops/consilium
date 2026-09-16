@@ -113,12 +113,18 @@ def test_council_retest_finance_default_config_matches_seed_stance():
 
 
 def test_council_retest_finance_lenient_config_flips_the_stance():
+    """Rewrite: raising the threshold so nothing trips any more is now the
+    all-clear "no rule triggered" state (stance=None), not an explicit
+    "yes" -- P3.6's own equivalence rule (old yes == new not-triggered
+    with nothing unchecked)."""
     response = client.post(
         "/council/retest",
         json={"agent_id": "finance", "config_overrides": {"supplier_cost_increase_threshold_pct": 50.0}},
     )
 
-    assert response.json()["stance"] == "yes"
+    body = response.json()
+    assert body["stance"] is None
+    assert body["triggered"] is False
 
 
 def test_council_retest_operations_licence_toggle_clears_the_blocker():
@@ -127,7 +133,9 @@ def test_council_retest_operations_licence_toggle_clears_the_blocker():
         json={"agent_id": "operations", "fact_overrides": {"licence_provisioned_for_new_date": True}},
     )
 
-    assert response.json()["stance"] == "yes"
+    body = response.json()
+    assert body["stance"] is None
+    assert body["triggered"] is False
 
 
 # ---------------------------------------------------------- agent config --
@@ -216,7 +224,7 @@ def test_put_agent_config_editing_a_threshold_changes_the_hard_signal_outcome(tm
 
     client.put("/agents/finance/config", json={"supplier_cost_increase_threshold_pct": 50.0})
     response = client.post("/council/retest", json={"agent_id": "finance"})
-    assert response.json()["stance"] == "yes"
+    assert response.json()["stance"] is None  # all-clear -- see the dedicated rewrite test above
 
     client.put("/agents/operations/config", json={"capacity_red_threshold_pct": 1.0})
     response = client.post(
