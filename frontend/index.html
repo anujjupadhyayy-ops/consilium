@@ -124,7 +124,6 @@
   .node.active{color:var(--ink);border-color:var(--coral);background:var(--coral-tint)}
   .node.active .dot{background:var(--coral);box-shadow:0 0 0 4px var(--coral-tint);animation:pulse 1s infinite}
   .node.done{color:var(--ink);border-color:var(--good)} .node.done .dot{background:var(--good)}
-  .node.skipped{opacity:.4;text-decoration:line-through}
   @keyframes pulse{50%{box-shadow:0 0 0 7px transparent}}
   .arrow{color:var(--line);font-size:14px}
 
@@ -135,8 +134,7 @@
   .step-k{font:700 10px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ground);background:var(--ink);padding:3px 8px;border-radius:6px}
   .bhead h3{font-size:15px;margin:0}
   .bbody{padding:16px 18px}
-  .route-line{font-size:14px;color:var(--ink-soft);margin:0 0 14px}
-  .route-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px}
+  .msg-line{font-size:14px;color:var(--ink-soft);margin:0 0 14px}
   .rcard{border:1px solid var(--line);border-radius:var(--r);padding:11px 13px;background:var(--ground)}
   .rcard.eng{border-left:3px solid var(--coral)} .rcard.skip{opacity:.65;border-left:3px solid var(--line)}
   .rcard .an{font:700 13px var(--sans);display:flex;align-items:center;gap:7px}
@@ -159,6 +157,21 @@
   .stance{display:inline-flex;align-items:center;gap:6px;font:700 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;padding:4px 9px;border-radius:6px}
   .s-yes{background:var(--good-tint);color:var(--good)} .s-no{background:var(--crit-tint);color:var(--crit)}
   .s-cond{background:var(--amber-tint);color:var(--amber)} .s-block{background:var(--crit);color:#fff}
+  .kv dd ul,.factlist{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:3px} .factlist{margin-top:4px;font-size:12px}
+  .notchecked{margin:0 0 16px;padding:12px 14px;border:1px solid var(--line);border-left:3px solid var(--amber);border-radius:var(--r-sm);background:var(--surface-2)}
+  .notchecked h4{margin:0 0 8px;font:700 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft)}
+  .confirmfirst{background:var(--amber-tint);color:var(--amber);border-radius:6px;padding:7px 10px;margin-bottom:10px;font-size:13px;font-weight:600}
+  .ncgroup{margin-top:8px} .ncgroup .an{font:700 12.5px var(--sans);color:var(--ink)}
+  .ncgroup li{font-size:12.5px;color:var(--ink-soft)} .nctag{margin-left:6px;font:700 9.5px var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--amber)}
+  .lane.notrig{opacity:.85;border-left:3px solid var(--line)} .lane.eng{border-left:3px solid var(--coral)}
+  .lhead .st.checking{color:var(--muted)}
+  .allclear-line{color:var(--good);font-weight:600} .notrig-line{color:var(--ink-soft);font-weight:600}
+  .couldnt-line{color:var(--muted);margin-top:4px;font-size:12px}
+  .unclear-line{color:var(--amber);background:var(--amber-tint);border-radius:6px;padding:4px 8px;margin-top:6px;font-size:12px;font-weight:600}
+  .evidence{margin-top:8px;display:flex;flex-direction:column;gap:3px;border-top:1px dashed var(--line);padding-top:6px}
+  .ev-item{font-size:11px;color:var(--muted);white-space:normal} .ev-item b{color:var(--ink-soft)}
+  .sysgov{margin-left:8px;font:700 9px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:5px;padding:1px 6px}
+  .blockerrule{font-size:11.5px;color:var(--muted);padding:6px 9px;background:var(--ground);border:1px solid var(--line);border-radius:8px;margin-top:4px}
   .lead{font:600 12.5px var(--mono);margin-top:8px;color:var(--ink)} .constr{font-size:11.5px;color:var(--muted);margin-top:3px}
   .conflict .bbody{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
   .cvs{display:flex;align-items:center;gap:10px;font:700 13px var(--sans)} .cvs .x{font-family:var(--mono);color:var(--muted)}
@@ -266,7 +279,7 @@
   .cos .nm{font-size:20px;letter-spacing:-.02em} .cos p{font-size:14.5px;line-height:1.55}
   .cos .role,.sect-h,.panel h4,.srow label,.rules .rl,.crow dt{font-feature-settings:"tnum"}
   .flag .ft{font-size:14px;letter-spacing:-.01em} .cch .nm{letter-spacing:-.01em}
-  .rec{font-size:19px;line-height:1.28} .route-line{font-size:14px;line-height:1.55}
+  .rec{font-size:19px;line-height:1.28} .msg-line{font-size:14px;line-height:1.55}
   .lbody{line-height:1.55} .rules{line-height:1.5}
   .hrow .ht{font-family:var(--display);letter-spacing:-.01em;font-size:15px}
   .mch .nm{font-size:17px} .ccard .cch .nm{font-size:14.5px}
@@ -392,7 +405,7 @@ const stage=document.getElementById("stage"), rail=document.getElementById("rail
 const reduce=matchMedia("(prefers-reduced-motion:reduce)").matches;
 const wait=ms=>new Promise(r=>setTimeout(r,reduce?0:ms));
 
-let running=false, currentSource=null, currentTrace=[], collectedPositions={}, currentRunMeta=null, licState="no";
+let running=false, currentSource=null, currentTrace=[], collectedPositions={}, collectedChecks={}, currentRunMeta=null, licState="no";
 let SEEDS=[];
 let CONFIGS={};      // agent_id -> persisted config, fetched from /agents/{id}/config
 let liveRuns=[];
@@ -429,10 +442,12 @@ document.getElementById("theme").addEventListener("click",()=>{const r=document.
 document.getElementById("pfp").addEventListener("click",()=>switchView("settings"));
 
 // ---------------------------------------------------------- the live run --
-function railInit(sc){const nodes=[["route","Route"]].concat(ORDER.map(k=>[k,AGENTS[k].nm]),[["reconcile","Reconcile"]]);
-  rail.innerHTML=nodes.map((n,i)=>{const sk=sc&&sc.skipped&&sc.skipped[n[0]];
-    return `${i?'<span class="arrow">→</span>':''}<span class="node ${sk?'skipped':'pending'}" id="n-${n[0]}"><span class="dot"></span>${n[1]}</span>`}).join("");}
-const setNode=(k,s)=>{const el=document.getElementById("n-"+k);if(el&&!el.classList.contains("skipped"))el.className="node "+s};
+// P3.6: every agent is fanned out to unconditionally, so the pipeline
+// rail always shows all four plus reconcile, with no per-agent opt-out state (agents/base.py's run() is what actually decides triggered vs not,
+// per-agent, in code -- see handleCheck below).
+function railInit(){const nodes=ORDER.map(k=>[k,AGENTS[k].nm]).concat([["reconcile","Reconcile"]]);
+  rail.innerHTML=nodes.map((n,i)=>`${i?'<span class="arrow">→</span>':''}<span class="node pending" id="n-${n[0]}"><span class="dot"></span>${n[1]}</span>`).join("");}
+const setNode=(k,s)=>{const el=document.getElementById("n-"+k);if(el)el.className="node "+s};
 function block(step,title,cls,html){const d=document.createElement("div");d.className="block "+(cls||"");
   d.innerHTML=`<div class="bhead"><span class="step-k">${step}</span><h3>${title}</h3></div><div class="bbody">${html}</div>`;
   stage.appendChild(d);requestAnimationFrame(()=>d.classList.add("show"));return d;}
@@ -445,9 +460,16 @@ function runLive({text,seedId,label}){
   document.getElementById("run").disabled=true;
   document.getElementById("q").value=text;
   stage.innerHTML=""; document.getElementById("insp").innerHTML="";
-  currentTrace=[]; collectedPositions={};
+  currentTrace=[]; collectedPositions={}; collectedChecks={};
   currentRunMeta={label:label||"Free-text decision", q:text};
-  railInit(null);
+  railInit();
+
+  // P3.6 §5.8: every agent has a FIXED manifest-order slot, built up front
+  // so a `check`/`position` event arriving in any order lands in the right
+  // place -- order is a display rule (ORDER), never an arrival rule.
+  const lanes=ORDER.map(k=>{const a=AGENTS[k];
+    return `<div class="lane" id="lane-${k}"><div class="lhead"><span class="ic" style="background:${a.c}">${a.ic}</span><span class="nm">${a.nm}</span><span class="st checking" id="st-${k}">checking</span></div><div class="lbody"><div class="reason" id="rs-${k}"></div></div><div class="lfoot" id="ft-${k}"></div></div>`}).join("");
+  block("Step 1 · Check","Council checks its rules","",`<div class="lanes">${lanes}</div>`);
 
   if(currentSource) currentSource.close();
   const params=new URLSearchParams();
@@ -458,7 +480,7 @@ function runLive({text,seedId,label}){
   source.addEventListener("trace",e=>{
     const evt=JSON.parse(e.data);
     currentTrace.push(evt);
-    if(evt.kind==="route") handleRoute(evt.payload);
+    if(evt.kind==="check") handleCheck(evt.payload);
     else if(evt.kind==="position") handlePosition(evt.payload);
     else if(evt.kind==="conflict") handleConflict(evt.payload);
     else if(evt.kind==="reconciliation") handleReconciliation(evt.payload);
@@ -466,10 +488,10 @@ function runLive({text,seedId,label}){
   source.addEventListener("stream_error",e=>{
     let message="Something went wrong running this decision.";
     try{message=JSON.parse(e.data).message;}catch(_){}
-    block("Error","The run couldn't complete","",`<p class="route-line">${message}</p>`);
+    block("Error","The run couldn't complete","",`<p class="msg-line">${message}</p>`);
     finishRun();
   });
-  source.addEventListener("error",()=>{ if(running){ block("Error","Connection lost","",`<p class="route-line">The orchestration stream was interrupted.</p>`); finishRun(); } });
+  source.addEventListener("error",()=>{ if(running){ block("Error","Connection lost","",`<p class="msg-line">The orchestration stream was interrupted.</p>`); finishRun(); } });
   source.addEventListener("done",()=>{ source.close(); finishRun(); });
 }
 
@@ -480,32 +502,63 @@ function finishRun(){
   recordRun();
 }
 
-function handleRoute(payload){
-  const engaged=payload.engaged||{}, skipped=payload.skipped||{};
-  const engagedIds=Object.keys(engaged);
-  railInit({skipped});
-  setNode("route","active");
+// A fact is always shown by its human label (the facts model's `title`, sent
+// on every check as `labels`) -- never a raw field name, never `agent.field`.
+function fl(check,f){const l=check&&check.labels&&check.labels[f];return l||String(f).replace(/_/g," ");}
+function listHtml(items,cls){return `<ul${cls?` class="${cls}"`:""}>${items.map(i=>`<li>${i}</li>`).join("")}</ul>`;}
+function evidenceHtml(check){
+  const provenance=(check&&check.provenance)||{}, evidence=(check&&check.evidence)||{};
+  const fields=Object.keys(provenance);
+  if(!fields.length) return "";
+  const items=fields.map(f=>{
+    if(provenance[f]==="seeded") return `<div class="ev-item"><b>${esc(fl(check,f))}:</b> seeded</div>`;
+    const quotes=(evidence[f]||[]).map(q=>`"${esc(q)}"`).join(" · ");
+    return quotes?`<div class="ev-item"><b>${esc(fl(check,f))}:</b> ${quotes}</div>`:"";
+  }).join("");
+  return items?`<div class="evidence">${items}</div>`:"";
+}
 
-  const rg=ORDER.filter(k=>engaged[k]||skipped[k]).map(k=>{const on=!!engaged[k];const a=AGENTS[k];
-    return `<div class="rcard ${on?'eng':'skip'}"><div class="an"><span class="ic-sm" style="background:${a.c}">${a.ic}</span>${a.nm}<span class="verdict">${on?'engaged':'skipped'}</span></div><div class="why">${on?engaged[k]:skipped[k]}</div></div>`}).join("");
-  block("Step 1 · Route","Chief of Staff routes the decision","",`<p class="route-line">${payload.rationale||""}</p><div class="route-grid">${rg}</div>`);
-  setNode("route","done");
+function handleCheck(check){
+  const k=check.agent;
+  collectedChecks[k]=check;
+  setNode(k,"active");
+  const st=document.getElementById("st-"+k), ft=document.getElementById("ft-"+k);
+  if(!st) return;
 
-  const lanes=engagedIds.map(k=>{const a=AGENTS[k]||{nm:k,ic:"?",c:"#888"};
-    return `<div class="lane"><div class="lhead"><span class="ic" style="background:${a.c}">${a.ic}</span><span class="nm">${a.nm}</span><span class="st thinking" id="st-${k}">thinking</span></div><div class="lbody"><div class="reason" id="rs-${k}"></div></div><div class="lfoot" id="ft-${k}"></div></div>`}).join("");
-  block("Step 2 · Deliberate","Specialists reason in parallel","",`<div class="lanes">${lanes}</div>`);
-  engagedIds.forEach(k=>setNode(k,"active"));
+  if(check.triggered){
+    const[cls,lab]=STANCE[check.stance]||["s-cond",check.stance];
+    st.textContent="thinking"; st.className="st thinking";
+    document.getElementById("lane-"+k).classList.add("eng");
+    if(ft){
+      ft.innerHTML=`<span class="stance ${cls}">${lab}</span>`;
+      ft.classList.add("show");
+    }
+    return;
+  }
+
+  // Not triggered: never wording that implies the agent was left out (P3.6 §5.8). Two
+  // distinct states -- every rule was checkable and none tripped (the
+  // all-clear card), or something couldn't be checked at all.
+  st.textContent="done"; st.classList.remove("thinking","checking");
+  document.getElementById("lane-"+k).classList.add("notrig");
+  const unchecked=check.unchecked||[], unclear=check.unclear||[];
+  let html = unchecked.length
+    ? `<div class="notrig-line">No rule triggered</div><div class="couldnt-line">Couldn't check:${listHtml(unchecked.map(f=>esc(fl(check,f))),"factlist")}</div>`
+    : `<div class="allclear-line">All rules checked — none tripped</div>`;
+  if(unclear.length) html += `<div class="unclear-line">Unclear: ${esc(unclear.map(f=>fl(check,f)).join("; "))} — mentioned but not confirmed</div>`;
+  document.getElementById("rs-"+k).innerHTML=html;
+  setNode(k,"done");
 }
 
 async function handlePosition(position){
   const k=position.agent;
   collectedPositions[k]=position;
   await type(document.getElementById("rs-"+k), position.reasoning);
+  const rs=document.getElementById("rs-"+k);
+  if(rs) rs.insertAdjacentHTML("beforeend", evidenceHtml(collectedChecks[k]));
   const ft=document.getElementById("ft-"+k);
   if(ft){
-    const[cls,lab]=STANCE[position.stance]||["s-cond",position.stance];
-    ft.innerHTML=`<span class="stance ${cls}">${lab}</span><div class="lead">${position.lead_figure}</div><div class="constr">${position.driving_constraint}</div>`;
-    ft.classList.add("show");
+    ft.innerHTML += `<div class="lead">${position.lead_figure}</div>`+(position.lead_figure===position.driving_constraint?"":`<div class="constr">${position.driving_constraint}</div>`);
   }
   const st=document.getElementById("st-"+k);
   if(st){st.textContent="done";st.classList.remove("thinking");}
@@ -524,14 +577,34 @@ function handleConflict(payload){
   }else{
     cvsHtml=`<span class="stance s-cond">No direct clash</span>`;
   }
-  block("Step 3 · Conflict","The disagreement","conflict",`<div class="cvs">${cvsHtml}</div><div class="cnote">${payload.summary}</div>`);
+  block("Step 2 · Conflict","The disagreement","conflict",`<div class="cvs">${cvsHtml}</div><div class="cnote">${payload.summary}</div>`);
   setNode("reconcile","active");
 }
 
+// The "Not checked" block: facts no rule could be checked on, by human label,
+// grouped by agent (blocker-related agents first, then manifest order), with
+// the confirm-first line leading when a blocker fact was mentioned but not confirmed.
+function notCheckedHtml(nc){
+  const groups=(nc&&nc.groups)||[];
+  if(!groups.length) return "";
+  const agentName=id=>(AGENTS[id]&&AGENTS[id].nm)||id;
+  const rank=id=>{const i=ORDER.indexOf(id);return i<0?ORDER.length:i;};
+  const sorted=groups.slice().sort((a,b)=>{
+    const ab=a.items.some(i=>i.blocker)?0:1, bb=b.items.some(i=>i.blocker)?0:1;
+    return ab-bb||rank(a.agent)-rank(b.agent);
+  });
+  const confirm=(nc.confirm_first||[]);
+  const lead=confirm.length
+    ?`<div class="confirmfirst">Confirm first — mentioned in the brief but not confirmed: ${esc(confirm.map(c=>`${c.label} (${agentName(c.agent)})`).join("; "))}</div>`:"";
+  const body=sorted.map(g=>`<div class="ncgroup"><div class="an">${esc(agentName(g.agent))}</div>${listHtml(g.items.map(i=>
+    `${esc(i.label)}${i.unclear?'<span class="nctag">mentioned, not confirmed</span>':(i.blocker?'<span class="nctag">blocker-related</span>':"")}`),"factlist")}</div>`).join("");
+  return `<div class="notchecked"><h4>Not checked — not stated in the brief</h4>${lead}${body}</div>`;
+}
+
 function handleReconciliation(payload){
-  const assumeText=(payload.assumptions||[]).join(" "), notText=(payload.not_considered||[]).join(" ");
-  block("Step 4 · Reconcile","Chief of Staff adjudicates","verdict-block",
-    `<p class="rec">${payload.recommendation}</p><dl class="kv"><dt>Why</dt><dd>${payload.why}</dd><dt>Key trade-off</dt><dd>${payload.trade_off}</dd><dt>Assumptions</dt><dd>${assumeText}</dd><dt>Not considered</dt><dd>${notText}</dd></dl><div class="policy"><b>Policy applied:</b> a hard operational blocker outranks a cost/schedule trade-off; positions are adjudicated, never averaged.</div>`);
+  const items=xs=>listHtml((xs||[]).map(esc));
+  block("Step 3 · Reconcile","Chief of Staff adjudicates","verdict-block",
+    `<p class="rec">${esc(payload.recommendation)}</p>${notCheckedHtml(payload.not_checked)}<dl class="kv"><dt>Why</dt><dd>${esc(payload.why)}</dd><dt>Key trade-off</dt><dd>${esc(payload.trade_off)}</dd><dt>Assumptions</dt><dd class="assumptions">${items(payload.assumptions)}</dd><dt>Not considered</dt><dd class="notconsidered">${items(payload.not_considered)}</dd></dl>${Object.values(collectedPositions).some(p=>p.stance==="blocker")?`<div class="policy"><b>Policy applied:</b> a hard operational blocker outranks a cost/schedule trade-off; positions are adjudicated, never averaged.</div>`:""}`);
   setNode("reconcile","done");
 }
 
@@ -586,8 +659,7 @@ document.getElementById("sim").addEventListener("click",async()=>{
     const res=await fetch("/trigger/inbound-email",{method:"POST",headers:{"Content-Type":"application/json"},body:"{}"});
     email=await res.json();
   }catch(_){ return; }
-  const convened=(email.convened||[]).map(id=>(AGENTS[id]&&AGENTS[id].nm)||id).join(", ")||"no agents (no keyword match)";
-  ec.innerHTML=`<div class="from">${email.from}</div><div class="subj">${email.subject}</div><div class="body">"${email.body}"</div><div class="match">⟶ Chief of Staff: matched trigger keywords → convening ${convened}…</div>`;
+  ec.innerHTML=`<div class="from">${email.from}</div><div class="subj">${email.subject}</div><div class="body">"${email.body}"</div><div class="match">⟶ Chief of Staff: convening the full council…</div>`;
   ec.classList.add("show");
   await wait(1400);
   switchView("decision");
@@ -605,6 +677,13 @@ function ruleList(k){
 }
 function renderRuleList(k){const el=document.getElementById("rl-"+k);if(el)el.outerHTML=ruleList(k);}
 
+function blockerRulesHtml(k){
+  const rules=(CONFIGS[k]&&CONFIGS[k].rules)||[];
+  const blockers=rules.filter(r=>r.stance==="blocker");
+  if(!blockers.length) return "";
+  return `<div class="blockerrules"><div class="rlab">Blocker rules <span class="sysgov">system-governed</span></div>`+
+    blockers.map(r=>`<div class="blockerrule">${esc(r.description)}</div>`).join("")+`</div>`;
+}
 function specCard(k){
   const a=AGENTS[k];
   const cfg=CONFIGS[k]||{};
@@ -612,7 +691,7 @@ function specCard(k){
   if(k==="finance")controls=`<div class="fields"><div class="field"><label>Project-margin floor (pts)</label><input type="number" id="cf-margin" value="${cfg.margin_erosion_threshold_pts??5}" min="0" max="100"></div><div class="field"><label>Supplier-cost line (%)</label><input type="number" id="cf-supplier" value="${cfg.supplier_cost_increase_threshold_pct??7}" min="0" max="200"></div><div class="field"><label>3PP forecast flag (%)</label><input type="number" id="cf-forecast" value="${cfg.early_forecast_threshold_pct??80}" min="0" max="100"></div><button class="retest" data-retest="finance">Save & re-test on supplier scenario ▸</button><div class="result" id="res-finance"></div></div>`;
   if(k==="operations")controls=`<div class="fields"><div class="field"><label>Early-cutover licence provisioned?</label><span class="toggle"><button data-lic="no" class="on">No</button><button data-lic="yes">Yes</button></span></div><button class="retest" data-retest="operations">Save & re-test on supplier scenario ▸</button><div class="result" id="res-operations"></div></div>`;
   if(k==="delivery"||k==="pmo")controls=`<button class="retest" data-save="${k}">Save rules ▸</button><div class="result" id="res-${k}"></div>`;
-  return `<div class="ccard"><div class="cch"><span class="ic" style="background:${a.c}">${a.ic}</span><div><div class="nm">${a.nm}</div><div class="ln">${a.lens}</div></div><span class="tag">editable</span></div><div class="ccb"><div class="rlab">Rules — edit, add or remove</div>${ruleList(k)}${controls}</div></div>`;
+  return `<div class="ccard"><div class="cch"><span class="ic" style="background:${a.c}">${a.ic}</span><div><div class="nm">${a.nm}</div><div class="ln">${a.lens}</div></div><span class="tag">editable</span></div><div class="ccb"><div class="rlab">Rules — edit, add or remove</div>${ruleList(k)}${blockerRulesHtml(k)}${controls}</div></div>`;
 }
 
 async function loadConfigs(){
@@ -634,16 +713,18 @@ async function renderCouncil(){
   await loadConfigs();
   const persona=await loadPersona();
   const master=`<div class="mastercard"><div class="mch"><span class="ic">CoS</span><span class="nm">Chief of Staff</span><span class="lock">🔒 System-governed core</span></div>
-    <div class="mcb"><dl style="margin:0"><div class="crow"><dt>Routing</dt><dd>Reads the decision, selects which specialists are relevant (and skips the rest), with a stated reason.</dd></div>
+    <div class="mcb"><dl style="margin:0"><div class="crow"><dt>Rule checks</dt><dd>Every specialist checks its own rules against every decision — none can be left out. An agent triggers only when one of its rules fires on stated facts; the Chief of Staff then summarises what triggered.</dd></div>
     <div class="crow"><dt>Reconcile policy</dt><dd><b style="color:var(--ink)">operational-blocker-wins</b> — a hard operational constraint outranks a cost / schedule trade-off; positions are adjudicated, never averaged.</dd></div>
     <div class="crow"><dt>Guardrails</dt><dd>Recommend-only · bounded termination · always states assumptions + what it did not consider.</dd></div><div class="crow" style="border-top:1px solid var(--line);margin-top:10px;padding-top:10px"><dt><span class="stance s-block">Blocker</span></dt><dd>A hard operational or structural constraint that makes the plan <b>unexecutable as scoped</b> (e.g. a required licence or approval not in place). Decisive: under operational-blocker-wins it overrides every cost/schedule argument, and the verdict is to decline until it is resolved.</dd></div><div class="crow"><dt><span class="stance s-no">Conflict</span></dt><dd>Two specialists reach <b>opposing</b> calls - one says proceed (Yes), another says do not (No). A genuine trade-off clash the Chief of Staff <b>adjudicates</b> into one defensible call - it never averages.</dd></div><div class="crow"><dt><span class="stance s-cond">Conditional</span></dt><dd>A specialist supports the decision <b>only if a stated condition is met</b> - a gate, not a clash; the recommendation carries the condition forward.</dd></div></dl>
     <div class="locknote">The adjudication core is locked by design — users configure the specialists, not how the council resolves conflict. Rewriting that would undermine trust in every verdict.</div>
-    <div class="prefbox"><div class="pl">Configure your Chief of Staff — persona & routing guidance</div><textarea class="cospersona" id="cos-persona">${persona.replace(/</g,"&lt;")}</textarea><button class="retest" style="margin-top:8px" id="cos-save">Save persona ▸</button><span class="saved" id="cos-saved">✓ Saved</span></div>
+    <div class="prefbox"><div class="pl">Configure your Chief of Staff — persona &amp; wording guidance</div><textarea class="cospersona" id="cos-persona">${persona.replace(/</g,"&lt;")}</textarea><button class="retest" style="margin-top:8px" id="cos-save">Save persona ▸</button><span class="saved" id="cos-saved">✓ Saved</span></div>
     <div class="prefbox"><div class="pl">What to flag to me</div><div class="field" style="margin-bottom:8px"><label>Escalate verdicts at or above</label><span class="toggle"><button class="on">Blocker</button><button>Any conflict</button><button>All</button></span></div><div class="field"><label>Revenue-at-risk alert threshold (£k)</label><input type="number" value="250" min="0"></div></div></div></div>`;
   document.getElementById("council").innerHTML=master+`<div class="cgrid">${ORDER.map(specCard).join("")}</div>`;
 }
-function showResult(id,stance,msg){const[cl,lb]=STANCE[stance]||["s-cond",stance];const el=document.getElementById(id);
+function showResult(id,stance,msg){const[cl,lb]=STANCE[stance]||(stance==null?["s-yes","All clear"]:["s-cond",stance]);const el=document.getElementById(id);
   el.innerHTML=`<span class="stance ${cl}">${lb}</span><div>${msg}</div><div style="color:var(--muted);margin-top:6px;font-size:11.5px">Saved to config — the next Decision-desk run reasons with this too.</div>`;el.classList.add("show");}
+function showError(id,msg){const el=document.getElementById(id);
+  el.innerHTML=`<span class="stance s-no">Not saved</span><div>⚠ ${esc(msg)}</div><div style="color:var(--muted);margin-top:6px;font-size:11.5px">Nothing was changed — fix the value and try again.</div>`;el.classList.add("show");}
 function showSavedOnly(id,msg){const el=document.getElementById(id);
   el.innerHTML=`<div>${msg}</div><div style="color:var(--muted);margin-top:6px;font-size:11.5px">Saved to config — the next Decision-desk run reasons with this too.</div>`;el.classList.add("show");}
 
@@ -672,7 +753,7 @@ document.getElementById("council").addEventListener("click",async e=>{
     const k=sv.dataset.save; sv.disabled=true;
     try{
       const res=await fetch(`/agents/${k}/config`,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify({rules_summary:CONFIGS[k].rules_summary})});
-      if(!res.ok){const err=await res.json();showSavedOnly(`res-${k}`,`⚠ ${err.detail||"Could not save"}`);return;}
+      if(!res.ok){const err=await res.json();showError(`res-${k}`,err.detail||"Could not save");return;}
       CONFIGS[k]=await res.json();renderRuleList(k);
       showSavedOnly(`res-${k}`,`✓ ${AGENTS[k].nm}'s ${CONFIGS[k].rules_summary.length} rules saved.`);
     } finally { sv.disabled=false; }
@@ -690,7 +771,7 @@ document.getElementById("council").addEventListener("click",async e=>{
         configOverrides.early_forecast_threshold_pct=+document.getElementById("cf-forecast").value;
       }
       const putRes=await fetch(`/agents/${k}/config`,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(configOverrides)});
-      if(!putRes.ok){const err=await putRes.json();showResult(`res-${k}`,"conditional",`⚠ ${err.detail||"Could not save"}`);return;}
+      if(!putRes.ok){const err=await putRes.json();showError(`res-${k}`,err.detail||"Could not save");return;}
       CONFIGS[k]=await putRes.json();renderRuleList(k);
 
       const retestBody={agent_id:k};
@@ -720,9 +801,9 @@ function esc(s){return String(s==null?"":s).replace(/</g,"&lt;")}
 function renderInspectFromTrace(){
   let h="";
   currentTrace.forEach(evt=>{
-    if(evt.kind==="route"){
+    if(evt.kind==="check"){
       const p=evt.payload;
-      h+=`<div class="ev"><div class="evh"><span class="evk">route</span> chief_of_staff.route · step ${evt.step}</div><div class="evb"><span class="k">engaged:</span> <span class="cor">[${Object.keys(p.engaged||{}).join(", ")}]</span>\n<span class="k">skipped:</span> <span class="v">[${Object.keys(p.skipped||{}).join(", ")||"—"}]</span>\n<span class="k">rationale:</span> <span class="v">"${esc(p.rationale)}"</span></div></div>`;
+      h+=`<div class="ev"><div class="evh"><span class="evk">check</span> agent="${p.agent}" · step ${evt.step}</div><div class="evb"><span class="k">triggered:</span> <span class="cor">${p.triggered}</span>  <span class="k">stance:</span> <span class="v">${p.stance}</span>\n<span class="k">fired:</span> <span class="v">${esc(JSON.stringify(p.fired))}</span>\n<span class="k">unchecked:</span> <span class="v">${esc(JSON.stringify(p.unchecked))}</span>\n<span class="k">unclear:</span> <span class="v">${esc(JSON.stringify(p.unclear))}</span></div></div>`;
     }else if(evt.kind==="position"){
       const p=evt.payload;
       h+=`<div class="ev"><div class="evh"><span class="evk">position</span> agent="${p.agent}" · step ${evt.step}</div><div class="evb"><span class="k">stance:</span> <span class="cor">"${p.stance}"</span>\n<span class="k">lead_figure:</span> <span class="v">"${esc(p.lead_figure)}"</span>\n<span class="k">driving_constraint:</span> <span class="v">"${esc(p.driving_constraint)}"</span>\n<span class="k">reasoning:</span> <span class="v">"${esc(p.reasoning)}"</span></div></div>`;
@@ -734,7 +815,7 @@ function renderInspectFromTrace(){
       h+=`<div class="ev"><div class="evh"><span class="evk">reconciliation</span> chief_of_staff.reconcile · step ${evt.step}</div><div class="evb"><span class="k">recommendation:</span> <span class="v">"${esc(p.recommendation)}"</span>\n<span class="k">assumptions:</span> <span class="v">${esc(JSON.stringify(p.assumptions))}</span>\n<span class="k">not_considered:</span> <span class="v">${esc(JSON.stringify(p.not_considered))}</span></div></div>`;
     }
   });
-  h+=`<div class="ev"><div class="evh"><span class="evk">graph</span> termination · bounded</div><div class="evb"><span class="k">topology:</span> <span class="v">START → route → [engaged agents in parallel] → reconcile → END</span>\n<span class="k">recursion_limit:</span> <span class="v">10</span>  <span class="k">loops:</span> <span class="v">0</span></div></div>`;
+  h+=`<div class="ev"><div class="evh"><span class="evk">graph</span> termination · bounded</div><div class="evb"><span class="k">topology:</span> <span class="v">START → [every agent in parallel: check → narrate if triggered] → reconcile → END</span>\n<span class="k">recursion_limit:</span> <span class="v">10</span>  <span class="k">loops:</span> <span class="v">0</span></div></div>`;
   document.getElementById("insp").innerHTML=h;
 }
 

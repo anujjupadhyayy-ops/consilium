@@ -12,7 +12,7 @@ from typing import Any, Iterator, Optional
 from fastapi import FastAPI, Header, HTTPException
 from fastapi.responses import StreamingResponse
 from fastapi.staticfiles import StaticFiles
-from pydantic import BaseModel
+from pydantic import BaseModel, ValidationError
 
 from audit import ledger
 
@@ -33,7 +33,7 @@ _FRONTEND_DIR = _REPO_ROOT / "frontend"
 # one imperceptible tick. Pure UI pacing -- lives here, never in
 # orchestrator/graph.py, and never touches agent logic or trace content.
 # `pace=0` (used by tests) disables it.
-PACING_SECONDS = {"after_route": 0.5, "between_positions": 0.3, "before_reconcile": 0.7}
+PACING_SECONDS = {"first_check": 0.5, "between_checks": 0.3, "before_reconcile": 0.7}
 
 
 @app.get("/health")
@@ -59,8 +59,8 @@ def _stream_run(text: str, pace: float, facts: Optional[dict] = None) -> Iterato
         for chunk in compiled.stream(state, config={"recursion_limit": 10}, stream_mode="updates"):
             for _node_name, update in chunk.items():
                 for event in update.get("trace", []):
-                    if event["kind"] == "position":
-                        time.sleep((PACING_SECONDS["after_route"] if first_stage else PACING_SECONDS["between_positions"]) * pace)
+                    if event["kind"] == "check":
+                        time.sleep((PACING_SECONDS["first_check"] if first_stage else PACING_SECONDS["between_checks"]) * pace)
                         first_stage = False
                     elif event["kind"] == "conflict":
                         time.sleep(PACING_SECONDS["before_reconcile"] * pace)
@@ -78,13 +78,12 @@ def _stream_run(text: str, pace: float, facts: Optional[dict] = None) -> Iterato
 
 @app.get("/run/stream")
 def run_stream(text: str = "", seed_id: str = "", pace: float = 1.0) -> StreamingResponse:
-    """The one real pipeline every run goes through -- routing, narration,
-    and reconciliation are always genuine LLM calls (with a deterministic
-    fallback if the model is unavailable). A seed additionally pre-supplies
-    its engineered facts as a head start -- the scenario already comes
-    with known figures, so there's nothing to estimate -- free text has
-    none, so the Chief of Staff's routing call also extracts facts for
-    whichever agents it engages."""
+    """The one real pipeline every run goes through -- every agent checks
+    its own rules (no routing; nothing can be skipped), triggered agents are
+    narrated, and reconciliation writes the wording (each an LLM call with a
+    deterministic fallback if the model is unavailable). A seed supplies its
+    authored facts and bypasses extraction; free text has none, so each
+    agent runs its own evidence-verified extraction over the whole message."""
     facts = None
     if seed_id:
         seed = get_seed(seed_id)
@@ -114,10 +113,10 @@ class RetestRequest(BaseModel):
 
 @app.post("/council/retest")
 def council_retest(req: RetestRequest) -> dict:
-    """The live proof that rules are data: re-evaluate one agent's
-    deterministic hard signal against the supplier-milestone scenario with
-    the caller's config/fact overrides layered on -- no LLM, no persistence,
-    just the same evaluate() every test in the suite already exercises."""
+    """The live proof that rules are data: re-check one agent's rules
+    against the supplier-milestone scenario with the caller's config/fact
+    overrides layered on -- no LLM, no persistence, just check() the same
+    way every run does."""
     base_agent = get_agent(req.agent_id)
     if base_agent is None:
         raise HTTPException(status_code=404, detail=f"Unknown agent '{req.agent_id}'.")
@@ -134,11 +133,27 @@ def council_retest(req: RetestRequest) -> dict:
 
     agent = type(base_agent)(agent_id=base_agent.id, config=config)
     try:
-        position = agent.evaluate(facts)
+        agent.validate_rules()
+        result = agent.check(facts)
     except Exception as exc:
         raise HTTPException(status_code=422, detail=f"Invalid fact override: {exc}") from exc
 
-    return dict(position)
+    if result.stance is None:
+        return {
+            "agent": agent.id,
+            "stance": None,
+            "triggered": False,
+            "recommendation": "All rules checked, none tripped" if not result.unchecked else "No rule triggered",
+            "reasoning": (
+                "No rule fired on these facts."
+                + (f" Couldn't check: {', '.join(result.unchecked)}." if result.unchecked else "")
+            ),
+            "driving_constraint": "",
+            "lead_figure": "",
+        }
+
+    position = agent._position_from_check(facts, result)
+    return {**dict(position), "triggered": True}
 
 
 @app.get("/agents/{agent_id}/config")
@@ -163,8 +178,15 @@ def put_agent_config(agent_id: str, body: dict[str, Any]) -> dict:
         agent = save_agent_config(agent_id, body)
     except UnknownAgentError:
         raise HTTPException(status_code=404, detail=f"Unknown agent '{agent_id}'.")
-    except Exception as exc:  # pydantic.ValidationError or a bad value
-        raise HTTPException(status_code=422, detail=f"Invalid config: {exc}") from exc
+    except ValidationError as exc:
+        # Readable "field: reason" lines for the Council UI, not pydantic's
+        # multi-line dump (with its docs URL and repr of the rejected input).
+        reasons = "; ".join(
+            f"{'.'.join(str(p) for p in e['loc'])}: {e['msg'].removeprefix('Value error, ')}" for e in exc.errors()
+        )
+        raise HTTPException(status_code=422, detail=f"Rejected -- {reasons}") from exc
+    except Exception as exc:  # RuleError, BlockerRuleImmutableError, ...
+        raise HTTPException(status_code=422, detail=f"Rejected -- {exc}") from exc
     return agent.config.model_dump()
 
 
@@ -183,7 +205,7 @@ def get_chief_of_staff_config() -> dict:
 
 @app.put("/chief-of-staff/config")
 def put_chief_of_staff_config(req: ChiefOfStaffConfigRequest) -> dict:
-    """Persona/routing-guidance only -- the adjudication policy
+    """Persona/wording guidance only -- the adjudication policy
     (operational-blocker-wins) and guardrails are not settable through
     this or any endpoint; see chief_of_staff._enforce_blocker_policy,
     which holds regardless of what this persona says."""
@@ -374,7 +396,11 @@ def _record_trigger_decision(text: str, label: str) -> dict:
         "verdict": rec.get("recommendation", "(run did not complete)"),
     }
     append_run(entry)
-    return entry
+    # The checks table (every agent's triggered/fired/unchecked/unclear/
+    # evidence/provenance) goes to the tamper-evident ledger as its own
+    # entry after the run -- the trigger itself was already recorded first,
+    # before anything ran, so a rejected or crashed run still leaves a trace.
+    return {**entry, "checks": {k: dict(v) for k, v in (result.get("checks") or {}).items()}}
 
 
 def _convene_and_record(*, source: str, actor: str, subject: str, body: str, auth_ok: bool) -> dict:
@@ -465,7 +491,16 @@ def trigger_webhook(
             detail=f"Invalid or missing X-Consilium-Token (rejected attempt logged as event #{result['event_id']}).",
         )
     # A real trigger runs the council and records the verdict -- not just a log.
-    result["decision"] = _record_trigger_decision(req.body, f"Webhook: {req.subject or 'inbound email'}")
+    decision = _record_trigger_decision(req.body, f"Webhook: {req.subject or 'inbound email'}")
+    checks = decision.pop("checks", {})
+    ledger.record({
+        "kind": "council_checks",
+        "trigger_event_id": result["event_id"],
+        "checks": checks,
+        "verdict": decision["verdict"],
+        "recommend_only": True,
+    })
+    result["decision"] = decision
     return result
 
 

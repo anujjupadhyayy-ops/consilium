@@ -1,3 +1,11 @@
 [tool.pytest.ini_options]
 pythonpath = ["."]
 testpaths = ["tests"]
+markers = [
+    "live: requires a real, reachable model (owner-run only: `pytest -m live`); never run by default.",
+]
+# P3.6: `live`-marked tests (determinism against a real model, the
+# extraction eval set) need a real API key/endpoint and are never part of
+# the default suite -- excluded here, not just left unmarked, so a bare
+# `pytest` can never accidentally attempt a real network call.
+addopts = "-m 'not live'"

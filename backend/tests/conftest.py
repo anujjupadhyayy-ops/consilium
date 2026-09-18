@@ -11,7 +11,7 @@ def _blank_real_credentials(monkeypatch):
 
 @pytest.fixture(autouse=True)
 def _mock_llm_unavailable_by_default(monkeypatch):
-    """P3.5: agents/routing/reconcile all call model.llm.call_structured.
+    """P3.5: agents' extraction/narration and reconcile all call model.llm.call_structured.
     Every test gets a fast, deterministic run by default -- the model is
     "unavailable", which exercises the same graceful-fallback path a real
     outage would (engage everyone; deterministic reconcile). Tests that

@@ -1,6 +1,6 @@
 """P1 entry point: run the supplier-milestone seed through the graph and
-print the full trace legibly -- routing reasoning, all 4 positions, the
-disagreement, and the reconciliation with its trade-off named."""
+print the full trace legibly -- every agent's rule check, the triggered
+positions, the disagreement, and the reconciliation with its trade-off named."""
 from __future__ import annotations
 
 from dotenv import find_dotenv, load_dotenv
@@ -27,11 +27,18 @@ def main() -> None:
 
     result = run_seed(seed["scenario"], seed["facts"])
 
-    _header("ROUTING")
-    print(f"Routed to: {', '.join(result['routed_agents'])}")
-    print(f"Reasoning: {result['routing_reasoning']}")
+    _header("COUNCIL CHECKS ITS RULES")
+    for agent_id, check in result["checks"].items():
+        if check["triggered"]:
+            print(f"[{agent_id.upper()}] TRIGGERED ({check['stance']}) -- fired: {', '.join(check['fired'])}")
+        elif check["unchecked"]:
+            print(f"[{agent_id.upper()}] no rule triggered -- couldn't check: {', '.join(check['unchecked'])}")
+        else:
+            print(f"[{agent_id.upper()}] all rules checked -- none tripped")
+        if check["unclear"]:
+            print(f"    unclear: {', '.join(check['unclear'])} (mentioned but not confirmed)")
 
-    _header("SPECIALIST POSITIONS")
+    _header("TRIGGERED POSITIONS")
     for position in result["positions"]:
         print(f"\n[{position['agent'].upper()}] {position['recommendation']}  (stance: {position['stance']})")
         print(f"  Reasoning: {position['reasoning']}")

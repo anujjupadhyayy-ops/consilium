@@ -1,0 +1,2672 @@
+[
+  {
+    "facts": {
+      "margin_erosion_pts": 4.99,
+      "supplier_cost_increase_pct": 1.0,
+      "budget_forecast_utilisation_pct": 50.0,
+      "fy_month_elapsed": 6
+    },
+    "stance": "yes",
+    "driving_constraint": "50% full-year 3PP forecast in month 6 (within the 88% threshold for this point in the FY)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 5.0,
+      "supplier_cost_increase_pct": 1.0,
+      "budget_forecast_utilisation_pct": 50.0,
+      "fy_month_elapsed": 6
+    },
+    "stance": "yes",
+    "driving_constraint": "50% full-year 3PP forecast in month 6 (within the 88% threshold for this point in the FY)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 5.01,
+      "supplier_cost_increase_pct": 1.0,
+      "budget_forecast_utilisation_pct": 50.0,
+      "fy_month_elapsed": 6
+    },
+    "stance": "no",
+    "driving_constraint": "5.01pt margin erosion (>5pt threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 1.0,
+      "supplier_cost_increase_pct": 6.99,
+      "budget_forecast_utilisation_pct": 50.0,
+      "fy_month_elapsed": 6
+    },
+    "stance": "yes",
+    "driving_constraint": "50% full-year 3PP forecast in month 6 (within the 88% threshold for this point in the FY)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 1.0,
+      "supplier_cost_increase_pct": 7.0,
+      "budget_forecast_utilisation_pct": 50.0,
+      "fy_month_elapsed": 6
+    },
+    "stance": "yes",
+    "driving_constraint": "50% full-year 3PP forecast in month 6 (within the 88% threshold for this point in the FY)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 1.0,
+      "supplier_cost_increase_pct": 7.01,
+      "budget_forecast_utilisation_pct": 50.0,
+      "fy_month_elapsed": 6
+    },
+    "stance": "no",
+    "driving_constraint": "7.01% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 1.0,
+      "supplier_cost_increase_pct": 1.0,
+      "budget_forecast_utilisation_pct": 104.99,
+      "fy_month_elapsed": 6
+    },
+    "stance": "conditional",
+    "driving_constraint": "104.99% full-year 3PP forecast in month 6 (early-concern threshold 88%)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 1.0,
+      "supplier_cost_increase_pct": 1.0,
+      "budget_forecast_utilisation_pct": 105.0,
+      "fy_month_elapsed": 6
+    },
+    "stance": "conditional",
+    "driving_constraint": "105% full-year 3PP forecast in month 6 (early-concern threshold 88%)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 1.0,
+      "supplier_cost_increase_pct": 1.0,
+      "budget_forecast_utilisation_pct": 105.01,
+      "fy_month_elapsed": 6
+    },
+    "stance": "no",
+    "driving_constraint": "105.01% full-year 3PP forecast (>105% hard breach line)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 1.0,
+      "supplier_cost_increase_pct": 1.0,
+      "budget_forecast_utilisation_pct": 77.99,
+      "fy_month_elapsed": 1
+    },
+    "stance": "yes",
+    "driving_constraint": "77.99% full-year 3PP forecast in month 1 (within the 78% threshold for this point in the FY)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 1.0,
+      "supplier_cost_increase_pct": 1.0,
+      "budget_forecast_utilisation_pct": 78.0,
+      "fy_month_elapsed": 1
+    },
+    "stance": "conditional",
+    "driving_constraint": "78% full-year 3PP forecast in month 1 (early-concern threshold 78%)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 1.0,
+      "supplier_cost_increase_pct": 1.0,
+      "budget_forecast_utilisation_pct": 78.01,
+      "fy_month_elapsed": 1
+    },
+    "stance": "conditional",
+    "driving_constraint": "78.01% full-year 3PP forecast in month 1 (early-concern threshold 78%)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 1.0,
+      "supplier_cost_increase_pct": 1.0,
+      "budget_forecast_utilisation_pct": 79.99,
+      "fy_month_elapsed": 2
+    },
+    "stance": "yes",
+    "driving_constraint": "79.99% full-year 3PP forecast in month 2 (within the 80% threshold for this point in the FY)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 1.0,
+      "supplier_cost_increase_pct": 1.0,
+      "budget_forecast_utilisation_pct": 80.0,
+      "fy_month_elapsed": 2
+    },
+    "stance": "conditional",
+    "driving_constraint": "80% full-year 3PP forecast in month 2 (early-concern threshold 80%)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 1.0,
+      "supplier_cost_increase_pct": 1.0,
+      "budget_forecast_utilisation_pct": 80.01,
+      "fy_month_elapsed": 2
+    },
+    "stance": "conditional",
+    "driving_constraint": "80.01% full-year 3PP forecast in month 2 (early-concern threshold 80%)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 1.0,
+      "supplier_cost_increase_pct": 1.0,
+      "budget_forecast_utilisation_pct": 81.99,
+      "fy_month_elapsed": 3
+    },
+    "stance": "yes",
+    "driving_constraint": "81.99% full-year 3PP forecast in month 3 (within the 82% threshold for this point in the FY)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 1.0,
+      "supplier_cost_increase_pct": 1.0,
+      "budget_forecast_utilisation_pct": 82.0,
+      "fy_month_elapsed": 3
+    },
+    "stance": "conditional",
+    "driving_constraint": "82% full-year 3PP forecast in month 3 (early-concern threshold 82%)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 1.0,
+      "supplier_cost_increase_pct": 1.0,
+      "budget_forecast_utilisation_pct": 82.01,
+      "fy_month_elapsed": 3
+    },
+    "stance": "conditional",
+    "driving_constraint": "82.01% full-year 3PP forecast in month 3 (early-concern threshold 82%)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 1.0,
+      "supplier_cost_increase_pct": 1.0,
+      "budget_forecast_utilisation_pct": 83.99,
+      "fy_month_elapsed": 4
+    },
+    "stance": "yes",
+    "driving_constraint": "83.99% full-year 3PP forecast in month 4 (within the 84% threshold for this point in the FY)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 1.0,
+      "supplier_cost_increase_pct": 1.0,
+      "budget_forecast_utilisation_pct": 84.0,
+      "fy_month_elapsed": 4
+    },
+    "stance": "conditional",
+    "driving_constraint": "84% full-year 3PP forecast in month 4 (early-concern threshold 84%)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 1.0,
+      "supplier_cost_increase_pct": 1.0,
+      "budget_forecast_utilisation_pct": 84.01,
+      "fy_month_elapsed": 4
+    },
+    "stance": "conditional",
+    "driving_constraint": "84.01% full-year 3PP forecast in month 4 (early-concern threshold 84%)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 1.0,
+      "supplier_cost_increase_pct": 1.0,
+      "budget_forecast_utilisation_pct": 85.99,
+      "fy_month_elapsed": 5
+    },
+    "stance": "yes",
+    "driving_constraint": "85.99% full-year 3PP forecast in month 5 (within the 86% threshold for this point in the FY)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 1.0,
+      "supplier_cost_increase_pct": 1.0,
+      "budget_forecast_utilisation_pct": 86.0,
+      "fy_month_elapsed": 5
+    },
+    "stance": "conditional",
+    "driving_constraint": "86% full-year 3PP forecast in month 5 (early-concern threshold 86%)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 1.0,
+      "supplier_cost_increase_pct": 1.0,
+      "budget_forecast_utilisation_pct": 86.01,
+      "fy_month_elapsed": 5
+    },
+    "stance": "conditional",
+    "driving_constraint": "86.01% full-year 3PP forecast in month 5 (early-concern threshold 86%)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 1.0,
+      "supplier_cost_increase_pct": 1.0,
+      "budget_forecast_utilisation_pct": 87.99,
+      "fy_month_elapsed": 6
+    },
+    "stance": "yes",
+    "driving_constraint": "87.99% full-year 3PP forecast in month 6 (within the 88% threshold for this point in the FY)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 1.0,
+      "supplier_cost_increase_pct": 1.0,
+      "budget_forecast_utilisation_pct": 88.0,
+      "fy_month_elapsed": 6
+    },
+    "stance": "conditional",
+    "driving_constraint": "88% full-year 3PP forecast in month 6 (early-concern threshold 88%)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 1.0,
+      "supplier_cost_increase_pct": 1.0,
+      "budget_forecast_utilisation_pct": 88.01,
+      "fy_month_elapsed": 6
+    },
+    "stance": "conditional",
+    "driving_constraint": "88.01% full-year 3PP forecast in month 6 (early-concern threshold 88%)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 1.0,
+      "supplier_cost_increase_pct": 1.0,
+      "budget_forecast_utilisation_pct": 89.99,
+      "fy_month_elapsed": 7
+    },
+    "stance": "yes",
+    "driving_constraint": "89.99% full-year 3PP forecast in month 7 (within the 90% threshold for this point in the FY)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 1.0,
+      "supplier_cost_increase_pct": 1.0,
+      "budget_forecast_utilisation_pct": 90.0,
+      "fy_month_elapsed": 7
+    },
+    "stance": "conditional",
+    "driving_constraint": "90% full-year 3PP forecast in month 7 (early-concern threshold 90%)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 1.0,
+      "supplier_cost_increase_pct": 1.0,
+      "budget_forecast_utilisation_pct": 90.01,
+      "fy_month_elapsed": 7
+    },
+    "stance": "conditional",
+    "driving_constraint": "90.01% full-year 3PP forecast in month 7 (early-concern threshold 90%)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 1.0,
+      "supplier_cost_increase_pct": 1.0,
+      "budget_forecast_utilisation_pct": 91.99,
+      "fy_month_elapsed": 8
+    },
+    "stance": "yes",
+    "driving_constraint": "91.99% full-year 3PP forecast in month 8 (within the 92% threshold for this point in the FY)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 1.0,
+      "supplier_cost_increase_pct": 1.0,
+      "budget_forecast_utilisation_pct": 92.0,
+      "fy_month_elapsed": 8
+    },
+    "stance": "conditional",
+    "driving_constraint": "92% full-year 3PP forecast in month 8 (early-concern threshold 92%)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 1.0,
+      "supplier_cost_increase_pct": 1.0,
+      "budget_forecast_utilisation_pct": 92.01,
+      "fy_month_elapsed": 8
+    },
+    "stance": "conditional",
+    "driving_constraint": "92.01% full-year 3PP forecast in month 8 (early-concern threshold 92%)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 1.0,
+      "supplier_cost_increase_pct": 1.0,
+      "budget_forecast_utilisation_pct": 93.99,
+      "fy_month_elapsed": 9
+    },
+    "stance": "yes",
+    "driving_constraint": "93.99% full-year 3PP forecast in month 9 (within the 94% threshold for this point in the FY)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 1.0,
+      "supplier_cost_increase_pct": 1.0,
+      "budget_forecast_utilisation_pct": 94.0,
+      "fy_month_elapsed": 9
+    },
+    "stance": "conditional",
+    "driving_constraint": "94% full-year 3PP forecast in month 9 (early-concern threshold 94%)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 1.0,
+      "supplier_cost_increase_pct": 1.0,
+      "budget_forecast_utilisation_pct": 94.01,
+      "fy_month_elapsed": 9
+    },
+    "stance": "conditional",
+    "driving_constraint": "94.01% full-year 3PP forecast in month 9 (early-concern threshold 94%)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 1.0,
+      "supplier_cost_increase_pct": 1.0,
+      "budget_forecast_utilisation_pct": 95.99,
+      "fy_month_elapsed": 10
+    },
+    "stance": "yes",
+    "driving_constraint": "95.99% full-year 3PP forecast in month 10 (within the 96% threshold for this point in the FY)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 1.0,
+      "supplier_cost_increase_pct": 1.0,
+      "budget_forecast_utilisation_pct": 96.0,
+      "fy_month_elapsed": 10
+    },
+    "stance": "conditional",
+    "driving_constraint": "96% full-year 3PP forecast in month 10 (early-concern threshold 96%)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 1.0,
+      "supplier_cost_increase_pct": 1.0,
+      "budget_forecast_utilisation_pct": 96.01,
+      "fy_month_elapsed": 10
+    },
+    "stance": "conditional",
+    "driving_constraint": "96.01% full-year 3PP forecast in month 10 (early-concern threshold 96%)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 1.0,
+      "supplier_cost_increase_pct": 1.0,
+      "budget_forecast_utilisation_pct": 97.99,
+      "fy_month_elapsed": 11
+    },
+    "stance": "yes",
+    "driving_constraint": "97.99% full-year 3PP forecast in month 11 (within the 98% threshold for this point in the FY)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 1.0,
+      "supplier_cost_increase_pct": 1.0,
+      "budget_forecast_utilisation_pct": 98.0,
+      "fy_month_elapsed": 11
+    },
+    "stance": "conditional",
+    "driving_constraint": "98% full-year 3PP forecast in month 11 (early-concern threshold 98%)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 1.0,
+      "supplier_cost_increase_pct": 1.0,
+      "budget_forecast_utilisation_pct": 98.01,
+      "fy_month_elapsed": 11
+    },
+    "stance": "conditional",
+    "driving_constraint": "98.01% full-year 3PP forecast in month 11 (early-concern threshold 98%)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 1.0,
+      "supplier_cost_increase_pct": 1.0,
+      "budget_forecast_utilisation_pct": 99.99,
+      "fy_month_elapsed": 12
+    },
+    "stance": "yes",
+    "driving_constraint": "99.99% full-year 3PP forecast in month 12 (within the 100% threshold for this point in the FY)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 1.0,
+      "supplier_cost_increase_pct": 1.0,
+      "budget_forecast_utilisation_pct": 100.0,
+      "fy_month_elapsed": 12
+    },
+    "stance": "conditional",
+    "driving_constraint": "100% full-year 3PP forecast in month 12 (early-concern threshold 100%)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 1.0,
+      "supplier_cost_increase_pct": 1.0,
+      "budget_forecast_utilisation_pct": 100.01,
+      "fy_month_elapsed": 12
+    },
+    "stance": "conditional",
+    "driving_constraint": "100.01% full-year 3PP forecast in month 12 (early-concern threshold 100%)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 1.0,
+      "supplier_cost_increase_pct": 1.0,
+      "budget_forecast_utilisation_pct": 50.0,
+      "fy_month_elapsed": 2
+    },
+    "stance": "yes",
+    "driving_constraint": "50% full-year 3PP forecast in month 2 (within the 80% threshold for this point in the FY)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 1.0,
+      "supplier_cost_increase_pct": 1.0,
+      "budget_forecast_utilisation_pct": 50.0,
+      "fy_month_elapsed": 12
+    },
+    "stance": "yes",
+    "driving_constraint": "50% full-year 3PP forecast in month 12 (within the 100% threshold for this point in the FY)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 9.25,
+      "supplier_cost_increase_pct": 16.37,
+      "budget_forecast_utilisation_pct": 127.98,
+      "fy_month_elapsed": 5
+    },
+    "stance": "no",
+    "driving_constraint": "16.37% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 3.9,
+      "supplier_cost_increase_pct": 5.91,
+      "budget_forecast_utilisation_pct": 52.87,
+      "fy_month_elapsed": 6
+    },
+    "stance": "yes",
+    "driving_constraint": "52.87% full-year 3PP forecast in month 6 (within the 88% threshold for this point in the FY)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 8.26,
+      "supplier_cost_increase_pct": 18.94,
+      "budget_forecast_utilisation_pct": 88.97,
+      "fy_month_elapsed": 9
+    },
+    "stance": "no",
+    "driving_constraint": "18.94% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 3.13,
+      "supplier_cost_increase_pct": 5.35,
+      "budget_forecast_utilisation_pct": 116.6,
+      "fy_month_elapsed": 11
+    },
+    "stance": "no",
+    "driving_constraint": "116.6% full-year 3PP forecast (>105% hard breach line)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 12.37,
+      "supplier_cost_increase_pct": 0.52,
+      "budget_forecast_utilisation_pct": 105.09,
+      "fy_month_elapsed": 1
+    },
+    "stance": "no",
+    "driving_constraint": "12.37pt margin erosion (>5pt threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 2.26,
+      "supplier_cost_increase_pct": 14.43,
+      "budget_forecast_utilisation_pct": 125.34,
+      "fy_month_elapsed": 5
+    },
+    "stance": "no",
+    "driving_constraint": "14.43% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 11.91,
+      "supplier_cost_increase_pct": 21.77,
+      "budget_forecast_utilisation_pct": 84.62,
+      "fy_month_elapsed": 1
+    },
+    "stance": "no",
+    "driving_constraint": "21.77% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 7.42,
+      "supplier_cost_increase_pct": 24.19,
+      "budget_forecast_utilisation_pct": 87.47,
+      "fy_month_elapsed": 10
+    },
+    "stance": "no",
+    "driving_constraint": "24.19% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 5.16,
+      "supplier_cost_increase_pct": 5.5,
+      "budget_forecast_utilisation_pct": 77.36,
+      "fy_month_elapsed": 4
+    },
+    "stance": "no",
+    "driving_constraint": "5.16pt margin erosion (>5pt threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 0.63,
+      "supplier_cost_increase_pct": 12.55,
+      "budget_forecast_utilisation_pct": 59.36,
+      "fy_month_elapsed": 9
+    },
+    "stance": "no",
+    "driving_constraint": "12.55% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 4.6,
+      "supplier_cost_increase_pct": 2.7,
+      "budget_forecast_utilisation_pct": 84.36,
+      "fy_month_elapsed": 2
+    },
+    "stance": "conditional",
+    "driving_constraint": "84.36% full-year 3PP forecast in month 2 (early-concern threshold 80%)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 0.91,
+      "supplier_cost_increase_pct": 6.98,
+      "budget_forecast_utilisation_pct": 89.46,
+      "fy_month_elapsed": 2
+    },
+    "stance": "conditional",
+    "driving_constraint": "89.46% full-year 3PP forecast in month 2 (early-concern threshold 80%)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 8.39,
+      "supplier_cost_increase_pct": 11.03,
+      "budget_forecast_utilisation_pct": 129.64,
+      "fy_month_elapsed": 12
+    },
+    "stance": "no",
+    "driving_constraint": "11.03% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 14.65,
+      "supplier_cost_increase_pct": 0.13,
+      "budget_forecast_utilisation_pct": 83.99,
+      "fy_month_elapsed": 2
+    },
+    "stance": "no",
+    "driving_constraint": "14.65pt margin erosion (>5pt threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 2.39,
+      "supplier_cost_increase_pct": 21.34,
+      "budget_forecast_utilisation_pct": 123.09,
+      "fy_month_elapsed": 1
+    },
+    "stance": "no",
+    "driving_constraint": "21.34% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 14.51,
+      "supplier_cost_increase_pct": 12.51,
+      "budget_forecast_utilisation_pct": 122.05,
+      "fy_month_elapsed": 3
+    },
+    "stance": "no",
+    "driving_constraint": "12.51% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 3.22,
+      "supplier_cost_increase_pct": 21.22,
+      "budget_forecast_utilisation_pct": 93.02,
+      "fy_month_elapsed": 9
+    },
+    "stance": "no",
+    "driving_constraint": "21.22% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 6.77,
+      "supplier_cost_increase_pct": 14.34,
+      "budget_forecast_utilisation_pct": 43.43,
+      "fy_month_elapsed": 10
+    },
+    "stance": "no",
+    "driving_constraint": "14.34% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 0.78,
+      "supplier_cost_increase_pct": 23.61,
+      "budget_forecast_utilisation_pct": 108.14,
+      "fy_month_elapsed": 8
+    },
+    "stance": "no",
+    "driving_constraint": "23.61% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 2.12,
+      "supplier_cost_increase_pct": 6.91,
+      "budget_forecast_utilisation_pct": 52.19,
+      "fy_month_elapsed": 8
+    },
+    "stance": "yes",
+    "driving_constraint": "52.19% full-year 3PP forecast in month 8 (within the 92% threshold for this point in the FY)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 2.17,
+      "supplier_cost_increase_pct": 21.19,
+      "budget_forecast_utilisation_pct": 101.91,
+      "fy_month_elapsed": 5
+    },
+    "stance": "no",
+    "driving_constraint": "21.19% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 2.16,
+      "supplier_cost_increase_pct": 14.06,
+      "budget_forecast_utilisation_pct": 69.27,
+      "fy_month_elapsed": 1
+    },
+    "stance": "no",
+    "driving_constraint": "14.06% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 4.62,
+      "supplier_cost_increase_pct": 14.37,
+      "budget_forecast_utilisation_pct": 112.07,
+      "fy_month_elapsed": 5
+    },
+    "stance": "no",
+    "driving_constraint": "14.37% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 13.65,
+      "supplier_cost_increase_pct": 7.67,
+      "budget_forecast_utilisation_pct": 49.17,
+      "fy_month_elapsed": 10
+    },
+    "stance": "no",
+    "driving_constraint": "7.67% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 6.39,
+      "supplier_cost_increase_pct": 17.84,
+      "budget_forecast_utilisation_pct": 121.32,
+      "fy_month_elapsed": 10
+    },
+    "stance": "no",
+    "driving_constraint": "17.84% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 7.61,
+      "supplier_cost_increase_pct": 18.34,
+      "budget_forecast_utilisation_pct": 108.52,
+      "fy_month_elapsed": 10
+    },
+    "stance": "no",
+    "driving_constraint": "18.34% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 2.67,
+      "supplier_cost_increase_pct": 6.68,
+      "budget_forecast_utilisation_pct": 106.47,
+      "fy_month_elapsed": 6
+    },
+    "stance": "no",
+    "driving_constraint": "106.47% full-year 3PP forecast (>105% hard breach line)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 14.55,
+      "supplier_cost_increase_pct": 20.39,
+      "budget_forecast_utilisation_pct": 66.04,
+      "fy_month_elapsed": 7
+    },
+    "stance": "no",
+    "driving_constraint": "20.39% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 12.07,
+      "supplier_cost_increase_pct": 17.38,
+      "budget_forecast_utilisation_pct": 92.3,
+      "fy_month_elapsed": 4
+    },
+    "stance": "no",
+    "driving_constraint": "17.38% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 12.01,
+      "supplier_cost_increase_pct": 12.74,
+      "budget_forecast_utilisation_pct": 101.24,
+      "fy_month_elapsed": 2
+    },
+    "stance": "no",
+    "driving_constraint": "12.74% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 3.02,
+      "supplier_cost_increase_pct": 10.46,
+      "budget_forecast_utilisation_pct": 116.05,
+      "fy_month_elapsed": 3
+    },
+    "stance": "no",
+    "driving_constraint": "10.46% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 11.1,
+      "supplier_cost_increase_pct": 7.68,
+      "budget_forecast_utilisation_pct": 49.68,
+      "fy_month_elapsed": 10
+    },
+    "stance": "no",
+    "driving_constraint": "7.68% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 13.36,
+      "supplier_cost_increase_pct": 19.53,
+      "budget_forecast_utilisation_pct": 80.96,
+      "fy_month_elapsed": 9
+    },
+    "stance": "no",
+    "driving_constraint": "19.53% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 6.25,
+      "supplier_cost_increase_pct": 23.47,
+      "budget_forecast_utilisation_pct": 53.04,
+      "fy_month_elapsed": 6
+    },
+    "stance": "no",
+    "driving_constraint": "23.47% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 0.89,
+      "supplier_cost_increase_pct": 19.67,
+      "budget_forecast_utilisation_pct": 90.55,
+      "fy_month_elapsed": 1
+    },
+    "stance": "no",
+    "driving_constraint": "19.67% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 2.07,
+      "supplier_cost_increase_pct": 4.12,
+      "budget_forecast_utilisation_pct": 108.62,
+      "fy_month_elapsed": 9
+    },
+    "stance": "no",
+    "driving_constraint": "108.62% full-year 3PP forecast (>105% hard breach line)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 9.8,
+      "supplier_cost_increase_pct": 17.96,
+      "budget_forecast_utilisation_pct": 112.49,
+      "fy_month_elapsed": 2
+    },
+    "stance": "no",
+    "driving_constraint": "17.96% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 14.76,
+      "supplier_cost_increase_pct": 17.1,
+      "budget_forecast_utilisation_pct": 108.76,
+      "fy_month_elapsed": 5
+    },
+    "stance": "no",
+    "driving_constraint": "17.1% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 0.29,
+      "supplier_cost_increase_pct": 6.84,
+      "budget_forecast_utilisation_pct": 49.09,
+      "fy_month_elapsed": 10
+    },
+    "stance": "yes",
+    "driving_constraint": "49.09% full-year 3PP forecast in month 10 (within the 96% threshold for this point in the FY)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 6.71,
+      "supplier_cost_increase_pct": 22.8,
+      "budget_forecast_utilisation_pct": 60.22,
+      "fy_month_elapsed": 10
+    },
+    "stance": "no",
+    "driving_constraint": "22.8% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 7.88,
+      "supplier_cost_increase_pct": 7.37,
+      "budget_forecast_utilisation_pct": 127.7,
+      "fy_month_elapsed": 12
+    },
+    "stance": "no",
+    "driving_constraint": "7.37% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 6.61,
+      "supplier_cost_increase_pct": 15.14,
+      "budget_forecast_utilisation_pct": 87.64,
+      "fy_month_elapsed": 1
+    },
+    "stance": "no",
+    "driving_constraint": "15.14% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 12.34,
+      "supplier_cost_increase_pct": 17.64,
+      "budget_forecast_utilisation_pct": 75.42,
+      "fy_month_elapsed": 9
+    },
+    "stance": "no",
+    "driving_constraint": "17.64% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 8.69,
+      "supplier_cost_increase_pct": 1.34,
+      "budget_forecast_utilisation_pct": 109.12,
+      "fy_month_elapsed": 1
+    },
+    "stance": "no",
+    "driving_constraint": "8.69pt margin erosion (>5pt threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 13.47,
+      "supplier_cost_increase_pct": 5.24,
+      "budget_forecast_utilisation_pct": 46.34,
+      "fy_month_elapsed": 12
+    },
+    "stance": "no",
+    "driving_constraint": "13.47pt margin erosion (>5pt threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 3.41,
+      "supplier_cost_increase_pct": 15.99,
+      "budget_forecast_utilisation_pct": 50.71,
+      "fy_month_elapsed": 12
+    },
+    "stance": "no",
+    "driving_constraint": "15.99% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 3.51,
+      "supplier_cost_increase_pct": 24.32,
+      "budget_forecast_utilisation_pct": 55.97,
+      "fy_month_elapsed": 6
+    },
+    "stance": "no",
+    "driving_constraint": "24.32% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 6.27,
+      "supplier_cost_increase_pct": 1.62,
+      "budget_forecast_utilisation_pct": 122.58,
+      "fy_month_elapsed": 10
+    },
+    "stance": "no",
+    "driving_constraint": "6.27pt margin erosion (>5pt threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 3.82,
+      "supplier_cost_increase_pct": 19.31,
+      "budget_forecast_utilisation_pct": 82.67,
+      "fy_month_elapsed": 7
+    },
+    "stance": "no",
+    "driving_constraint": "19.31% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 13.47,
+      "supplier_cost_increase_pct": 7.25,
+      "budget_forecast_utilisation_pct": 86.88,
+      "fy_month_elapsed": 4
+    },
+    "stance": "no",
+    "driving_constraint": "7.25% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 6.27,
+      "supplier_cost_increase_pct": 13.54,
+      "budget_forecast_utilisation_pct": 76.97,
+      "fy_month_elapsed": 12
+    },
+    "stance": "no",
+    "driving_constraint": "13.54% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 7.49,
+      "supplier_cost_increase_pct": 8.83,
+      "budget_forecast_utilisation_pct": 113.92,
+      "fy_month_elapsed": 2
+    },
+    "stance": "no",
+    "driving_constraint": "8.83% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 6.54,
+      "supplier_cost_increase_pct": 7.47,
+      "budget_forecast_utilisation_pct": 122.04,
+      "fy_month_elapsed": 8
+    },
+    "stance": "no",
+    "driving_constraint": "7.47% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 14.77,
+      "supplier_cost_increase_pct": 11.21,
+      "budget_forecast_utilisation_pct": 120.45,
+      "fy_month_elapsed": 6
+    },
+    "stance": "no",
+    "driving_constraint": "11.21% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 2.97,
+      "supplier_cost_increase_pct": 6.8,
+      "budget_forecast_utilisation_pct": 119.21,
+      "fy_month_elapsed": 6
+    },
+    "stance": "no",
+    "driving_constraint": "119.21% full-year 3PP forecast (>105% hard breach line)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 3.02,
+      "supplier_cost_increase_pct": 3.19,
+      "budget_forecast_utilisation_pct": 101.49,
+      "fy_month_elapsed": 12
+    },
+    "stance": "conditional",
+    "driving_constraint": "101.49% full-year 3PP forecast in month 12 (early-concern threshold 100%)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 12.45,
+      "supplier_cost_increase_pct": 13.96,
+      "budget_forecast_utilisation_pct": 110.25,
+      "fy_month_elapsed": 12
+    },
+    "stance": "no",
+    "driving_constraint": "13.96% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 12.21,
+      "supplier_cost_increase_pct": 13.95,
+      "budget_forecast_utilisation_pct": 42.06,
+      "fy_month_elapsed": 3
+    },
+    "stance": "no",
+    "driving_constraint": "13.95% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 4.04,
+      "supplier_cost_increase_pct": 12.94,
+      "budget_forecast_utilisation_pct": 129.93,
+      "fy_month_elapsed": 2
+    },
+    "stance": "no",
+    "driving_constraint": "12.94% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 12.62,
+      "supplier_cost_increase_pct": 4.41,
+      "budget_forecast_utilisation_pct": 115.2,
+      "fy_month_elapsed": 7
+    },
+    "stance": "no",
+    "driving_constraint": "12.62pt margin erosion (>5pt threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 13.89,
+      "supplier_cost_increase_pct": 22.6,
+      "budget_forecast_utilisation_pct": 84.31,
+      "fy_month_elapsed": 5
+    },
+    "stance": "no",
+    "driving_constraint": "22.6% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 7.93,
+      "supplier_cost_increase_pct": 21.21,
+      "budget_forecast_utilisation_pct": 50.16,
+      "fy_month_elapsed": 8
+    },
+    "stance": "no",
+    "driving_constraint": "21.21% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 5.32,
+      "supplier_cost_increase_pct": 9.55,
+      "budget_forecast_utilisation_pct": 59.6,
+      "fy_month_elapsed": 9
+    },
+    "stance": "no",
+    "driving_constraint": "9.55% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 14.14,
+      "supplier_cost_increase_pct": 14.34,
+      "budget_forecast_utilisation_pct": 112.56,
+      "fy_month_elapsed": 1
+    },
+    "stance": "no",
+    "driving_constraint": "14.34% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 0.52,
+      "supplier_cost_increase_pct": 13.14,
+      "budget_forecast_utilisation_pct": 62.09,
+      "fy_month_elapsed": 12
+    },
+    "stance": "no",
+    "driving_constraint": "13.14% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 1.0,
+      "supplier_cost_increase_pct": 15.27,
+      "budget_forecast_utilisation_pct": 116.44,
+      "fy_month_elapsed": 10
+    },
+    "stance": "no",
+    "driving_constraint": "15.27% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 6.32,
+      "supplier_cost_increase_pct": 9.9,
+      "budget_forecast_utilisation_pct": 61.52,
+      "fy_month_elapsed": 3
+    },
+    "stance": "no",
+    "driving_constraint": "9.9% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 11.67,
+      "supplier_cost_increase_pct": 10.38,
+      "budget_forecast_utilisation_pct": 105.46,
+      "fy_month_elapsed": 9
+    },
+    "stance": "no",
+    "driving_constraint": "10.38% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 13.74,
+      "supplier_cost_increase_pct": 12.25,
+      "budget_forecast_utilisation_pct": 68.29,
+      "fy_month_elapsed": 8
+    },
+    "stance": "no",
+    "driving_constraint": "12.25% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 9.21,
+      "supplier_cost_increase_pct": 19.21,
+      "budget_forecast_utilisation_pct": 48.44,
+      "fy_month_elapsed": 11
+    },
+    "stance": "no",
+    "driving_constraint": "19.21% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 3.34,
+      "supplier_cost_increase_pct": 1.85,
+      "budget_forecast_utilisation_pct": 72.57,
+      "fy_month_elapsed": 1
+    },
+    "stance": "yes",
+    "driving_constraint": "72.57% full-year 3PP forecast in month 1 (within the 78% threshold for this point in the FY)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 1.58,
+      "supplier_cost_increase_pct": 4.93,
+      "budget_forecast_utilisation_pct": 104.87,
+      "fy_month_elapsed": 7
+    },
+    "stance": "conditional",
+    "driving_constraint": "104.87% full-year 3PP forecast in month 7 (early-concern threshold 90%)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 14.42,
+      "supplier_cost_increase_pct": 1.61,
+      "budget_forecast_utilisation_pct": 71.81,
+      "fy_month_elapsed": 7
+    },
+    "stance": "no",
+    "driving_constraint": "14.42pt margin erosion (>5pt threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 7.62,
+      "supplier_cost_increase_pct": 3.77,
+      "budget_forecast_utilisation_pct": 52.87,
+      "fy_month_elapsed": 2
+    },
+    "stance": "no",
+    "driving_constraint": "7.62pt margin erosion (>5pt threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 0.25,
+      "supplier_cost_increase_pct": 2.44,
+      "budget_forecast_utilisation_pct": 80.44,
+      "fy_month_elapsed": 9
+    },
+    "stance": "yes",
+    "driving_constraint": "80.44% full-year 3PP forecast in month 9 (within the 94% threshold for this point in the FY)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 3.13,
+      "supplier_cost_increase_pct": 5.8,
+      "budget_forecast_utilisation_pct": 69.55,
+      "fy_month_elapsed": 5
+    },
+    "stance": "yes",
+    "driving_constraint": "69.55% full-year 3PP forecast in month 5 (within the 86% threshold for this point in the FY)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 9.43,
+      "supplier_cost_increase_pct": 3.88,
+      "budget_forecast_utilisation_pct": 95.16,
+      "fy_month_elapsed": 11
+    },
+    "stance": "no",
+    "driving_constraint": "9.43pt margin erosion (>5pt threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 8.48,
+      "supplier_cost_increase_pct": 1.96,
+      "budget_forecast_utilisation_pct": 63.91,
+      "fy_month_elapsed": 7
+    },
+    "stance": "no",
+    "driving_constraint": "8.48pt margin erosion (>5pt threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 1.31,
+      "supplier_cost_increase_pct": 11.85,
+      "budget_forecast_utilisation_pct": 99.04,
+      "fy_month_elapsed": 10
+    },
+    "stance": "no",
+    "driving_constraint": "11.85% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 9.16,
+      "supplier_cost_increase_pct": 4.84,
+      "budget_forecast_utilisation_pct": 104.61,
+      "fy_month_elapsed": 2
+    },
+    "stance": "no",
+    "driving_constraint": "9.16pt margin erosion (>5pt threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 13.26,
+      "supplier_cost_increase_pct": 16.48,
+      "budget_forecast_utilisation_pct": 113.27,
+      "fy_month_elapsed": 8
+    },
+    "stance": "no",
+    "driving_constraint": "16.48% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 4.87,
+      "supplier_cost_increase_pct": 17.23,
+      "budget_forecast_utilisation_pct": 53.83,
+      "fy_month_elapsed": 12
+    },
+    "stance": "no",
+    "driving_constraint": "17.23% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 13.53,
+      "supplier_cost_increase_pct": 0.68,
+      "budget_forecast_utilisation_pct": 63.49,
+      "fy_month_elapsed": 11
+    },
+    "stance": "no",
+    "driving_constraint": "13.53pt margin erosion (>5pt threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 8.97,
+      "supplier_cost_increase_pct": 24.9,
+      "budget_forecast_utilisation_pct": 44.35,
+      "fy_month_elapsed": 11
+    },
+    "stance": "no",
+    "driving_constraint": "24.9% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 8.85,
+      "supplier_cost_increase_pct": 22.95,
+      "budget_forecast_utilisation_pct": 76.95,
+      "fy_month_elapsed": 2
+    },
+    "stance": "no",
+    "driving_constraint": "22.95% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 1.3,
+      "supplier_cost_increase_pct": 21.83,
+      "budget_forecast_utilisation_pct": 55.97,
+      "fy_month_elapsed": 8
+    },
+    "stance": "no",
+    "driving_constraint": "21.83% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 9.95,
+      "supplier_cost_increase_pct": 23.75,
+      "budget_forecast_utilisation_pct": 76.52,
+      "fy_month_elapsed": 10
+    },
+    "stance": "no",
+    "driving_constraint": "23.75% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 3.11,
+      "supplier_cost_increase_pct": 13.14,
+      "budget_forecast_utilisation_pct": 100.62,
+      "fy_month_elapsed": 8
+    },
+    "stance": "no",
+    "driving_constraint": "13.14% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 11.38,
+      "supplier_cost_increase_pct": 0.02,
+      "budget_forecast_utilisation_pct": 60.09,
+      "fy_month_elapsed": 11
+    },
+    "stance": "no",
+    "driving_constraint": "11.38pt margin erosion (>5pt threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 10.89,
+      "supplier_cost_increase_pct": 17.98,
+      "budget_forecast_utilisation_pct": 122.98,
+      "fy_month_elapsed": 12
+    },
+    "stance": "no",
+    "driving_constraint": "17.98% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 13.89,
+      "supplier_cost_increase_pct": 14.87,
+      "budget_forecast_utilisation_pct": 102.46,
+      "fy_month_elapsed": 2
+    },
+    "stance": "no",
+    "driving_constraint": "14.87% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 0.17,
+      "supplier_cost_increase_pct": 12.18,
+      "budget_forecast_utilisation_pct": 67.59,
+      "fy_month_elapsed": 7
+    },
+    "stance": "no",
+    "driving_constraint": "12.18% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 8.92,
+      "supplier_cost_increase_pct": 12.76,
+      "budget_forecast_utilisation_pct": 123.67,
+      "fy_month_elapsed": 11
+    },
+    "stance": "no",
+    "driving_constraint": "12.76% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 4.46,
+      "supplier_cost_increase_pct": 3.12,
+      "budget_forecast_utilisation_pct": 101.88,
+      "fy_month_elapsed": 10
+    },
+    "stance": "conditional",
+    "driving_constraint": "101.88% full-year 3PP forecast in month 10 (early-concern threshold 96%)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 14.41,
+      "supplier_cost_increase_pct": 10.85,
+      "budget_forecast_utilisation_pct": 77.06,
+      "fy_month_elapsed": 3
+    },
+    "stance": "no",
+    "driving_constraint": "10.85% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 0.75,
+      "supplier_cost_increase_pct": 8.83,
+      "budget_forecast_utilisation_pct": 66.53,
+      "fy_month_elapsed": 7
+    },
+    "stance": "no",
+    "driving_constraint": "8.83% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 12.45,
+      "supplier_cost_increase_pct": 14.04,
+      "budget_forecast_utilisation_pct": 58.4,
+      "fy_month_elapsed": 5
+    },
+    "stance": "no",
+    "driving_constraint": "14.04% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 13.63,
+      "supplier_cost_increase_pct": 23.98,
+      "budget_forecast_utilisation_pct": 67.19,
+      "fy_month_elapsed": 3
+    },
+    "stance": "no",
+    "driving_constraint": "23.98% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 7.66,
+      "supplier_cost_increase_pct": 2.29,
+      "budget_forecast_utilisation_pct": 45.56,
+      "fy_month_elapsed": 5
+    },
+    "stance": "no",
+    "driving_constraint": "7.66pt margin erosion (>5pt threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 0.67,
+      "supplier_cost_increase_pct": 11.32,
+      "budget_forecast_utilisation_pct": 79.88,
+      "fy_month_elapsed": 9
+    },
+    "stance": "no",
+    "driving_constraint": "11.32% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 1.47,
+      "supplier_cost_increase_pct": 20.4,
+      "budget_forecast_utilisation_pct": 72.96,
+      "fy_month_elapsed": 12
+    },
+    "stance": "no",
+    "driving_constraint": "20.4% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 12.03,
+      "supplier_cost_increase_pct": 19.05,
+      "budget_forecast_utilisation_pct": 59.61,
+      "fy_month_elapsed": 3
+    },
+    "stance": "no",
+    "driving_constraint": "19.05% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 8.98,
+      "supplier_cost_increase_pct": 10.33,
+      "budget_forecast_utilisation_pct": 103.18,
+      "fy_month_elapsed": 6
+    },
+    "stance": "no",
+    "driving_constraint": "10.33% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 3.89,
+      "supplier_cost_increase_pct": 17.91,
+      "budget_forecast_utilisation_pct": 40.33,
+      "fy_month_elapsed": 9
+    },
+    "stance": "no",
+    "driving_constraint": "17.91% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 7.3,
+      "supplier_cost_increase_pct": 22.52,
+      "budget_forecast_utilisation_pct": 43.95,
+      "fy_month_elapsed": 10
+    },
+    "stance": "no",
+    "driving_constraint": "22.52% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 4.83,
+      "supplier_cost_increase_pct": 20.04,
+      "budget_forecast_utilisation_pct": 60.36,
+      "fy_month_elapsed": 4
+    },
+    "stance": "no",
+    "driving_constraint": "20.04% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 1.0,
+      "supplier_cost_increase_pct": 14.22,
+      "budget_forecast_utilisation_pct": 115.99,
+      "fy_month_elapsed": 9
+    },
+    "stance": "no",
+    "driving_constraint": "14.22% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 5.47,
+      "supplier_cost_increase_pct": 22.09,
+      "budget_forecast_utilisation_pct": 52.15,
+      "fy_month_elapsed": 2
+    },
+    "stance": "no",
+    "driving_constraint": "22.09% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 2.51,
+      "supplier_cost_increase_pct": 21.86,
+      "budget_forecast_utilisation_pct": 68.18,
+      "fy_month_elapsed": 2
+    },
+    "stance": "no",
+    "driving_constraint": "21.86% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 14.18,
+      "supplier_cost_increase_pct": 22.44,
+      "budget_forecast_utilisation_pct": 128.3,
+      "fy_month_elapsed": 5
+    },
+    "stance": "no",
+    "driving_constraint": "22.44% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 0.89,
+      "supplier_cost_increase_pct": 10.83,
+      "budget_forecast_utilisation_pct": 71.67,
+      "fy_month_elapsed": 11
+    },
+    "stance": "no",
+    "driving_constraint": "10.83% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 11.73,
+      "supplier_cost_increase_pct": 24.91,
+      "budget_forecast_utilisation_pct": 64.29,
+      "fy_month_elapsed": 1
+    },
+    "stance": "no",
+    "driving_constraint": "24.91% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 7.62,
+      "supplier_cost_increase_pct": 15.44,
+      "budget_forecast_utilisation_pct": 95.21,
+      "fy_month_elapsed": 4
+    },
+    "stance": "no",
+    "driving_constraint": "15.44% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 1.55,
+      "supplier_cost_increase_pct": 19.04,
+      "budget_forecast_utilisation_pct": 126.61,
+      "fy_month_elapsed": 6
+    },
+    "stance": "no",
+    "driving_constraint": "19.04% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 6.43,
+      "supplier_cost_increase_pct": 5.64,
+      "budget_forecast_utilisation_pct": 51.25,
+      "fy_month_elapsed": 12
+    },
+    "stance": "no",
+    "driving_constraint": "6.43pt margin erosion (>5pt threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 6.32,
+      "supplier_cost_increase_pct": 2.6,
+      "budget_forecast_utilisation_pct": 89.29,
+      "fy_month_elapsed": 2
+    },
+    "stance": "no",
+    "driving_constraint": "6.32pt margin erosion (>5pt threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 12.26,
+      "supplier_cost_increase_pct": 15.28,
+      "budget_forecast_utilisation_pct": 85.27,
+      "fy_month_elapsed": 11
+    },
+    "stance": "no",
+    "driving_constraint": "15.28% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 5.31,
+      "supplier_cost_increase_pct": 6.63,
+      "budget_forecast_utilisation_pct": 129.46,
+      "fy_month_elapsed": 11
+    },
+    "stance": "no",
+    "driving_constraint": "5.31pt margin erosion (>5pt threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 10.49,
+      "supplier_cost_increase_pct": 21.82,
+      "budget_forecast_utilisation_pct": 99.03,
+      "fy_month_elapsed": 5
+    },
+    "stance": "no",
+    "driving_constraint": "21.82% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 9.53,
+      "supplier_cost_increase_pct": 7.46,
+      "budget_forecast_utilisation_pct": 90.54,
+      "fy_month_elapsed": 6
+    },
+    "stance": "no",
+    "driving_constraint": "7.46% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 11.62,
+      "supplier_cost_increase_pct": 20.45,
+      "budget_forecast_utilisation_pct": 120.5,
+      "fy_month_elapsed": 4
+    },
+    "stance": "no",
+    "driving_constraint": "20.45% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 9.88,
+      "supplier_cost_increase_pct": 20.87,
+      "budget_forecast_utilisation_pct": 97.34,
+      "fy_month_elapsed": 5
+    },
+    "stance": "no",
+    "driving_constraint": "20.87% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 2.76,
+      "supplier_cost_increase_pct": 3.22,
+      "budget_forecast_utilisation_pct": 57.28,
+      "fy_month_elapsed": 1
+    },
+    "stance": "yes",
+    "driving_constraint": "57.28% full-year 3PP forecast in month 1 (within the 78% threshold for this point in the FY)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 9.61,
+      "supplier_cost_increase_pct": 22.49,
+      "budget_forecast_utilisation_pct": 110.02,
+      "fy_month_elapsed": 1
+    },
+    "stance": "no",
+    "driving_constraint": "22.49% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 6.94,
+      "supplier_cost_increase_pct": 0.08,
+      "budget_forecast_utilisation_pct": 43.18,
+      "fy_month_elapsed": 3
+    },
+    "stance": "no",
+    "driving_constraint": "6.94pt margin erosion (>5pt threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 11.13,
+      "supplier_cost_increase_pct": 16.44,
+      "budget_forecast_utilisation_pct": 110.54,
+      "fy_month_elapsed": 2
+    },
+    "stance": "no",
+    "driving_constraint": "16.44% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 7.82,
+      "supplier_cost_increase_pct": 5.27,
+      "budget_forecast_utilisation_pct": 90.19,
+      "fy_month_elapsed": 7
+    },
+    "stance": "no",
+    "driving_constraint": "7.82pt margin erosion (>5pt threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 11.72,
+      "supplier_cost_increase_pct": 19.55,
+      "budget_forecast_utilisation_pct": 78.37,
+      "fy_month_elapsed": 10
+    },
+    "stance": "no",
+    "driving_constraint": "19.55% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 13.97,
+      "supplier_cost_increase_pct": 19.18,
+      "budget_forecast_utilisation_pct": 56.78,
+      "fy_month_elapsed": 9
+    },
+    "stance": "no",
+    "driving_constraint": "19.18% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 9.4,
+      "supplier_cost_increase_pct": 9.99,
+      "budget_forecast_utilisation_pct": 114.88,
+      "fy_month_elapsed": 4
+    },
+    "stance": "no",
+    "driving_constraint": "9.99% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 4.29,
+      "supplier_cost_increase_pct": 13.23,
+      "budget_forecast_utilisation_pct": 92.88,
+      "fy_month_elapsed": 12
+    },
+    "stance": "no",
+    "driving_constraint": "13.23% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 14.13,
+      "supplier_cost_increase_pct": 11.99,
+      "budget_forecast_utilisation_pct": 84.05,
+      "fy_month_elapsed": 11
+    },
+    "stance": "no",
+    "driving_constraint": "11.99% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 1.3,
+      "supplier_cost_increase_pct": 15.58,
+      "budget_forecast_utilisation_pct": 46.98,
+      "fy_month_elapsed": 11
+    },
+    "stance": "no",
+    "driving_constraint": "15.58% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 5.18,
+      "supplier_cost_increase_pct": 13.0,
+      "budget_forecast_utilisation_pct": 72.78,
+      "fy_month_elapsed": 5
+    },
+    "stance": "no",
+    "driving_constraint": "13% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 5.11,
+      "supplier_cost_increase_pct": 7.43,
+      "budget_forecast_utilisation_pct": 116.49,
+      "fy_month_elapsed": 7
+    },
+    "stance": "no",
+    "driving_constraint": "7.43% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 5.56,
+      "supplier_cost_increase_pct": 14.21,
+      "budget_forecast_utilisation_pct": 94.92,
+      "fy_month_elapsed": 12
+    },
+    "stance": "no",
+    "driving_constraint": "14.21% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 4.39,
+      "supplier_cost_increase_pct": 1.41,
+      "budget_forecast_utilisation_pct": 59.94,
+      "fy_month_elapsed": 7
+    },
+    "stance": "yes",
+    "driving_constraint": "59.94% full-year 3PP forecast in month 7 (within the 90% threshold for this point in the FY)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 2.18,
+      "supplier_cost_increase_pct": 7.22,
+      "budget_forecast_utilisation_pct": 128.37,
+      "fy_month_elapsed": 12
+    },
+    "stance": "no",
+    "driving_constraint": "7.22% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 8.1,
+      "supplier_cost_increase_pct": 12.07,
+      "budget_forecast_utilisation_pct": 64.42,
+      "fy_month_elapsed": 9
+    },
+    "stance": "no",
+    "driving_constraint": "12.07% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 13.45,
+      "supplier_cost_increase_pct": 3.91,
+      "budget_forecast_utilisation_pct": 95.36,
+      "fy_month_elapsed": 6
+    },
+    "stance": "no",
+    "driving_constraint": "13.45pt margin erosion (>5pt threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 0.42,
+      "supplier_cost_increase_pct": 1.92,
+      "budget_forecast_utilisation_pct": 86.31,
+      "fy_month_elapsed": 6
+    },
+    "stance": "yes",
+    "driving_constraint": "86.31% full-year 3PP forecast in month 6 (within the 88% threshold for this point in the FY)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 2.58,
+      "supplier_cost_increase_pct": 9.94,
+      "budget_forecast_utilisation_pct": 57.46,
+      "fy_month_elapsed": 2
+    },
+    "stance": "no",
+    "driving_constraint": "9.94% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 3.53,
+      "supplier_cost_increase_pct": 19.41,
+      "budget_forecast_utilisation_pct": 77.13,
+      "fy_month_elapsed": 9
+    },
+    "stance": "no",
+    "driving_constraint": "19.41% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 2.61,
+      "supplier_cost_increase_pct": 3.86,
+      "budget_forecast_utilisation_pct": 70.49,
+      "fy_month_elapsed": 3
+    },
+    "stance": "yes",
+    "driving_constraint": "70.49% full-year 3PP forecast in month 3 (within the 82% threshold for this point in the FY)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 14.47,
+      "supplier_cost_increase_pct": 2.16,
+      "budget_forecast_utilisation_pct": 52.65,
+      "fy_month_elapsed": 12
+    },
+    "stance": "no",
+    "driving_constraint": "14.47pt margin erosion (>5pt threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 9.91,
+      "supplier_cost_increase_pct": 15.31,
+      "budget_forecast_utilisation_pct": 89.49,
+      "fy_month_elapsed": 5
+    },
+    "stance": "no",
+    "driving_constraint": "15.31% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 4.88,
+      "supplier_cost_increase_pct": 15.43,
+      "budget_forecast_utilisation_pct": 98.08,
+      "fy_month_elapsed": 11
+    },
+    "stance": "no",
+    "driving_constraint": "15.43% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 2.8,
+      "supplier_cost_increase_pct": 11.41,
+      "budget_forecast_utilisation_pct": 125.3,
+      "fy_month_elapsed": 9
+    },
+    "stance": "no",
+    "driving_constraint": "11.41% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 14.24,
+      "supplier_cost_increase_pct": 4.67,
+      "budget_forecast_utilisation_pct": 50.4,
+      "fy_month_elapsed": 10
+    },
+    "stance": "no",
+    "driving_constraint": "14.24pt margin erosion (>5pt threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 7.81,
+      "supplier_cost_increase_pct": 12.29,
+      "budget_forecast_utilisation_pct": 61.24,
+      "fy_month_elapsed": 11
+    },
+    "stance": "no",
+    "driving_constraint": "12.29% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 11.2,
+      "supplier_cost_increase_pct": 9.02,
+      "budget_forecast_utilisation_pct": 77.99,
+      "fy_month_elapsed": 11
+    },
+    "stance": "no",
+    "driving_constraint": "9.02% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 10.34,
+      "supplier_cost_increase_pct": 12.06,
+      "budget_forecast_utilisation_pct": 41.85,
+      "fy_month_elapsed": 11
+    },
+    "stance": "no",
+    "driving_constraint": "12.06% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 5.73,
+      "supplier_cost_increase_pct": 8.95,
+      "budget_forecast_utilisation_pct": 50.8,
+      "fy_month_elapsed": 3
+    },
+    "stance": "no",
+    "driving_constraint": "8.95% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 10.02,
+      "supplier_cost_increase_pct": 5.71,
+      "budget_forecast_utilisation_pct": 63.93,
+      "fy_month_elapsed": 12
+    },
+    "stance": "no",
+    "driving_constraint": "10.02pt margin erosion (>5pt threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 1.98,
+      "supplier_cost_increase_pct": 4.88,
+      "budget_forecast_utilisation_pct": 98.55,
+      "fy_month_elapsed": 9
+    },
+    "stance": "conditional",
+    "driving_constraint": "98.55% full-year 3PP forecast in month 9 (early-concern threshold 94%)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 7.64,
+      "supplier_cost_increase_pct": 4.26,
+      "budget_forecast_utilisation_pct": 105.52,
+      "fy_month_elapsed": 2
+    },
+    "stance": "no",
+    "driving_constraint": "7.64pt margin erosion (>5pt threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 7.2,
+      "supplier_cost_increase_pct": 7.31,
+      "budget_forecast_utilisation_pct": 75.53,
+      "fy_month_elapsed": 11
+    },
+    "stance": "no",
+    "driving_constraint": "7.31% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 1.29,
+      "supplier_cost_increase_pct": 15.36,
+      "budget_forecast_utilisation_pct": 115.07,
+      "fy_month_elapsed": 1
+    },
+    "stance": "no",
+    "driving_constraint": "15.36% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 14.43,
+      "supplier_cost_increase_pct": 9.15,
+      "budget_forecast_utilisation_pct": 124.47,
+      "fy_month_elapsed": 7
+    },
+    "stance": "no",
+    "driving_constraint": "9.15% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 14.02,
+      "supplier_cost_increase_pct": 15.88,
+      "budget_forecast_utilisation_pct": 95.04,
+      "fy_month_elapsed": 7
+    },
+    "stance": "no",
+    "driving_constraint": "15.88% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 3.06,
+      "supplier_cost_increase_pct": 12.31,
+      "budget_forecast_utilisation_pct": 91.07,
+      "fy_month_elapsed": 5
+    },
+    "stance": "no",
+    "driving_constraint": "12.31% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 1.66,
+      "supplier_cost_increase_pct": 16.21,
+      "budget_forecast_utilisation_pct": 75.13,
+      "fy_month_elapsed": 7
+    },
+    "stance": "no",
+    "driving_constraint": "16.21% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 6.91,
+      "supplier_cost_increase_pct": 16.37,
+      "budget_forecast_utilisation_pct": 110.02,
+      "fy_month_elapsed": 6
+    },
+    "stance": "no",
+    "driving_constraint": "16.37% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 10.37,
+      "supplier_cost_increase_pct": 0.31,
+      "budget_forecast_utilisation_pct": 87.03,
+      "fy_month_elapsed": 2
+    },
+    "stance": "no",
+    "driving_constraint": "10.37pt margin erosion (>5pt threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 14.15,
+      "supplier_cost_increase_pct": 4.01,
+      "budget_forecast_utilisation_pct": 70.78,
+      "fy_month_elapsed": 7
+    },
+    "stance": "no",
+    "driving_constraint": "14.15pt margin erosion (>5pt threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 7.24,
+      "supplier_cost_increase_pct": 23.15,
+      "budget_forecast_utilisation_pct": 98.29,
+      "fy_month_elapsed": 1
+    },
+    "stance": "no",
+    "driving_constraint": "23.15% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 12.79,
+      "supplier_cost_increase_pct": 4.88,
+      "budget_forecast_utilisation_pct": 71.61,
+      "fy_month_elapsed": 2
+    },
+    "stance": "no",
+    "driving_constraint": "12.79pt margin erosion (>5pt threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 14.87,
+      "supplier_cost_increase_pct": 4.7,
+      "budget_forecast_utilisation_pct": 65.88,
+      "fy_month_elapsed": 11
+    },
+    "stance": "no",
+    "driving_constraint": "14.87pt margin erosion (>5pt threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 9.53,
+      "supplier_cost_increase_pct": 10.7,
+      "budget_forecast_utilisation_pct": 84.32,
+      "fy_month_elapsed": 1
+    },
+    "stance": "no",
+    "driving_constraint": "10.7% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 10.8,
+      "supplier_cost_increase_pct": 11.19,
+      "budget_forecast_utilisation_pct": 109.3,
+      "fy_month_elapsed": 1
+    },
+    "stance": "no",
+    "driving_constraint": "11.19% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 1.52,
+      "supplier_cost_increase_pct": 9.66,
+      "budget_forecast_utilisation_pct": 129.32,
+      "fy_month_elapsed": 8
+    },
+    "stance": "no",
+    "driving_constraint": "9.66% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 11.67,
+      "supplier_cost_increase_pct": 11.19,
+      "budget_forecast_utilisation_pct": 56.73,
+      "fy_month_elapsed": 12
+    },
+    "stance": "no",
+    "driving_constraint": "11.19% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 6.34,
+      "supplier_cost_increase_pct": 3.91,
+      "budget_forecast_utilisation_pct": 73.95,
+      "fy_month_elapsed": 8
+    },
+    "stance": "no",
+    "driving_constraint": "6.34pt margin erosion (>5pt threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 7.71,
+      "supplier_cost_increase_pct": 11.48,
+      "budget_forecast_utilisation_pct": 69.52,
+      "fy_month_elapsed": 9
+    },
+    "stance": "no",
+    "driving_constraint": "11.48% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 9.51,
+      "supplier_cost_increase_pct": 5.45,
+      "budget_forecast_utilisation_pct": 90.8,
+      "fy_month_elapsed": 6
+    },
+    "stance": "no",
+    "driving_constraint": "9.51pt margin erosion (>5pt threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 14.87,
+      "supplier_cost_increase_pct": 9.52,
+      "budget_forecast_utilisation_pct": 118.69,
+      "fy_month_elapsed": 3
+    },
+    "stance": "no",
+    "driving_constraint": "9.52% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 13.35,
+      "supplier_cost_increase_pct": 3.96,
+      "budget_forecast_utilisation_pct": 128.96,
+      "fy_month_elapsed": 6
+    },
+    "stance": "no",
+    "driving_constraint": "13.35pt margin erosion (>5pt threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 0.5,
+      "supplier_cost_increase_pct": 15.31,
+      "budget_forecast_utilisation_pct": 47.21,
+      "fy_month_elapsed": 7
+    },
+    "stance": "no",
+    "driving_constraint": "15.31% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 14.92,
+      "supplier_cost_increase_pct": 7.94,
+      "budget_forecast_utilisation_pct": 72.64,
+      "fy_month_elapsed": 4
+    },
+    "stance": "no",
+    "driving_constraint": "7.94% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 0.83,
+      "supplier_cost_increase_pct": 17.86,
+      "budget_forecast_utilisation_pct": 45.24,
+      "fy_month_elapsed": 9
+    },
+    "stance": "no",
+    "driving_constraint": "17.86% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 3.63,
+      "supplier_cost_increase_pct": 13.42,
+      "budget_forecast_utilisation_pct": 54.56,
+      "fy_month_elapsed": 6
+    },
+    "stance": "no",
+    "driving_constraint": "13.42% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 10.38,
+      "supplier_cost_increase_pct": 16.23,
+      "budget_forecast_utilisation_pct": 71.42,
+      "fy_month_elapsed": 1
+    },
+    "stance": "no",
+    "driving_constraint": "16.23% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 5.79,
+      "supplier_cost_increase_pct": 15.08,
+      "budget_forecast_utilisation_pct": 74.92,
+      "fy_month_elapsed": 1
+    },
+    "stance": "no",
+    "driving_constraint": "15.08% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 5.13,
+      "supplier_cost_increase_pct": 6.92,
+      "budget_forecast_utilisation_pct": 110.01,
+      "fy_month_elapsed": 5
+    },
+    "stance": "no",
+    "driving_constraint": "5.13pt margin erosion (>5pt threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 12.92,
+      "supplier_cost_increase_pct": 11.02,
+      "budget_forecast_utilisation_pct": 68.93,
+      "fy_month_elapsed": 10
+    },
+    "stance": "no",
+    "driving_constraint": "11.02% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 14.57,
+      "supplier_cost_increase_pct": 5.41,
+      "budget_forecast_utilisation_pct": 43.91,
+      "fy_month_elapsed": 8
+    },
+    "stance": "no",
+    "driving_constraint": "14.57pt margin erosion (>5pt threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 14.71,
+      "supplier_cost_increase_pct": 11.57,
+      "budget_forecast_utilisation_pct": 106.64,
+      "fy_month_elapsed": 5
+    },
+    "stance": "no",
+    "driving_constraint": "11.57% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 5.28,
+      "supplier_cost_increase_pct": 3.72,
+      "budget_forecast_utilisation_pct": 75.58,
+      "fy_month_elapsed": 9
+    },
+    "stance": "no",
+    "driving_constraint": "5.28pt margin erosion (>5pt threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 11.26,
+      "supplier_cost_increase_pct": 9.07,
+      "budget_forecast_utilisation_pct": 126.7,
+      "fy_month_elapsed": 2
+    },
+    "stance": "no",
+    "driving_constraint": "9.07% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 10.73,
+      "supplier_cost_increase_pct": 5.9,
+      "budget_forecast_utilisation_pct": 70.42,
+      "fy_month_elapsed": 2
+    },
+    "stance": "no",
+    "driving_constraint": "10.73pt margin erosion (>5pt threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 7.06,
+      "supplier_cost_increase_pct": 20.77,
+      "budget_forecast_utilisation_pct": 45.45,
+      "fy_month_elapsed": 8
+    },
+    "stance": "no",
+    "driving_constraint": "20.77% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 6.2,
+      "supplier_cost_increase_pct": 22.78,
+      "budget_forecast_utilisation_pct": 46.06,
+      "fy_month_elapsed": 10
+    },
+    "stance": "no",
+    "driving_constraint": "22.78% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 2.05,
+      "supplier_cost_increase_pct": 12.2,
+      "budget_forecast_utilisation_pct": 117.11,
+      "fy_month_elapsed": 9
+    },
+    "stance": "no",
+    "driving_constraint": "12.2% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 4.26,
+      "supplier_cost_increase_pct": 8.12,
+      "budget_forecast_utilisation_pct": 86.06,
+      "fy_month_elapsed": 4
+    },
+    "stance": "no",
+    "driving_constraint": "8.12% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 13.32,
+      "supplier_cost_increase_pct": 21.6,
+      "budget_forecast_utilisation_pct": 81.89,
+      "fy_month_elapsed": 1
+    },
+    "stance": "no",
+    "driving_constraint": "21.6% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 4.19,
+      "supplier_cost_increase_pct": 7.47,
+      "budget_forecast_utilisation_pct": 70.92,
+      "fy_month_elapsed": 5
+    },
+    "stance": "no",
+    "driving_constraint": "7.47% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 0.78,
+      "supplier_cost_increase_pct": 1.7,
+      "budget_forecast_utilisation_pct": 111.73,
+      "fy_month_elapsed": 10
+    },
+    "stance": "no",
+    "driving_constraint": "111.73% full-year 3PP forecast (>105% hard breach line)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 13.2,
+      "supplier_cost_increase_pct": 2.42,
+      "budget_forecast_utilisation_pct": 55.3,
+      "fy_month_elapsed": 2
+    },
+    "stance": "no",
+    "driving_constraint": "13.2pt margin erosion (>5pt threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 8.77,
+      "supplier_cost_increase_pct": 13.7,
+      "budget_forecast_utilisation_pct": 99.69,
+      "fy_month_elapsed": 4
+    },
+    "stance": "no",
+    "driving_constraint": "13.7% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 9.67,
+      "supplier_cost_increase_pct": 13.72,
+      "budget_forecast_utilisation_pct": 125.5,
+      "fy_month_elapsed": 9
+    },
+    "stance": "no",
+    "driving_constraint": "13.72% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 7.19,
+      "supplier_cost_increase_pct": 11.64,
+      "budget_forecast_utilisation_pct": 63.55,
+      "fy_month_elapsed": 8
+    },
+    "stance": "no",
+    "driving_constraint": "11.64% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 0.78,
+      "supplier_cost_increase_pct": 3.87,
+      "budget_forecast_utilisation_pct": 76.87,
+      "fy_month_elapsed": 6
+    },
+    "stance": "yes",
+    "driving_constraint": "76.87% full-year 3PP forecast in month 6 (within the 88% threshold for this point in the FY)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 9.05,
+      "supplier_cost_increase_pct": 7.0,
+      "budget_forecast_utilisation_pct": 87.31,
+      "fy_month_elapsed": 1
+    },
+    "stance": "no",
+    "driving_constraint": "9.05pt margin erosion (>5pt threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 13.95,
+      "supplier_cost_increase_pct": 11.41,
+      "budget_forecast_utilisation_pct": 78.77,
+      "fy_month_elapsed": 4
+    },
+    "stance": "no",
+    "driving_constraint": "11.41% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 9.79,
+      "supplier_cost_increase_pct": 1.47,
+      "budget_forecast_utilisation_pct": 42.78,
+      "fy_month_elapsed": 1
+    },
+    "stance": "no",
+    "driving_constraint": "9.79pt margin erosion (>5pt threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 1.71,
+      "supplier_cost_increase_pct": 7.07,
+      "budget_forecast_utilisation_pct": 110.93,
+      "fy_month_elapsed": 11
+    },
+    "stance": "no",
+    "driving_constraint": "7.07% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 6.92,
+      "supplier_cost_increase_pct": 21.22,
+      "budget_forecast_utilisation_pct": 107.1,
+      "fy_month_elapsed": 5
+    },
+    "stance": "no",
+    "driving_constraint": "21.22% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 3.53,
+      "supplier_cost_increase_pct": 12.57,
+      "budget_forecast_utilisation_pct": 41.71,
+      "fy_month_elapsed": 5
+    },
+    "stance": "no",
+    "driving_constraint": "12.57% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 5.21,
+      "supplier_cost_increase_pct": 7.26,
+      "budget_forecast_utilisation_pct": 121.12,
+      "fy_month_elapsed": 4
+    },
+    "stance": "no",
+    "driving_constraint": "7.26% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 2.12,
+      "supplier_cost_increase_pct": 20.95,
+      "budget_forecast_utilisation_pct": 103.7,
+      "fy_month_elapsed": 5
+    },
+    "stance": "no",
+    "driving_constraint": "20.95% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 1.1,
+      "supplier_cost_increase_pct": 5.11,
+      "budget_forecast_utilisation_pct": 44.21,
+      "fy_month_elapsed": 2
+    },
+    "stance": "yes",
+    "driving_constraint": "44.21% full-year 3PP forecast in month 2 (within the 80% threshold for this point in the FY)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 2.05,
+      "supplier_cost_increase_pct": 8.56,
+      "budget_forecast_utilisation_pct": 97.36,
+      "fy_month_elapsed": 4
+    },
+    "stance": "no",
+    "driving_constraint": "8.56% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 5.1,
+      "supplier_cost_increase_pct": 18.76,
+      "budget_forecast_utilisation_pct": 98.65,
+      "fy_month_elapsed": 4
+    },
+    "stance": "no",
+    "driving_constraint": "18.76% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 7.84,
+      "supplier_cost_increase_pct": 19.73,
+      "budget_forecast_utilisation_pct": 64.96,
+      "fy_month_elapsed": 8
+    },
+    "stance": "no",
+    "driving_constraint": "19.73% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 9.17,
+      "supplier_cost_increase_pct": 3.78,
+      "budget_forecast_utilisation_pct": 76.88,
+      "fy_month_elapsed": 4
+    },
+    "stance": "no",
+    "driving_constraint": "9.17pt margin erosion (>5pt threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 3.96,
+      "supplier_cost_increase_pct": 22.8,
+      "budget_forecast_utilisation_pct": 71.95,
+      "fy_month_elapsed": 12
+    },
+    "stance": "no",
+    "driving_constraint": "22.8% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 13.33,
+      "supplier_cost_increase_pct": 2.64,
+      "budget_forecast_utilisation_pct": 83.85,
+      "fy_month_elapsed": 8
+    },
+    "stance": "no",
+    "driving_constraint": "13.33pt margin erosion (>5pt threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 14.23,
+      "supplier_cost_increase_pct": 10.81,
+      "budget_forecast_utilisation_pct": 59.18,
+      "fy_month_elapsed": 6
+    },
+    "stance": "no",
+    "driving_constraint": "10.81% supplier cost increase (>7% threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 8.98,
+      "supplier_cost_increase_pct": 1.43,
+      "budget_forecast_utilisation_pct": 68.86,
+      "fy_month_elapsed": 4
+    },
+    "stance": "no",
+    "driving_constraint": "8.98pt margin erosion (>5pt threshold)"
+  },
+  {
+    "facts": {
+      "margin_erosion_pts": 8.25,
+      "supplier_cost_increase_pct": 12.77,
+      "budget_forecast_utilisation_pct": 110.51,
+      "fy_month_elapsed": 7
+    },
+    "stance": "no",
+    "driving_constraint": "12.77% supplier cost increase (>7% threshold)"
+  }
+]

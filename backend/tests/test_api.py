@@ -55,15 +55,18 @@ def test_stream_unavailable_seed_returns_409():
 
 
 def test_stream_supplier_seed_emits_the_full_trace_in_order():
-    """Under the autouse mocked-LLM-unavailable fallback: routing engages
-    everyone, the seed's pre-supplied facts drive real evaluate(), reconcile
-    falls back to the deterministic P2 logic -- same shape as a P1/P2 run."""
+    """Rewrite: no `route` event exists any more (P3.6 deletes routing) --
+    every one of the four agents streams its own `check` event first (no
+    centralised routing stage), and since the seed's pre-supplied facts
+    trigger all four agents' rules, reconcile falls back to the
+    deterministic path with all four `position` events present too."""
     response = client.get("/run/stream?seed_id=supplier_milestone&pace=0")
 
     events = _parse_sse(response.text)
     kinds = [data["kind"] for event, data in events if event == "trace"]
 
-    assert kinds[0] == "route"
+    assert kinds[0] == "check"
+    assert kinds.count("check") == 4
     assert kinds.count("position") == 4
     assert kinds[-2] == "conflict"
     assert kinds[-1] == "reconciliation"
@@ -110,12 +113,18 @@ def test_council_retest_finance_default_config_matches_seed_stance():
 
 
 def test_council_retest_finance_lenient_config_flips_the_stance():
+    """Rewrite: raising the threshold so nothing trips any more is now the
+    all-clear "no rule triggered" state (stance=None), not an explicit
+    "yes" -- P3.6's own equivalence rule (old yes == new not-triggered
+    with nothing unchecked)."""
     response = client.post(
         "/council/retest",
         json={"agent_id": "finance", "config_overrides": {"supplier_cost_increase_threshold_pct": 50.0}},
     )
 
-    assert response.json()["stance"] == "yes"
+    body = response.json()
+    assert body["stance"] is None
+    assert body["triggered"] is False
 
 
 def test_council_retest_operations_licence_toggle_clears_the_blocker():
@@ -124,7 +133,9 @@ def test_council_retest_operations_licence_toggle_clears_the_blocker():
         json={"agent_id": "operations", "fact_overrides": {"licence_provisioned_for_new_date": True}},
     )
 
-    assert response.json()["stance"] == "yes"
+    body = response.json()
+    assert body["stance"] is None
+    assert body["triggered"] is False
 
 
 # ---------------------------------------------------------- agent config --
@@ -213,7 +224,7 @@ def test_put_agent_config_editing_a_threshold_changes_the_hard_signal_outcome(tm
 
     client.put("/agents/finance/config", json={"supplier_cost_increase_threshold_pct": 50.0})
     response = client.post("/council/retest", json={"agent_id": "finance"})
-    assert response.json()["stance"] == "yes"
+    assert response.json()["stance"] is None  # all-clear -- see the dedicated rewrite test above
 
     client.put("/agents/operations/config", json={"capacity_red_threshold_pct": 1.0})
     response = client.post(
@@ -257,9 +268,13 @@ def test_get_chief_of_staff_config_returns_a_persona():
     assert response.json()["persona"]
 
 
-def test_put_chief_of_staff_config_persists_and_feeds_the_routing_brief(tmp_path, monkeypatch):
-    from model.llm import LLMUnavailableError
+def test_put_chief_of_staff_config_persists_and_feeds_the_reconcile_brief(tmp_path, monkeypatch, seed_input, seed_facts):
+    """Rewrite: persona used to shape the routing brief (deleted with
+    routing); P3.6 §5.6 confines it to reconciliation/narration WORDING
+    only, so this now checks the reconcile prompt instead -- reason:
+    routing (and its persona-fed prompt) no longer exists."""
     from orchestrator import cos_settings
+    from orchestrator.chief_of_staff import ReconciliationDraft
 
     monkeypatch.setattr(cos_settings, "COS_SETTINGS_PATH", tmp_path / "cos_settings.json")
 
@@ -270,16 +285,20 @@ def test_put_chief_of_staff_config_persists_and_feeds_the_routing_brief(tmp_path
     captured = {}
 
     def fake_call_structured(system, user, response_model, config=None, temperature=0.2):
-        captured["system"] = system
+        if response_model is ReconciliationDraft:
+            captured["system"] = system
         raise LLMUnavailableError("stop after capture -- only checking the composed prompt")
+
+    from model.llm import LLMUnavailableError
 
     monkeypatch.setattr("model.llm.call_structured", fake_call_structured)
 
-    from orchestrator.chief_of_staff import route_node
+    from orchestrator.graph import build_graph
     from orchestrator.state import initial_state
 
-    route_node(initial_state("some scenario", {}))
+    build_graph().invoke(initial_state(seed_input, seed_facts), config={"recursion_limit": 10})
 
+    assert "system" in captured, "reconcile must be reached (the seed triggers at least one agent)"
     assert "Always mention pineapple." in captured["system"]
 
 
@@ -393,3 +412,48 @@ def test_trigger_inbound_email_matches_pmo_and_delivery_keywords():
     assert "pmo" in body["convened"]  # "contract variation" is a PMO trigger keyword
     assert "delivery" in body["convened"]  # "milestone" is a Delivery trigger keyword
     assert body["run_text"]
+
+
+# ------------------------------------------- P3.6 §6.7: SSE `check` shape --
+
+def test_sse_emits_exactly_one_check_per_agent_with_the_full_shape():
+    events = _parse_sse(client.get("/run/stream?seed_id=supplier_milestone&pace=0").text)
+    checks = [d for e, d in events if e == "trace" and d["kind"] == "check"]
+    assert sorted(c["agent"] for c in checks) == ["delivery", "finance", "operations", "pmo"]
+    for c in checks:
+        assert {"triggered", "stance", "fired", "unchecked", "unclear", "evidence", "provenance"} <= set(c["payload"])
+
+
+def test_sse_never_emits_a_route_event():
+    events = _parse_sse(client.get("/run/stream?seed_id=supplier_milestone&pace=0").text)
+    assert all(d["kind"] != "route" for e, d in events if e == "trace")
+
+
+def test_conflict_and_reconciliation_come_after_every_check():
+    events = _parse_sse(client.get("/run/stream?seed_id=supplier_milestone&pace=0").text)
+    kinds = [d["kind"] for e, d in events if e == "trace"]
+    last_check = max(i for i, k in enumerate(kinds) if k == "check")
+    assert kinds.index("conflict") > last_check
+    assert kinds.index("reconciliation") > kinds.index("conflict")
+
+
+def test_seeded_facts_carry_seeded_provenance_and_no_evidence_quotes():
+    events = _parse_sse(client.get("/run/stream?seed_id=supplier_milestone&pace=0").text)
+    ops = next(d for e, d in events if e == "trace" and d["kind"] == "check" and d["agent"] == "operations")
+    assert set(ops["payload"]["provenance"].values()) == {"seeded"}
+    assert ops["payload"]["evidence"] == {}
+
+
+def test_rejected_config_edits_return_a_readable_reason(tmp_path, monkeypatch):
+    _isolate_configs(tmp_path, monkeypatch)
+
+    too_long = client.put("/agents/finance/config", json={"rules_summary": ["x" * 500]})
+    assert too_long.status_code == 422
+    detail = too_long.json()["detail"]
+    assert detail.startswith("Rejected --") and "240" in detail and "pydantic" not in detail.lower()
+
+    out_of_range = client.put("/agents/finance/config", json={"margin_erosion_threshold_pts": -5})
+    assert "margin_erosion_threshold_pts" in out_of_range.json()["detail"]
+
+    blocker = client.put("/agents/operations/config", json={"rules": []})
+    assert blocker.status_code == 422 and "system-governed" in blocker.json()["detail"]

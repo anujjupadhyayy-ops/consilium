@@ -62,3 +62,20 @@ def test_model_status_reports_unreachable(monkeypatch):
 def test_model_status_reports_reachable(monkeypatch):
     monkeypatch.setattr("model.llm.probe_model", lambda cfg=None: True)
     assert client.get("/settings/model/status").json()["reachable"] is True
+
+
+def test_pre_p3_6_history_entries_load_and_render_data_without_error(monkeypatch, tmp_path):
+    """HistoryEntry.positions is an untyped list[dict] and no routing shape
+    was ever persisted in history, so a pre-P3.6 entry (positions with
+    stance/agent only, no checks) loads unchanged -- nothing to migrate;
+    this proves it explicitly rather than assuming it."""
+    import json
+
+    monkeypatch.setenv("CONSILIUM_DATA_DIR", str(tmp_path))
+    (tmp_path / "run_history.json").write_text(json.dumps([{
+        "label": "Old run", "q": "old scenario", "when": "09:00", "verdict": "Decline",
+        "positions": [{"agent": "finance", "stance": "no", "driving_constraint": "x", "reasoning": "y",
+                       "recommendation": "z", "lead_figure": "w"}],
+    }]))
+    runs = client.get("/history").json()["runs"]
+    assert runs[0]["label"] == "Old run" and runs[0]["positions"][0]["stance"] == "no"

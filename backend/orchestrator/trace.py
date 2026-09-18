@@ -5,7 +5,7 @@ from typing import Literal, Optional, TypedDict
 
 from .state import ConsiliumState
 
-TraceKind = Literal["route", "dispatch", "position", "conflict", "reconciliation"]
+TraceKind = Literal["check", "position", "conflict", "reconciliation"]
 
 
 class TraceEvent(TypedDict):

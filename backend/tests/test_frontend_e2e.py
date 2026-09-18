@@ -7,6 +7,7 @@ Skips cleanly if Playwright or its browser isn't installed (e.g. plain CI):
 run `pip install playwright && playwright install chromium` to enable.
 """
 import os
+import shutil
 import socket
 import threading
 import time
@@ -17,6 +18,7 @@ import pytest
 pytest.importorskip("playwright")
 from playwright.sync_api import sync_playwright  # noqa: E402
 import uvicorn  # noqa: E402
+from _pytest.monkeypatch import MonkeyPatch  # noqa: E402
 
 
 def _free_port():
@@ -33,6 +35,23 @@ def base_url(tmp_path_factory):
     # Force the deterministic fallback path (no model) so runs complete fast.
     os.environ["MODEL_PROVIDER"] = "oss"
     os.environ["BASE_URL"] = "http://127.0.0.1:1"
+
+    # Isolate the live server's agent configs from the repo's tracked JSON --
+    # test_agent_rule_editable_after_saving really does PUT /agents/pmo/config
+    # against this server, and without this it silently dirties
+    # backend/agents/configs/pmo.json on disk every time the suite runs
+    # (module-scoped monkeypatch, since pytest's function-scoped `monkeypatch`
+    # fixture can't be requested here).
+    from agents import registry
+
+    configs_dir = tmp_path_factory.mktemp("e2e_configs")
+    shutil.copytree(registry.DEFAULT_CONFIGS_DIR, configs_dir, dirs_exist_ok=True)
+    manifest_path = tmp_path_factory.mktemp("e2e_manifest") / "manifest.json"
+    manifest_path.write_text(registry.DEFAULT_MANIFEST_PATH.read_text())
+    mp = MonkeyPatch()
+    mp.setattr(registry, "DEFAULT_CONFIGS_DIR", configs_dir)
+    mp.setattr(registry, "DEFAULT_MANIFEST_PATH", manifest_path)
+
     from api.app import app
 
     port = _free_port()
@@ -48,6 +67,7 @@ def base_url(tmp_path_factory):
     yield url
     server.should_exit = True
     time.sleep(0.3)
+    mp.undo()
 
 
 @pytest.fixture(scope="module")
@@ -146,3 +166,245 @@ def test_selecting_a_provider_sets_its_model_and_base_url(page):
 def test_audit_viewer_loads(page, base_url):
     page.goto(base_url + "/audit.html")
     assert "ledger" in page.content().lower()
+
+
+# ------------------------------------------------ P3.6 §6.8 additions --
+
+def _run_seed_in_ui(page):
+    page.click("[data-v='decision']")
+    page.click(".chip[data-id='supplier_milestone']")
+    page.wait_for_selector("#stage .verdict-block.show", timeout=20000)
+    page.wait_for_function("!document.getElementById('run').disabled", timeout=20000)
+
+
+def _real_stream_events(base_url, query):
+    import json as _json
+
+    raw = urllib.request.urlopen(f"{base_url}/run/stream?{query}&pace=0", timeout=20).read().decode()
+    events = []
+    for block in raw.strip().split("\n\n"):
+        head, data = block.split("\n", 1)
+        events.append((head.removeprefix("event: "), _json.loads(data.removeprefix("data: "))))
+    return events
+
+
+def _sse_body(events):
+    import json as _json
+
+    return "".join(f"event: {e}\ndata: {_json.dumps(d)}\n\n" for e, d in events)
+
+
+def test_step_one_label_is_council_checks_its_rules(page):
+    _run_seed_in_ui(page)
+    stage = page.inner_text("#stage")
+    assert "Council checks its rules" in stage
+    assert "routes the decision" not in stage
+
+
+def test_triggered_cards_show_stance_and_seeded_provenance(page):
+    _run_seed_in_ui(page)
+    ops = page.locator("#lane-operations")
+    assert "blocker" in ops.inner_text().lower()  # badge is CSS-uppercased
+    assert "seeded" in ops.inner_text().lower()
+    assert "no" in page.locator("#lane-finance").inner_text().lower()
+
+
+def test_all_agents_render_in_manifest_order_even_when_checks_arrive_reversed(page, base_url):
+    events = _real_stream_events(base_url, "seed_id=supplier_milestone")
+    checks = [ev for ev in events if ev[0] == "trace" and ev[1]["kind"] == "check"]
+    rest = [ev for ev in events if not (ev[0] == "trace" and ev[1]["kind"] == "check")]
+    reversed_events = list(reversed(checks)) + rest
+    page.route("**/run/stream*", lambda route: route.fulfill(
+        status=200, content_type="text/event-stream", body=_sse_body(reversed_events)))
+    _run_seed_in_ui(page)
+    order = page.eval_on_selector_all("#stage .lane", "els => els.map(e => e.id)")
+    assert order == ["lane-finance", "lane-delivery", "lane-pmo", "lane-operations"]
+    page.unroute("**/run/stream*")
+
+
+def test_not_triggered_cards_say_no_rule_triggered_and_never_skipped_or_no_impact(page):
+    page.click("[data-v='decision']")
+    page.fill("#q", "Please advise on this vague request; no figures are given at all.")
+    page.click("#run")
+    page.wait_for_selector("#stage .verdict-block.show", timeout=20000)
+    stage = page.inner_text("#stage")
+    assert "No rule triggered" in stage and "Couldn't check:" in stage
+    assert "skipped" not in stage.lower() and "no impact" not in stage.lower()
+    assert page.locator("#rail .node").count() == 5  # four agents + reconcile, always present
+
+
+def test_unclear_tripwire_renders_amber_and_verdict_panel_shows_the_cap(page):
+    page.click("[data-v='decision']")
+    page.fill("#q", "We are still checking whether the licence will be ready for the earlier date.")
+    page.click("#run")
+    page.wait_for_selector("#stage .verdict-block.show", timeout=20000)
+    unclear = page.locator("#stage .unclear-line")
+    assert unclear.count() >= 1
+    assert "mentioned but not confirmed" in unclear.first.inner_text()
+    same_amber = page.evaluate(
+        """() => { const a = document.querySelector('#stage .unclear-line');
+                   const t = document.createElement('span'); t.style.color = 'var(--amber)'; document.body.appendChild(t);
+                   const r = getComputedStyle(a).color === getComputedStyle(t).color; t.remove(); return r; }"""
+    )
+    assert same_amber
+    assert "Proceed only after confirming" in page.inner_text("#stage .verdict-block")
+
+
+def test_dashboard_simulate_email_names_the_full_council_not_a_subset(page):
+    page.click("#sim")
+    page.wait_for_selector("#emailcard.show")
+    text = page.inner_text("#emailcard")
+    assert "full council" in text
+    assert "Delivery, PMO" not in text and "convening Delivery" not in text
+
+
+def test_council_tab_blocker_rules_read_only_and_threshold_edit_reflected_in_next_run(page):
+    page.click("[data-v='council']")
+    page.wait_for_selector(".blockerrule")
+    assert "system-governed" in page.inner_text("#view-council")
+    assert page.locator(".blockerrule input").count() == 0
+    assert page.locator(".blockerrule").count() >= 1
+
+    page.fill("#cf-supplier", "50")
+    page.click("[data-retest='finance']")
+    page.wait_for_selector("#res-finance.show")
+    assert "all clear" in page.inner_text("#res-finance").lower()
+
+    _run_seed_in_ui(page)  # next run reflects the edit: finance no longer triggers on 15%
+    assert "All rules checked" in page.locator("#lane-finance").inner_text()
+
+    page.click("[data-v='council']")
+    page.fill("#cf-supplier", "7")
+    page.click("[data-retest='finance']")
+    page.wait_for_selector("#res-finance.show")
+
+
+def test_history_renders_old_and_new_entries_without_a_page_error(page, base_url):
+    errors = []
+    page.on("pageerror", lambda e: errors.append(str(e)))
+    import json as _json
+
+    req = urllib.request.Request(
+        base_url + "/history", method="POST", headers={"Content-Type": "application/json"},
+        data=_json.dumps({"label": "Pre-P3.6 run", "q": "old", "verdict": "Decline",
+                          "positions": [{"agent": "finance", "stance": "no"}]}).encode(),
+    )
+    urllib.request.urlopen(req)
+    page.reload()
+    page.click("[data-v='history']")
+    page.wait_for_selector("#hgrid .hrow")
+    assert "Pre-P3.6 run" in page.inner_text("#hgrid")
+    assert errors == []
+
+
+def test_council_shows_the_backend_validation_error_for_a_rejected_rule_edit(page):
+    page.click("[data-v='council']")
+    page.locator("#rl-pmo .rin").first.fill("x" * 300)  # over the 240-char rule limit
+    page.click("[data-save='pmo']")
+    page.wait_for_selector("#res-pmo.show")
+    text = page.inner_text("#res-pmo")
+    assert "240" in text and "not saved" in text.lower()  # the backend's own reason, readable
+    assert "saved to config" not in text.lower()  # never claims success on a rejection
+    assert "value_error" not in text and "pydantic" not in text.lower()
+
+
+def test_council_shows_the_backend_validation_error_for_a_rejected_threshold_edit(page):
+    page.click("[data-v='council']")
+    page.evaluate("document.getElementById('cf-margin').removeAttribute('min')")  # bypass the browser's own bound
+    page.fill("#cf-margin", "-5")
+    page.click("[data-retest='finance']")
+    page.wait_for_selector("#res-finance.show")
+    text = page.inner_text("#res-finance")
+    assert "margin_erosion_threshold_pts" in text and "not saved" in text.lower()
+    assert "all clear" not in text.lower() and "saved to config" not in text.lower()
+
+
+# ---------------------- verdict panel structure, list rendering, human labels --
+
+import re as _re
+
+_RAW = _re.compile(r"[a-z0-9]+_[a-z0-9_]+|\b(finance|delivery|pmo|operations)\.[a-z]")
+
+
+def _free_text_run_in_ui(page, text):
+    page.click("[data-v='decision']")
+    page.fill("#q", text)
+    page.click("#run")
+    page.wait_for_selector("#stage .verdict-block.show", timeout=20000)
+    page.wait_for_function("!document.getElementById('run').disabled", timeout=20000)
+
+
+def test_three_assumptions_render_as_three_separate_items(page, base_url):
+    events = _real_stream_events(base_url, "seed_id=supplier_milestone")
+    for i, (kind, data) in enumerate(events):
+        if kind == "trace" and data["kind"] == "reconciliation":
+            data["payload"]["assumptions"] = ["First assumption.", "Second assumption.", "Third assumption."]
+            data["payload"]["not_considered"] = ["Alpha.", "Beta."]
+    page.route("**/run/stream*", lambda route: route.fulfill(
+        status=200, content_type="text/event-stream", body=_sse_body(events)))
+    _run_seed_in_ui(page)
+    items = page.locator("#stage .verdict-block .assumptions li")
+    assert items.count() == 3
+    assert [items.nth(i).inner_text() for i in range(3)] == ["First assumption.", "Second assumption.", "Third assumption."]
+    assert page.locator("#stage .verdict-block .notconsidered li").count() == 2
+    page.unroute("**/run/stream*")
+
+
+def test_no_raw_field_name_appears_in_user_facing_text(page):
+    """Checked on the seed run, a nothing-stated run and a licence-mentioned-
+    but-unconfirmed run: the stage (lanes + verdict panel) may show human
+    labels only -- no `snake_case` identifier and no `agent.field`. (The
+    developer inspector, a collapsed <details>, deliberately shows the raw
+    trace and is outside this check.)"""
+    _run_seed_in_ui(page)
+    seed_text = page.inner_text("#stage")
+    _free_text_run_in_ui(page, "Please advise on this vague request; no figures are given at all.")
+    vague_text = page.inner_text("#stage")
+    _free_text_run_in_ui(page, "We are still checking whether the licence will be ready for the earlier date.")
+    unclear_text = page.inner_text("#stage")
+    for name, text in (("seed", seed_text), ("vague", vague_text), ("unclear", unclear_text)):
+        assert not _RAW.search(text), f"{name}: raw name leaked: {_RAW.search(text).group(0)!r}"
+    assert "licence provisioned for the new date" in unclear_text.lower()
+    assert "supplier cost increase (%)" in vague_text.lower()
+
+
+def test_verdict_panel_headline_is_the_recommendation_only_and_facts_move_to_their_own_block(page):
+    _free_text_run_in_ui(page, "We are still checking whether the licence will be ready for the earlier date.")
+    panel = page.locator("#stage .verdict-block")
+    headline = panel.locator(".rec").inner_text()
+    assert headline == "Proceed only after confirming the blocker-related facts listed below."
+    assert "licence" not in headline.lower()
+
+    # DOM order: headline, then the not-checked block, then WHY / KEY TRADE-OFF / ASSUMPTIONS / NOT CONSIDERED
+    order = panel.evaluate("""el => [...el.querySelectorAll('.rec, .notchecked, .kv')].map(n => n.className.split(' ')[0])""")
+    assert order == ["rec", "notchecked", "kv"]
+    assert panel.locator(".notchecked h4").inner_text().lower() == "not checked — not stated in the brief"
+    labels = [t.lower() for t in panel.locator(".kv dt").all_inner_texts()]
+    assert labels == ["why", "key trade-off", "assumptions", "not considered"]
+
+    # the confirm-first line leads the block (first thing after its heading)
+    first_after_heading = panel.locator(".notchecked").evaluate("el => el.children[1].className")
+    assert "confirmfirst" in first_after_heading
+    assert "licence provisioned for the new date" in panel.locator(".confirmfirst").inner_text()
+    assert "Operations" in panel.locator(".confirmfirst").inner_text()
+
+    # grouped by agent, blocker-related agent first; blocker facts before the rest within a group
+    agents = panel.locator(".ncgroup .an").all_inner_texts()
+    assert agents[0] == "Operations" and sorted(agents) == sorted(["Operations", "Delivery", "Finance", "PMO"])
+    ops_items = panel.locator(".ncgroup").first.locator("li").all_inner_texts()
+    assert ops_items[0].lower().startswith("licence provisioned for the new date")
+    assert "mentioned, not confirmed" in ops_items[0].lower()
+
+
+def test_not_checked_block_without_an_unclear_blocker_fact_has_no_confirm_first_line(page):
+    _free_text_run_in_ui(page, "Please advise on this vague request; no figures are given at all.")
+    panel = page.locator("#stage .verdict-block")
+    assert panel.locator(".notchecked").count() == 1
+    assert panel.locator(".confirmfirst").count() == 0
+    assert panel.locator(".rec").inner_text() == "No rule triggered on stated facts."
+
+
+def test_fully_stated_seed_has_no_not_checked_block(page):
+    _run_seed_in_ui(page)
+    assert page.locator("#stage .verdict-block .notchecked").count() == 0
+    assert page.locator("#stage .verdict-block .rec").inner_text().startswith("Decline as currently scoped")

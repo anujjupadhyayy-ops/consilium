@@ -1,0 +1,18 @@
+{
+  "finance": {
+    "stance": "no",
+    "driving_constraint": "15% supplier cost increase (>7% threshold)"
+  },
+  "delivery": {
+    "stance": "yes",
+    "driving_constraint": "Critical Revenue at Risk reduced by \u00a3420,000 (\u00a3420,000 -> \u00a30)"
+  },
+  "pmo": {
+    "stance": "conditional",
+    "driving_constraint": "Requires Change Control Gate 1 (tolerance exception), Change Control Gate 2 (contract variation) sign-off before proceeding"
+  },
+  "operations": {
+    "stance": "blocker",
+    "driving_constraint": "Weakest signal: Supplier/SLA & licence-kit control (RED)"
+  }
+}

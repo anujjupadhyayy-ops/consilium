@@ -1,10 +1,10 @@
-"""Persisted Chief of Staff persona / routing-guidance (P3.6).
+"""Persisted Chief of Staff persona / wording guidance (P3.6).
 
 The adjudication policy (operational-blocker-wins) and guardrails
 (recommend-only, bounded termination) stay code-controlled -- see
 chief_of_staff.py's OPERATIONAL_BLOCKER_POLICY and _enforce_blocker_policy.
 This file only holds the user-editable *framing* layered on top of the
-routing/reconcile prompts: tone, prioritisation, what to escalate. Tracked
+reconciliation prompt: tone, prioritisation, what to escalate (wording only). Tracked
 in git (no secrets) so a fork ships with a sensible default persona, same
 treatment as agents/configs/*.json.
 """

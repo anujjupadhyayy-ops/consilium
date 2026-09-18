@@ -97,7 +97,11 @@ def test_webhook_convenes_and_records(client):
 
     audit = client.get("/trigger/audit").json()
     assert audit["chain"]["ok"] is True
-    assert audit["entries"][0]["actor"] == "ops@corp"
+    # Rewrite: a webhook run now appends TWO ledger entries (the trigger,
+    # recorded first, then a council_checks entry with the checks table),
+    # newest first -- so the trigger is no longer entries[0].
+    trigger = next(e for e in audit["entries"] if e.get("kind") == "trigger")
+    assert trigger["actor"] == "ops@corp"
 
 
 def test_webhook_without_token_when_one_is_required_is_rejected_but_logged(tmp_path, monkeypatch):
@@ -134,3 +138,29 @@ def test_inbound_email_still_works_and_is_audited(client):
     assert r.status_code == 200
     assert r.json()["convened"]
     assert client.get("/trigger/audit/verify").json()["ok"] is True
+
+
+def test_webhook_run_records_the_checks_table_and_chain_still_verifies(client):
+    r = client.post("/trigger/webhook", json={"subject": "s", "body": "The licence is not provisioned for the new date."})
+    assert r.status_code == 200
+    audit = client.get("/trigger/audit").json()
+    checks_entry = next(e for e in audit["entries"] if e.get("kind") == "council_checks")
+    assert set(checks_entry["checks"]) == {"finance", "delivery", "pmo", "operations"}
+    for check in checks_entry["checks"].values():
+        assert {"triggered", "stance", "fired", "unchecked", "unclear", "evidence", "provenance"} <= set(check)
+    assert audit["chain"]["ok"] is True
+
+
+def test_tampering_with_a_recorded_checks_entry_is_still_detected(client, tmp_path, monkeypatch):
+    import json as _json
+    from pathlib import Path
+
+    log = Path(tmp_path / "api_audit.jsonl")
+    client.post("/trigger/webhook", json={"subject": "s", "body": "budget overspend"})
+    lines = log.read_text().splitlines()
+    idx = next(i for i, ln in enumerate(lines) if _json.loads(ln).get("kind") == "council_checks")
+    entry = _json.loads(lines[idx])
+    entry["verdict"] = "TAMPERED"
+    lines[idx] = _json.dumps(entry, ensure_ascii=False)
+    log.write_text("\n".join(lines) + "\n")
+    assert client.get("/trigger/audit/verify").json()["ok"] is False

@@ -3,8 +3,17 @@ from orchestrator.chief_of_staff import build_reconciliation, detect_conflict
 
 
 def _positions(seed_facts: dict):
+    """P3.6 rewrite: evaluate() is deleted -- build each triggered agent's
+    position via check()/_position_from_check() instead. Every agent in
+    the seed genuinely triggers, so this is a like-for-like replacement,
+    not a scope reduction."""
     agents = load_agents_from_manifest()
-    return [agent.evaluate(seed_facts[agent.id]) for agent in agents]
+    positions = []
+    for agent in agents:
+        result = agent.check(seed_facts[agent.id])
+        assert result.stance is not None, f"{agent.id} must trigger on the seed's engineered facts"
+        positions.append(agent._position_from_check(seed_facts[agent.id], result))
+    return positions
 
 
 def test_detects_finance_delivery_conflict_structurally(seed_facts):

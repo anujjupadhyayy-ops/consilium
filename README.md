@@ -1,11 +1,13 @@
 # Consilium
 
-Consilium is a forkable, open-source multi-agent decision framework: a **Chief of Staff**
-orchestrator routes a free-text decision to specialist agents, lets them reason independently and
-**disagree**, then reconciles their positions into one defensible recommendation — with the whole
-process visible on screen, step by step. It ships with a back-office example (Finance, Delivery,
-PMO, Operations) because that's a domain most people can sanity-check, but the framework itself is
-domain-agnostic: the agents are editable config, not hardcoded logic.
+Consilium is a forkable, open-source multi-agent decision framework built around one principle:
+**rules decide, the LLM reads and explains.** Every specialist agent checks its own rules against
+every decision — none can be left out — and an agent is *triggered* only when one of its rules fires
+on stated facts. A **Chief of Staff** then summarises what triggered and reconciles the positions
+into one defensible recommendation, with the whole process visible on screen, step by step. It
+ships with an illustrative back-office example (Finance, Delivery, PMO, Operations) because that's
+a domain most people can sanity-check — a framework showcase, not a product; the agents are
+editable config, not hardcoded logic.
 
 ![Dashboard: the Chief of Staff's morning briefing, flagged items needing a decision, and the council's latest signals from Finance, Delivery, PMO and Operations](docs/images/dashboard.png)
 
@@ -23,18 +25,29 @@ what wins.
 
 ## How it works
 
-1. **Route.** The Chief of Staff reads the decision and picks which specialist agents are
-   relevant, stating a reason for each — and explicitly states why it skipped the rest. Selective
-   routing is itself a sign of judgement; it never dispatches to an agent that has nothing to add.
-2. **Deliberate, in parallel.** Each engaged agent computes a deterministic **hard signal** —
-   stance (`yes` / `no` / `conditional` / `blocker`) plus the one number or constraint driving it —
-   from its own editable config. An LLM call then writes that position up in the agent's voice, but
-   cannot change the stance: the narration model has no field to put one in.
-3. **Reconcile.** The Chief of Staff weighs the positions and writes a verdict naming the real
-   trade-off between them. One policy is non-negotiable: a `blocker` from *any* agent overrides a
-   cost/schedule trade-off, full stop — see below for how that's enforced, not just prompted.
+```
+message / seed ─► facts   (seed: authored · free text: extracted, every value backed by a verified quote, never estimated)
+               ─► EVERY agent checks its rules                 (nothing can be left out)
+                    a rule fires            → TRIGGERED: stance, the rule(s) that fired, the evidence
+                    no rule fires           → "All rules checked — none tripped", or "No rule triggered" + "Couldn't check: …"
+                    keyword mentioned, field not confirmed → "Unclear: …" (tripwire)
+               ─► verdict direction (code): a fired blocker wins; an unclear / unchecked blocker field caps it
+               ─► Chief of Staff (LLM): wording — the risks, why the brief is a challenge, the conflicts
+```
 
-![The Chief of Staff card: routing, reconcile policy and guardrails, plus the Blocker/Conflict/Conditional glossary shown to the user](docs/images/council-glossary.png)
+1. **Check.** Each agent's rules live in editable config (`rules[]`: id, fields, a `when`
+   expression, a stance). The rules engine is a small whitelist evaluator — no `eval`. A rule fires
+   only if *every* field it needs is stated and its condition is true; a rule with an unstated field
+   never fires and never guesses, it is reported as "couldn't check". An agent's stance is the most
+   severe among the rules that fired (`blocker` > `no` > `conditional` > `yes`).
+2. **Explain.** Only triggered agents are narrated: an LLM writes the position up in the agent's
+   voice but cannot change the stance — the narration model has no field to put one in.
+3. **Reconcile.** The verdict's *direction* is set in code — a fired `blocker` from *any* agent
+   overrides a cost/schedule trade-off, and an unconfirmed blocker field caps the verdict. The
+   Chief of Staff's model only writes the wording; if its wording contradicts the code, the code's
+   direction is what's shown.
+
+![The Chief of Staff card: reconcile policy and guardrails, plus the Blocker/Conflict/Conditional glossary shown to the user](docs/images/council-glossary.png)
 
 *The policy in plain English, not just in code — Blocker, Conflict and Conditional defined the way
 the verdict actually uses them.*
@@ -43,11 +56,12 @@ the verdict actually uses them.*
 with what was assumed and what wasn't considered, and the framework never claims more certainty
 than its inputs support.
 
-**Deterministic fallback, always.** Every LLM call — routing, narration, reconciliation — has a
-non-LLM fallback path. No model reachable? Routing engages every configured agent instead of
-guessing who to skip, and reconciliation falls back to rule-based logic over the same structured
-positions. A run never crashes because a model is down; it degrades to a known, tested behaviour
-instead, and the UI's **Fallback mode** indicator makes that state visible rather than silent.
+**Deterministic fallback, always.** Every LLM call — extraction, narration, reconciliation — has a
+non-LLM fallback path. No model reachable? A seed runs completely (its facts are authored, so no
+extraction is needed) and reconciliation falls back to rule-based logic over the same structured
+positions; a free-text brief simply has no stated facts, so no rule fires and the verdict lists what
+couldn't be checked. A run never crashes because a model is down, and the UI's **Fallback mode**
+indicator makes that state visible rather than silent.
 
 ## The standout engineering
 
@@ -57,23 +71,35 @@ instead, and the UI's **Fallback mode** indicator makes that state visible rathe
   approve"* contains the word "hold" but ships an approval); reconciliation avoids that trap
   entirely by authoring the verdict itself whenever a blocker is present, and confining the model's
   contribution to the *why* and the *trade-off*.
-- **Abstention over fabrication.** If not one routed specialist evaluated on facts actually
-  extracted from the scenario — a weak model, or genuinely ambiguous input — the council **abstains**
-  ("insufficient grounding") rather than present a confident-looking verdict built on schema
-  defaults. Looking authoritative while quietly ignoring the user's actual numbers is treated as a
-  worse failure than saying "I don't have enough to go on."
+- **No agent can be skipped, so no LLM can silence a blocker.** An earlier design let one LLM
+  routing call choose which agents ran; when it left Operations out, Operations' code-enforced
+  blocker never fired and the same input returned opposite verdicts on different runs. Routing is
+  deleted: every agent is an unconditional graph edge, and whether it triggers is decided by its
+  own rules in code.
+- **Evidence-quoted facts, no estimates.** Free-text facts are extracted by one narrow LLM call per
+  agent over the *whole* message (never chunked). Each value must come with verbatim quotes, and
+  *code* verifies every quote is really in the message; a value with missing or unverifiable
+  evidence is discarded and the field counts as not stated. No schema defaults, no "reasonable
+  estimate" — a brief that never states a figure can't produce a verdict that rests on one.
+- **A verdict cap for what wasn't confirmed.** If a blocker-relevant field is *mentioned* (a
+  specific keyword like "licence" or "SLA") but not confirmed, the card shows "Unclear" and the
+  verdict cannot be better than "proceed only after confirming". If it isn't in the brief at all,
+  the verdict may proceed on stated facts, but the panel lists those facts in a separate
+  "Not checked — not stated in the brief" block (by plain-English label, grouped by agent, blocker-related
+  first; if a blocker fact was mentioned but unconfirmed the block leads with "Confirm first"). Never a
+  clean approve resting on silence.
 - **A tamper-evident audit ledger on the inbound trigger.** `POST /trigger/webhook` is a real,
   credential-free way to convene the council from an external event (a mail rule, Zapier, `curl`).
   Every call — including a rejected one — is appended to a hash-chained, append-only ledger before
   anything else happens: each entry stores the hash of the previous entry, so editing or deleting
   any past line breaks every hash after it. `/audit.html` is a governance viewer over the same
   chain — it recomputes the chain independently and flips visibly red the moment it's been altered.
-- **Agents are edited, not redeployed.** Every agent's plain-English rules and numeric thresholds
-  live in versioned JSON config, not Python literals. The Council UI edits them live —
-  `PUT /agents/{id}/config` validates and persists to that file, and the very next run reasons with
-  the change. Numeric limits stay hard, code-enforced signals; the plain-English rules are what
-  feed the LLM's narration prompt, so a rule you add genuinely changes how an agent explains
-  itself.
+- **Agents are edited, not redeployed.** Every agent's rules and numeric thresholds live in
+  versioned JSON config, not Python literals. The Council UI edits thresholds live —
+  `PUT /agents/{id}/config` validates and persists to that file, and the very next run checks with
+  the change. Blocker rules are system-governed: the save endpoint refuses to add, remove or alter
+  one, so a UI edit can't quietly delete a safety rule. Plain-English notes still feed the LLM's
+  narration prompt, so they change how an agent *explains* itself, never whether it triggers.
 
 ## Prerequisites
 
@@ -93,6 +119,15 @@ instead, and the UI's **Fallback mode** indicator makes that state visible rathe
   Consilium only *connects* to it — start it before or after launching, and Consilium picks it up
   on the next Save/refresh, no restart required.
 
+### Configuration
+
+| Variable | Default | Purpose |
+|---|---|---|
+| `MODEL_PROVIDER` / `MODEL_NAME` / `BASE_URL` / `API_KEY` | `openai` / `gpt-4o-mini` / — / — | Any OpenAI-compatible endpoint (also settable in **Settings**). |
+| `MODEL_CONTEXT_TOKENS` | `8000` | Conservative ceiling on a free-text message's *estimated* size (~3 characters per token, deliberately over-counting). The whole message goes to every agent's extraction call and is never chunked or truncated — a message over this fails with a clear error. Raise it only if your model's context window genuinely allows. |
+| `CONSILIUM_DATA_DIR` | `~/.consilium` | Where settings, run history and the audit ledger persist (outside the source tree). |
+| `CONSILIUM_WEBHOOK_TOKEN` | unset | If set, `POST /trigger/webhook` callers must send it as `X-Consilium-Token`. |
+
 ### Providers & models
 
 Consilium speaks the OpenAI HTTP shape, so any compatible endpoint drops in from **Settings →
@@ -107,9 +142,9 @@ Language model** — pick a provider and a sensible default model and base URL f
 | **Local (Ollama)** | free | `llama3.2` | fine for wiring checks; a 3B model is often too small for accurate free-text fact extraction. |
 
 **Model quality drives free-text accuracy.** Reading the figures a decision turns on is only as
-good as the model doing the reading — a small local model often can't, and Consilium abstains
-rather than guess (see above). Seeds carry explicit facts and produce grounded verdicts on any
-model, including the deterministic fallback.
+good as the model doing the reading — a small local model often can't, and the affected fields are
+reported as "couldn't check" / "unclear" (and cap the verdict) rather than guessed. Seeds carry
+explicit facts and produce grounded verdicts on any model, including the deterministic fallback.
 
 ## Setup & run
 
@@ -160,27 +195,29 @@ you can try both a seed scenario and your own free-text decision immediately.
 
 - **Seed scenarios** on the Decision desk are one-click, pre-written dilemmas with engineered
   facts — the fastest way to see a genuine disagreement and a blocker-overrides-trade-off verdict.
-- **Free-text decisions** run through the same real pipeline: type your own scenario, the Chief of
-  Staff decides who's relevant and extracts the facts each engaged agent needs from your text.
+- **Free-text decisions** run through the same real pipeline: type your own scenario and every
+  agent extracts the facts it needs — with quoted evidence — from your text, then checks its rules.
 - **The inbound webhook** (`POST /trigger/webhook`) convenes the council from an external event —
   point a mail rule or `curl` at it — and the resulting decision lands in History exactly like a
-  desk run, with every call (accepted or rejected) recorded to the audit ledger first. `/audit.html`
+  desk run, with every call (accepted or rejected) recorded to the audit ledger first, and the
+  per-agent checks table recorded to it afterwards. `/audit.html`
   shows the chain and its verification status. The Dashboard's "Simulate inbound email" button
   exercises the same audited path without needing anything wired up.
 
-  ![History: three past runs, each showing every engaged specialist's stance and the Chief of Staff's verdict](docs/images/history.png)
+  ![History: three past runs, each showing the specialists' stances and the Chief of Staff's verdict](docs/images/history.png)
 
   *History — every run the council has made, with each specialist's stance and the verdict it led to.*
 
 - **Council** is where you edit the agents: add, edit, or remove a plain-English rule for any of
   the four specialists, adjust a numeric threshold, and re-test live against the seed scenario to
-  watch the stance move. The Chief of Staff's own persona (tone, routing guidance) is editable the
-  same way; its adjudication policy and guardrails are not.
+  watch the stance move. Blocker rules are shown read-only ("system-governed"). The Chief of
+  Staff's persona (tone and wording guidance only — it can never touch extraction, checks, or
+  stances) is editable; its adjudication policy and guardrails are not.
 
   ![The specialists grid: Finance, Delivery, PMO and Operations, each with an editable rules list](docs/images/council-specialists.png)
 
   *Finance, Delivery, PMO, Operations — plain-English rules and numeric thresholds, editable live,
-  no redeploy.*
+  no redeploy. (Screenshot predates the P3.6 rule display.)*
 
 ## Testing
 
@@ -189,12 +226,22 @@ cd backend
 pytest
 ```
 
-112 backend/routing tests, plus 7 real-browser Playwright end-to-end tests that drive the actual
-served UI (catching wiring defects — a dead button, a stubbed-not-real connection, state lost on
-reload — that backend unit tests structurally can't see). Every LLM call is mocked by default, so
-the suite needs no reachable model and runs in a few seconds; specific tests override the mock to
-verify genuine LLM-driven behaviour (a subset of agents selected, the blocker policy enforced
-against a deliberately misbehaving model, and so on).
+207 backend tests, plus 15 real-browser Playwright end-to-end tests that drive the actual served
+UI (catching wiring defects — a dead button, a stubbed-not-real connection, state lost on reload —
+that backend unit tests structurally can't see). Every LLM call is mocked by default, so the suite
+needs no reachable model and runs in a few seconds; specific tests override the mock to verify
+genuine LLM-driven behaviour. Regression control for the rules migration is permanent: golden
+fact-set files (`backend/tests/golden/`) generated from the original `evaluate()` code pin every
+agent's stance and driving constraint, including every threshold edge.
+
+Two suites need a real model and are excluded from a bare `pytest` (`-m live`): the seed
+determinism check and the extraction evaluation set —
+
+```bash
+cd backend
+pytest -m live tests/test_determinism.py      # seed x5 against your configured model
+pytest -m live tests/extraction_eval -s       # blocker-field hit rate / false-positive rate
+```
 
 The Playwright tests skip cleanly if Playwright isn't installed. To enable them:
 
@@ -205,13 +252,36 @@ playwright install chromium
 
 ## Architecture
 
-LangGraph orchestrates a bounded, three-stage graph (`route → parallel specialists → reconcile`)
-with `add_conditional_edges` fanning out only to the agents actually engaged that run — no
-open-ended agent-to-agent loops, ever. FastAPI streams the run over Server-Sent Events so the
-frontend renders each stage as it happens rather than waiting for the whole thing. See
+LangGraph orchestrates a bounded, two-superstep graph (`every agent in parallel → reconcile`)
+with an unconditional edge to every enabled agent — each agent extracts (free text only), checks its
+rules, and narrates if triggered, all inside its own node — and no open-ended agent-to-agent loops,
+ever. FastAPI streams the run over Server-Sent Events so the frontend renders each agent's check as
+it completes rather than waiting for the whole thing. See
 [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for the full technical narrative — the state shape,
 the termination guarantees, the config-driven agent design, and why each of the standout-engineering
 pieces above is built the way it is.
+
+## Limitations
+
+Consilium is a showcase of a design, on an illustrative domain — not a product.
+
+- **Extraction depends on the model.** Free-text facts are only as good as the model reading them.
+  Measured blocker-field hit rate: `[TO BE MEASURED: run pytest -m live tests/extraction_eval]`
+  (model to be recorded with it; the 24 evaluation emails' expected answers are still unconfirmed
+  by the project owner, so no number is valid until they are).
+- **A miss is visible, not silent.** A field the model can't ground in a verified quote is shown as
+  "couldn't check" or, when its keyword appears, "unclear" — and an unclear blocker field caps the
+  verdict. Weak models, and facts that are only *implied* ("should be fine by then"), will therefore
+  show a lot of "couldn't check". That is the expected behaviour, not a failure.
+- **Cost.** A free-text run makes one extraction call per agent (four here), plus narration for
+  each triggered agent and one reconciliation call. Seeds make no extraction calls.
+- **No chunking.** The whole message goes to every agent. A message estimated over
+  `MODEL_CONTEXT_TOKENS` fails with a clear error instead of being truncated.
+- **Stable direction, varying wording.** Which agents trigger, which rules fire and the verdict's
+  direction are decided in code and don't change run to run on the same facts; the wording an LLM
+  writes around them does.
+- **Illustrative rules.** The four agents' rules and thresholds are examples of what the framework
+  can carry, not a claim about how any organisation should decide.
 
 ## Fork it
 
