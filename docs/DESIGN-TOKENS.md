@@ -61,6 +61,8 @@ The rules-trigger UI reuses existing tokens rather than adding any:
   tripped" is `--good`; "No rule triggered" is `--ink-soft`; "Couldn't check: …" is `--muted`.
 - **Unclear tripwire** — `--amber` text on `--amber-tint`, 12px semibold: "Unclear: … — mentioned
   but not confirmed". Amber is deliberate: it is a caution (confirm before proceeding), not a stop.
-- **System-governed** — blocker rules in the Council tab render as read-only `--muted` rows with a
-  small bordered "system-governed" tag (`--line`), never an input.
+- **Read-only rules** — every executable rule in the Council tab renders as a `--ground` row
+  (description, `--muted` monospace condition, stance badge) under a small bordered "read-only"
+  tag (`--line`), never an input; blocker rules add a "system-governed" tag. The editable box
+  beneath is labelled "Narration wording" and is the only text input on a card.
 - The words "skipped" and "no impact" are never used for a not-triggered agent.

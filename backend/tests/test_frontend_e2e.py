@@ -513,3 +513,60 @@ def test_single_other_agent_sentence_and_no_block_when_no_blocker_fact_is_unchec
     assert panel.locator(".othernote").inner_text() == "Finance also needed facts the brief doesn't state — see its card."
     assert "supplier cost increase" not in panel.locator(".othernote").inner_text().lower()  # named by agent only, never by fact
     page.unroute("**/run/stream*")
+
+
+# --------------- Council: executable rules read-only, wording box honest --
+
+def test_council_shows_executable_rules_read_only_with_condition_and_stance(page):
+    page.click("[data-v='council']")
+    page.wait_for_selector("#view-council .xrule")
+    card = page.locator(".ccard", has_text="Finance").first
+    rules = card.locator(".xrule")
+    assert rules.count() == 4                                   # finance.json's four rules
+    assert card.locator(".xrules input, .xrules textarea, .xrules button").count() == 0
+    text = card.locator(".xrules").inner_text()
+    assert "supplier_cost_increase_pct > supplier_cost_increase_threshold_pct" in text   # the condition
+    assert "7" in text and "{" not in text and "‹" in text      # thresholds filled in; no raw template braces
+    assert "no" in text.lower() and "conditional" in text.lower()                      # stances shown
+    assert "read-only" in card.inner_text().lower()
+
+
+def test_council_wording_box_is_labelled_narration_only_and_messages_match(page):
+    page.click("[data-v='council']")
+    page.wait_for_selector("#rl-pmo .rin")
+    body = page.inner_text("#view-council").lower()
+    assert "narration wording" in body
+    assert "never changes whether the agent triggers" in body
+    assert "rules — edit, add or remove" not in body            # the old, false label
+
+    page.locator("#rl-pmo .rin").first.fill("Escalate variations above tolerance to the governance gate.")
+    page.click("[data-save='pmo']")
+    page.wait_for_selector("#res-pmo.show")
+    saved = page.inner_text("#res-pmo").lower()
+    assert "wording" in saved and "not whether it triggers" in saved
+    assert "reasons with this" not in saved                     # never claims the next run reasons with it
+
+
+def test_finance_threshold_save_says_thresholds_change_the_next_run(page):
+    page.click("[data-v='council']")
+    page.click("[data-retest='finance']")
+    page.wait_for_selector("#res-finance.show")
+    saved = page.inner_text("#res-finance").lower()
+    assert "thresholds saved" in saved and "next decision-desk run checks with them" in saved
+    assert "narration only" in saved
+
+
+def test_editing_wording_never_changes_the_executable_rules(page, base_url):
+    import json as _json
+
+    def rules_of(agent):
+        with urllib.request.urlopen(f"{base_url}/agents/{agent}/config") as r:
+            return _json.loads(r.read())["rules"]
+
+    before = rules_of("pmo")
+    page.click("[data-v='council']")
+    page.wait_for_selector("#rl-pmo .rin")
+    page.locator("#rl-pmo .rin").first.fill("Reworded note that must not touch the rules.")
+    page.click("[data-save='pmo']")
+    page.wait_for_selector("#res-pmo.show")
+    assert rules_of("pmo") == before

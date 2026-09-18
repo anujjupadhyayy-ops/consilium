@@ -226,6 +226,12 @@
   .rin:focus{outline:2px solid var(--coral);outline-offset:1px}
   .rx{border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:8px;width:28px;height:30px;cursor:pointer;font-size:15px;line-height:1;flex:none}
   .rx:hover{border-color:var(--crit);color:var(--crit)}
+  .xrules{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
+  .xrule{background:var(--ground);border:1px solid var(--line);border-radius:8px;padding:8px 10px;display:flex;flex-direction:column;gap:4px}
+  .xrule .xtop{display:flex;gap:8px;align-items:flex-start;justify-content:space-between}
+  .xrule .xdesc{font-size:12.5px;color:var(--ink-soft);line-height:1.45}
+  .xrule code{font:500 11px var(--mono);color:var(--muted);overflow-wrap:anywhere}
+  .rnote{font-size:11.5px;color:var(--muted);margin:0 0 6px;line-height:1.45}
   .addrule{align-self:flex-start;border:1px dashed var(--line);background:transparent;color:var(--coral);border-radius:8px;padding:6px 11px;font:700 11.5px var(--sans);cursor:pointer;margin-top:2px}
   .addrule:hover{border-color:var(--coral)}
   .cospersona{width:100%;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:9px;padding:9px 11px;font:500 12.5px var(--sans);resize:vertical;min-height:58px}
@@ -343,7 +349,7 @@
         <div class="stage" id="stage"></div>
       </div>
       <aside class="side">
-        <div class="panel"><h4>The Council</h4><div id="roster"></div><div class="rmnote">Specialist rules are editable config. The Chief of Staff's core is system-governed. Configure in the Council tab.</div></div>
+        <div class="panel"><h4>The Council</h4><div id="roster"></div><div class="rmnote">Each specialist's rules are read-only; its thresholds and narration wording are editable. The Chief of Staff's core is system-governed. Configure in the Council tab.</div></div>
         <div class="panel"><h4>Engine</h4><div class="rmnote" style="margin-top:0">LangGraph supervisor · bounded termination · streaming trace · OpenAI-compatible model layer (bring your own / OSS). Recommend-only.</div></div>
       </aside>
     </div>
@@ -682,31 +688,46 @@ document.getElementById("sim").addEventListener("click",async()=>{
 });
 
 // ---------------------------------------------------------------- council --
-// Every agent's rules are edit/add/remove, hydrated from the persisted
-// config (GET /agents/{id}/config), not a hardcoded copy.
+// Two different things live on a Council card. `rules[]` are the executable
+// rules that decide whether an agent triggers -- shown READ-ONLY here.
+// `rules_summary` is free-text that only feeds the narration prompt (how the
+// agent words its position) -- that is the editable box, labelled as such.
+// Both are hydrated from the persisted config (GET /agents/{id}/config).
+function ruleText(k,r){
+  const cfg=CONFIGS[k]||{};
+  return esc(r.description).replace(/\{(\w+)(?::[^}]*)?\}/g,(_,n)=>{
+    const v=cfg[n];
+    if(typeof v==="number"||typeof v==="string") return String(v);
+    return "‹"+n.replace(/_(pct|pts)$/,"").replace(/_/g," ")+"›";
+  });
+}
+function executableRulesHtml(k){
+  const rules=(CONFIGS[k]&&CONFIGS[k].rules)||[];
+  if(!rules.length) return "";
+  return `<div class="rlab">Rules that decide whether it triggers <span class="sysgov">read-only</span></div>`+
+    `<p class="rnote">These are the executable rules. They are set in the agent's config file, not here — editing the wording box below does not change them.</p>`+
+    `<div class="xrules">`+rules.map(r=>{
+      const [cl,lb]=STANCE[r.stance]||["s-cond",r.stance];
+      const gov=r.stance==="blocker"?` <span class="sysgov">system-governed</span>`:"";
+      return `<div class="xrule${r.stance==="blocker"?" blockerrule":""}"><div class="xtop"><div class="xdesc">${ruleText(k,r)}${gov}</div><span class="stance ${cl}">${lb}</span></div><code>${esc(r.when)}</code></div>`;
+    }).join("")+`</div>`;
+}
 function ruleList(k){
   const rules=(CONFIGS[k]&&CONFIGS[k].rules_summary)||[];
   return `<div class="rulelist" id="rl-${k}">`+
-    rules.map((r,i)=>`<div class="rulerow"><input class="rin" data-agent="${k}" data-i="${i}" value="${String(r).replace(/"/g,'&quot;')}"><button class="rx" data-agent="${k}" data-i="${i}" title="Remove rule">×</button></div>`).join("")+
-    `<button class="addrule" data-add="${k}">+ Add rule</button></div>`;
+    rules.map((r,i)=>`<div class="rulerow"><input class="rin" data-agent="${k}" data-i="${i}" value="${String(r).replace(/"/g,'&quot;')}"><button class="rx" data-agent="${k}" data-i="${i}" title="Remove wording note">×</button></div>`).join("")+
+    `<button class="addrule" data-add="${k}">+ Add wording note</button></div>`;
 }
 function renderRuleList(k){const el=document.getElementById("rl-"+k);if(el)el.outerHTML=ruleList(k);}
 
-function blockerRulesHtml(k){
-  const rules=(CONFIGS[k]&&CONFIGS[k].rules)||[];
-  const blockers=rules.filter(r=>r.stance==="blocker");
-  if(!blockers.length) return "";
-  return `<div class="blockerrules"><div class="rlab">Blocker rules <span class="sysgov">system-governed</span></div>`+
-    blockers.map(r=>`<div class="blockerrule">${esc(r.description)}</div>`).join("")+`</div>`;
-}
 function specCard(k){
   const a=AGENTS[k];
   const cfg=CONFIGS[k]||{};
   let controls="";
   if(k==="finance")controls=`<div class="fields"><div class="field"><label>Project-margin floor (pts)</label><input type="number" id="cf-margin" value="${cfg.margin_erosion_threshold_pts??5}" min="0" max="100"></div><div class="field"><label>Supplier-cost line (%)</label><input type="number" id="cf-supplier" value="${cfg.supplier_cost_increase_threshold_pct??7}" min="0" max="200"></div><div class="field"><label>3PP forecast flag (%)</label><input type="number" id="cf-forecast" value="${cfg.early_forecast_threshold_pct??80}" min="0" max="100"></div><button class="retest" data-retest="finance">Save & re-test on supplier scenario ▸</button><div class="result" id="res-finance"></div></div>`;
   if(k==="operations")controls=`<div class="fields"><div class="field"><label>Early-cutover licence provisioned?</label><span class="toggle"><button data-lic="no" class="on">No</button><button data-lic="yes">Yes</button></span></div><button class="retest" data-retest="operations">Save & re-test on supplier scenario ▸</button><div class="result" id="res-operations"></div></div>`;
-  if(k==="delivery"||k==="pmo")controls=`<button class="retest" data-save="${k}">Save rules ▸</button><div class="result" id="res-${k}"></div>`;
-  return `<div class="ccard"><div class="cch"><span class="ic" style="background:${a.c}">${a.ic}</span><div><div class="nm">${a.nm}</div><div class="ln">${a.lens}</div></div><span class="tag">editable</span></div><div class="ccb"><div class="rlab">Rules — edit, add or remove</div>${ruleList(k)}${blockerRulesHtml(k)}${controls}</div></div>`;
+  if(k==="delivery"||k==="pmo")controls=`<button class="retest" data-save="${k}">Save wording ▸</button><div class="result" id="res-${k}"></div>`;
+  return `<div class="ccard"><div class="cch"><span class="ic" style="background:${a.c}">${a.ic}</span><div><div class="nm">${a.nm}</div><div class="ln">${a.lens}</div></div><span class="tag">${k==="finance"?"thresholds + wording editable":"wording editable"}</span></div><div class="ccb">${executableRulesHtml(k)}<div class="rlab">Narration wording — how this agent explains itself</div><p class="rnote">Free text that only shapes how the agent's position is worded. It never changes whether the agent triggers or what its stance is.</p>${ruleList(k)}${controls}</div></div>`;
 }
 
 async function loadConfigs(){
@@ -736,12 +757,14 @@ async function renderCouncil(){
     <div class="prefbox"><div class="pl">What to flag to me</div><div class="field" style="margin-bottom:8px"><label>Escalate verdicts at or above</label><span class="toggle"><button class="on">Blocker</button><button>Any conflict</button><button>All</button></span></div><div class="field"><label>Revenue-at-risk alert threshold (£k)</label><input type="number" value="250" min="0"></div></div></div></div>`;
   document.getElementById("council").innerHTML=master+`<div class="cgrid">${ORDER.map(specCard).join("")}</div>`;
 }
-function showResult(id,stance,msg){const[cl,lb]=STANCE[stance]||(stance==null?["s-yes","All clear"]:["s-cond",stance]);const el=document.getElementById(id);
-  el.innerHTML=`<span class="stance ${cl}">${lb}</span><div>${msg}</div><div style="color:var(--muted);margin-top:6px;font-size:11.5px">Saved to config — the next Decision-desk run reasons with this too.</div>`;el.classList.add("show");}
+function showResult(id,stance,msg,note){const[cl,lb]=STANCE[stance]||(stance==null?["s-yes","All clear"]:["s-cond",stance]);const el=document.getElementById(id);
+  el.innerHTML=`<span class="stance ${cl}">${lb}</span><div>${msg}</div><div style="color:var(--muted);margin-top:6px;font-size:11.5px">${note}</div>`;el.classList.add("show");}
 function showError(id,msg){const el=document.getElementById(id);
   el.innerHTML=`<span class="stance s-no">Not saved</span><div>⚠ ${esc(msg)}</div><div style="color:var(--muted);margin-top:6px;font-size:11.5px">Nothing was changed — fix the value and try again.</div>`;el.classList.add("show");}
+const WORDING_NOTE="Saved to config. This changes how the agent words its position — not whether it triggers or its stance.";
+const THRESHOLD_NOTE="Thresholds saved — the next Decision-desk run checks with them. Wording notes change narration only.";
 function showSavedOnly(id,msg){const el=document.getElementById(id);
-  el.innerHTML=`<div>${msg}</div><div style="color:var(--muted);margin-top:6px;font-size:11.5px">Saved to config — the next Decision-desk run reasons with this too.</div>`;el.classList.add("show");}
+  el.innerHTML=`<div>${msg}</div><div style="color:var(--muted);margin-top:6px;font-size:11.5px">${WORDING_NOTE}</div>`;el.classList.add("show");}
 
 document.getElementById("council").addEventListener("input",e=>{
   const ri=e.target.closest(".rin"); if(!ri) return;
@@ -754,7 +777,7 @@ document.getElementById("council").addEventListener("click",async e=>{
   if(rx){const k=rx.dataset.agent;CONFIGS[k].rules_summary.splice(+rx.dataset.i,1);renderRuleList(k);return;}
 
   const ad=e.target.closest("[data-add]");
-  if(ad){const k=ad.dataset.add;CONFIGS[k]=CONFIGS[k]||{rules_summary:[]};CONFIGS[k].rules_summary.push("New rule — describe it in plain English");renderRuleList(k);
+  if(ad){const k=ad.dataset.add;CONFIGS[k]=CONFIGS[k]||{rules_summary:[]};CONFIGS[k].rules_summary.push("New wording note — describe how this agent should explain itself");renderRuleList(k);
     const ins=document.querySelectorAll("#rl-"+k+" .rin");if(ins.length){ins[ins.length-1].focus();ins[ins.length-1].select();}return;}
 
   const lic=e.target.closest("[data-lic]");
@@ -770,7 +793,7 @@ document.getElementById("council").addEventListener("click",async e=>{
       const res=await fetch(`/agents/${k}/config`,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify({rules_summary:CONFIGS[k].rules_summary})});
       if(!res.ok){const err=await res.json();showError(`res-${k}`,err.detail||"Could not save");return;}
       CONFIGS[k]=await res.json();renderRuleList(k);
-      showSavedOnly(`res-${k}`,`✓ ${AGENTS[k].nm}'s ${CONFIGS[k].rules_summary.length} rules saved.`);
+      showSavedOnly(`res-${k}`,`✓ ${AGENTS[k].nm}'s ${CONFIGS[k].rules_summary.length} wording notes saved.`);
     } finally { sv.disabled=false; }
     return;
   }
@@ -793,7 +816,7 @@ document.getElementById("council").addEventListener("click",async e=>{
       if(k==="operations")retestBody.fact_overrides={licence_provisioned_for_new_date:licState==="yes"};
       const retestRes=await fetch("/council/retest",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(retestBody)});
       const pos=await retestRes.json();
-      showResult(`res-${k}`,pos.stance,pos.reasoning||pos.detail);
+      showResult(`res-${k}`,pos.stance,pos.reasoning||pos.detail,k==="finance"?THRESHOLD_NOTE:WORDING_NOTE+" The licence toggle applies to this re-test only.");
     } finally { rt.disabled=false; }
     return;
   }

@@ -7,7 +7,7 @@ on stated facts. A **Chief of Staff** then summarises what triggered and reconci
 into one defensible recommendation, with the whole process visible on screen, step by step. It
 ships with an illustrative back-office example (Finance, Delivery, PMO, Operations) because that's
 a domain most people can sanity-check — a framework showcase, not a product; the agents are
-editable config, not hardcoded logic.
+config (JSON), not hardcoded logic.
 
 ![Dashboard: the Chief of Staff's morning briefing, flagged items needing a decision, and the council's latest signals from Finance, Delivery, PMO and Operations](docs/images/dashboard.png)
 
@@ -35,7 +35,7 @@ message / seed ─► facts   (seed: authored · free text: extracted, every val
                ─► Chief of Staff (LLM): wording — the risks, why the brief is a challenge, the conflicts
 ```
 
-1. **Check.** Each agent's rules live in editable config (`rules[]`: id, fields, a `when`
+1. **Check.** Each agent's rules live in its JSON config (`rules[]`: id, fields, a `when`
    expression, a stance). The rules engine is a small whitelist evaluator — no `eval`. A rule fires
    only if *every* field it needs is stated and its condition is true; a rule with an unstated field
    never fires and never guesses, it is reported as "couldn't check". An agent's stance is the most
@@ -95,12 +95,15 @@ indicator makes that state visible rather than silent.
   anything else happens: each entry stores the hash of the previous entry, so editing or deleting
   any past line breaks every hash after it. `/audit.html` is a governance viewer over the same
   chain — it recomputes the chain independently and flips visibly red the moment it's been altered.
-- **Agents are edited, not redeployed.** Every agent's rules and numeric thresholds live in
-  versioned JSON config, not Python literals. The Council UI edits thresholds live —
+- **Agents are configured, not redeployed.** Every agent's rules and numeric thresholds live in
+  versioned JSON config, not Python literals. The Council UI edits **thresholds** live —
   `PUT /agents/{id}/config` validates and persists to that file, and the very next run checks with
-  the change. Blocker rules are system-governed: the save endpoint refuses to add, remove or alter
-  one, so a UI edit can't quietly delete a safety rule. Plain-English notes still feed the LLM's
-  narration prompt, so they change how an agent *explains* itself, never whether it triggers.
+  the change. The executable `rules[]` are **not editable in the UI**: the Council tab shows them
+  read-only (description, condition, stance); change them in the config file. Blocker rules are
+  system-governed on every path: the save endpoint refuses to add, remove or alter one. The
+  plain-English "narration wording" notes (`rules_summary`) are the only free-text the UI edits;
+  they feed the LLM's narration prompt, so they change how an agent *explains* itself, never
+  whether it triggers.
 
 ## Prerequisites
 
@@ -209,16 +212,19 @@ you can try both a seed scenario and your own free-text decision immediately.
 
   *History — every run the council has made, with each specialist's stance and the verdict it led to.*
 
-- **Council** is where you edit the agents: add, edit, or remove a plain-English rule for any of
-  the four specialists, adjust a numeric threshold, and re-test live against the seed scenario to
-  watch the stance move. Blocker rules are shown read-only ("system-governed"). The Chief of
+- **Council** is where you configure the agents: adjust Finance's numeric thresholds and re-test
+  live against the seed scenario to watch the stance move, and edit each specialist's narration
+  wording (how it explains itself — it never changes whether it triggers). Each agent's executable
+  rules are shown read-only — description, condition and stance — with blocker rules tagged
+  "system-governed". The Chief of
   Staff's persona (tone and wording guidance only — it can never touch extraction, checks, or
   stances) is editable; its adjudication policy and guardrails are not.
 
-  ![The specialists grid: Finance, Delivery, PMO and Operations, each with an editable rules list](docs/images/council-specialists.png)
+  ![The specialists grid: Finance, Delivery, PMO and Operations, each with a wording list](docs/images/council-specialists.png)
 
-  *Finance, Delivery, PMO, Operations — plain-English rules and numeric thresholds, editable live,
-  no redeploy. (Screenshot predates the P3.6 rule display.)*
+  *Finance, Delivery, PMO, Operations — thresholds and narration wording, editable live, no
+  redeploy. (Screenshot predates the P3.6 change: rules are now shown read-only above the wording
+  box.)*
 
 ## Testing
 
@@ -288,9 +294,10 @@ Consilium is a showcase of a design, on an illustrative domain — not a product
 
 This is a scaffold, not a finished product. Three ways to make it yours:
 
-- **Change the rules, not the code.** Edit `backend/agents/configs/*.json` — thresholds, gate
-  names, lens descriptions — and disable/add entries in `backend/agents/manifest.json` to change
-  which agents run. No Python changes needed (the Council tab does exactly this, live).
+- **Change the rules, not the code.** Edit `backend/agents/configs/*.json` — `rules[]`, thresholds,
+  gate names, lens descriptions — and disable/add entries in `backend/agents/manifest.json` to
+  change which agents run. No Python changes needed. (The Council tab edits the thresholds and
+  narration wording live; the rules themselves are changed in the file.)
 - **Change the reasoning.** Replace `evaluate()` in any `backend/agents/*.py` with your own domain
   logic (and its matching `*Config`/`*Facts` Pydantic models), or add a wholly new agent kind and
   register it in `backend/agents/registry.py`'s `AGENT_KIND_REGISTRY`. A JSON file alone can
