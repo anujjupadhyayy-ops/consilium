@@ -1,0 +1,295 @@
+{
+  "expected_answers_confirmed_by_owner": false,
+  "note": "expected answers unconfirmed by owner -- do not treat a measured hit rate as valid until confirmed",
+  "agent": "operations",
+  "emails": [
+    {
+      "id": "e01",
+      "category": "stated",
+      "text": "Hi team, the supplier can pull Milestone 4 forward by three weeks. The new licence has not been provisioned for the earlier date.",
+      "expected": {
+        "licence_provisioned_for_new_date": false,
+        "supplier_sla_in_place": null,
+        "capacity_utilisation_pct_if_accepted": null,
+        "third_party_spend_pct_of_budget": null,
+        "savings_delivery_ratio": null
+      }
+    },
+    {
+      "id": "e02",
+      "category": "stated",
+      "text": "Update: the licence for the new cutover date is provisioned and confirmed with the vendor.",
+      "expected": {
+        "licence_provisioned_for_new_date": true,
+        "supplier_sla_in_place": null,
+        "capacity_utilisation_pct_if_accepted": null,
+        "third_party_spend_pct_of_budget": null,
+        "savings_delivery_ratio": null
+      }
+    },
+    {
+      "id": "e03",
+      "category": "stated",
+      "text": "Reminder that our supplier SLA is in place and signed until March 2027.",
+      "expected": {
+        "licence_provisioned_for_new_date": null,
+        "supplier_sla_in_place": true,
+        "capacity_utilisation_pct_if_accepted": null,
+        "third_party_spend_pct_of_budget": null,
+        "savings_delivery_ratio": null
+      }
+    },
+    {
+      "id": "e04",
+      "category": "stated",
+      "text": "The pull-forward would take capacity utilisation to 104% if accepted.",
+      "expected": {
+        "licence_provisioned_for_new_date": null,
+        "supplier_sla_in_place": null,
+        "capacity_utilisation_pct_if_accepted": 104,
+        "third_party_spend_pct_of_budget": null,
+        "savings_delivery_ratio": null
+      }
+    },
+    {
+      "id": "e05",
+      "category": "stated",
+      "text": "Third-party spend is currently at 97% of budget for the year.",
+      "expected": {
+        "licence_provisioned_for_new_date": null,
+        "supplier_sla_in_place": null,
+        "capacity_utilisation_pct_if_accepted": null,
+        "third_party_spend_pct_of_budget": 97,
+        "savings_delivery_ratio": null
+      }
+    },
+    {
+      "id": "e06",
+      "category": "stated",
+      "text": "Savings delivery is running at 0.62 of the committed target.",
+      "expected": {
+        "licence_provisioned_for_new_date": null,
+        "supplier_sla_in_place": null,
+        "capacity_utilisation_pct_if_accepted": null,
+        "third_party_spend_pct_of_budget": null,
+        "savings_delivery_ratio": 0.62
+      }
+    },
+    {
+      "id": "e07",
+      "category": "stated",
+      "text": "Licence is provisioned. SLA is in place. Capacity would reach 88% and 3PP spend sits at 91% of budget.",
+      "expected": {
+        "licence_provisioned_for_new_date": true,
+        "supplier_sla_in_place": true,
+        "capacity_utilisation_pct_if_accepted": 88,
+        "third_party_spend_pct_of_budget": 91,
+        "savings_delivery_ratio": null
+      }
+    },
+    {
+      "id": "e08",
+      "category": "negated",
+      "text": "We do not expect any licence problems -- the licence is provisioned for the new date.",
+      "expected": {
+        "licence_provisioned_for_new_date": true,
+        "supplier_sla_in_place": null,
+        "capacity_utilisation_pct_if_accepted": null,
+        "third_party_spend_pct_of_budget": null,
+        "savings_delivery_ratio": null
+      }
+    },
+    {
+      "id": "e09",
+      "category": "negated",
+      "text": "There is no SLA in place with this supplier at the moment.",
+      "expected": {
+        "licence_provisioned_for_new_date": null,
+        "supplier_sla_in_place": false,
+        "capacity_utilisation_pct_if_accepted": null,
+        "third_party_spend_pct_of_budget": null,
+        "savings_delivery_ratio": null
+      }
+    },
+    {
+      "id": "e10",
+      "category": "negated",
+      "text": "Capacity is not a concern: utilisation would stay at 70%.",
+      "expected": {
+        "licence_provisioned_for_new_date": null,
+        "supplier_sla_in_place": null,
+        "capacity_utilisation_pct_if_accepted": 70,
+        "third_party_spend_pct_of_budget": null,
+        "savings_delivery_ratio": null
+      }
+    },
+    {
+      "id": "e11",
+      "category": "negated",
+      "text": "We haven't provisioned the licence yet for the earlier date.",
+      "expected": {
+        "licence_provisioned_for_new_date": false,
+        "supplier_sla_in_place": null,
+        "capacity_utilisation_pct_if_accepted": null,
+        "third_party_spend_pct_of_budget": null,
+        "savings_delivery_ratio": null
+      }
+    },
+    {
+      "id": "e12",
+      "category": "implied",
+      "text": "The supplier says the new licence should be fine by then, we think.",
+      "expected": {
+        "licence_provisioned_for_new_date": null,
+        "supplier_sla_in_place": null,
+        "capacity_utilisation_pct_if_accepted": null,
+        "third_party_spend_pct_of_budget": null,
+        "savings_delivery_ratio": null
+      }
+    },
+    {
+      "id": "e13",
+      "category": "implied",
+      "text": "I'd guess we're probably near capacity but nobody has checked the numbers.",
+      "expected": {
+        "licence_provisioned_for_new_date": null,
+        "supplier_sla_in_place": null,
+        "capacity_utilisation_pct_if_accepted": null,
+        "third_party_spend_pct_of_budget": null,
+        "savings_delivery_ratio": null
+      }
+    },
+    {
+      "id": "e14",
+      "category": "implied",
+      "text": "Spend on the third party has been high lately.",
+      "expected": {
+        "licence_provisioned_for_new_date": null,
+        "supplier_sla_in_place": null,
+        "capacity_utilisation_pct_if_accepted": null,
+        "third_party_spend_pct_of_budget": null,
+        "savings_delivery_ratio": null
+      }
+    },
+    {
+      "id": "e15",
+      "category": "implied",
+      "text": "Savings are looking okay so far, as far as I can tell.",
+      "expected": {
+        "licence_provisioned_for_new_date": null,
+        "supplier_sla_in_place": null,
+        "capacity_utilisation_pct_if_accepted": null,
+        "third_party_spend_pct_of_budget": null,
+        "savings_delivery_ratio": null
+      }
+    },
+    {
+      "id": "e16",
+      "category": "split",
+      "text": "The supplier proposes moving the go-live to 12 March.\n\nBackground on the contract and the history of this account.\n\nSeparately, the licence renewal is not due until 30 April, so it will not be provisioned by 12 March.",
+      "expected": {
+        "licence_provisioned_for_new_date": false,
+        "supplier_sla_in_place": null,
+        "capacity_utilisation_pct_if_accepted": null,
+        "third_party_spend_pct_of_budget": null,
+        "savings_delivery_ratio": null
+      }
+    },
+    {
+      "id": "e17",
+      "category": "split",
+      "text": "Capacity planning note.\n\nThe team is currently at 92% utilisation.\n\nAccepting the change adds a further 12 points on top of that, taking it to 104%.",
+      "expected": {
+        "licence_provisioned_for_new_date": null,
+        "supplier_sla_in_place": null,
+        "capacity_utilisation_pct_if_accepted": 104,
+        "third_party_spend_pct_of_budget": null,
+        "savings_delivery_ratio": null
+      }
+    },
+    {
+      "id": "e18",
+      "category": "split",
+      "text": "Budget update for the programme.\n\nOverall 3PP spend is at 96% of the annual budget.\n\nAny uplift would land on top of this.",
+      "expected": {
+        "licence_provisioned_for_new_date": null,
+        "supplier_sla_in_place": null,
+        "capacity_utilisation_pct_if_accepted": null,
+        "third_party_spend_pct_of_budget": 96,
+        "savings_delivery_ratio": null
+      }
+    },
+    {
+      "id": "e19",
+      "category": "absent",
+      "text": "A 3rd-party supplier offers to pull a delivery milestone forward 3 weeks for a 15% cost increase and a contract variation.",
+      "expected": {
+        "licence_provisioned_for_new_date": null,
+        "supplier_sla_in_place": null,
+        "capacity_utilisation_pct_if_accepted": null,
+        "third_party_spend_pct_of_budget": null,
+        "savings_delivery_ratio": null
+      }
+    },
+    {
+      "id": "e20",
+      "category": "absent",
+      "text": "Please advise on whether we should accept the supplier's revised commercial terms.",
+      "expected": {
+        "licence_provisioned_for_new_date": null,
+        "supplier_sla_in_place": null,
+        "capacity_utilisation_pct_if_accepted": null,
+        "third_party_spend_pct_of_budget": null,
+        "savings_delivery_ratio": null
+      }
+    },
+    {
+      "id": "e21",
+      "category": "absent",
+      "text": "The steering group meets on Friday to discuss the milestone plan.",
+      "expected": {
+        "licence_provisioned_for_new_date": null,
+        "supplier_sla_in_place": null,
+        "capacity_utilisation_pct_if_accepted": null,
+        "third_party_spend_pct_of_budget": null,
+        "savings_delivery_ratio": null
+      }
+    },
+    {
+      "id": "e22",
+      "category": "absent",
+      "text": "We are reviewing the supplier proposal and will revert with questions.",
+      "expected": {
+        "licence_provisioned_for_new_date": null,
+        "supplier_sla_in_place": null,
+        "capacity_utilisation_pct_if_accepted": null,
+        "third_party_spend_pct_of_budget": null,
+        "savings_delivery_ratio": null
+      }
+    },
+    {
+      "id": "e23",
+      "category": "absent",
+      "text": "Thanks for the update -- can we get a summary of options by Monday?",
+      "expected": {
+        "licence_provisioned_for_new_date": null,
+        "supplier_sla_in_place": null,
+        "capacity_utilisation_pct_if_accepted": null,
+        "third_party_spend_pct_of_budget": null,
+        "savings_delivery_ratio": null
+      }
+    },
+    {
+      "id": "e24",
+      "category": "absent",
+      "text": "The contract variation would change the payment schedule; details attached.",
+      "expected": {
+        "licence_provisioned_for_new_date": null,
+        "supplier_sla_in_place": null,
+        "capacity_utilisation_pct_if_accepted": null,
+        "third_party_spend_pct_of_budget": null,
+        "savings_delivery_ratio": null
+      }
+    }
+  ]
+}
