@@ -49,3 +49,18 @@ both ways — see `frontend/index.html` for the exact pattern in place.)*
 **Stance chips (semantic, NOT the accent colour):** yes → `--good` · conditional → `--amber` ·
 no → `--crit` · blocker → `--crit` on a stronger/filled treatment so it reads as the hardest stop.
 The accent colour stays for brand/active UI, never for a stance.
+
+## P3.6 card states (no new tokens)
+
+The rules-trigger UI reuses existing tokens rather than adding any:
+
+- **Triggered lane** — coral left rule (`--coral`) and the stance chip above (`--good` / `--amber` /
+  `--crit`). Verified evidence quotes sit under a dashed `--line` divider in `--muted` 11px; seeded
+  facts read "seeded" instead of a quote.
+- **Not-triggered lane** — a neutral `--line` left rule at 85% opacity. "All rules checked — none
+  tripped" is `--good`; "No rule triggered" is `--ink-soft`; "Couldn't check: …" is `--muted`.
+- **Unclear tripwire** — `--amber` text on `--amber-tint`, 12px semibold: "Unclear: … — mentioned
+  but not confirmed". Amber is deliberate: it is a caution (confirm before proceeding), not a stop.
+- **System-governed** — blocker rules in the Council tab render as read-only `--muted` rows with a
+  small bordered "system-governed" tag (`--line`), never an input.
+- The words "skipped" and "no impact" are never used for a not-triggered agent.

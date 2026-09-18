@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import re
+from dataclasses import replace
 from abc import ABC
 from typing import Any, ClassVar, Literal, Optional, Type
 
@@ -157,7 +158,16 @@ class ConfigurableAgent(ABC):
             )
             for rc in self.config.rules
         ]
-        return check_rules(rules, env, stated)
+        result = check_rules(rules, env, stated)
+        # Report the FACT a person can supply, not an internal derived name.
+        sources = tuple(sorted({self.source_field(f) for f in result.unchecked}))
+        return replace(result, unchecked=sources)
+
+    def source_field(self, name: str) -> str:
+        """Map a derived name back to the stated fact it comes from, for
+        display (default: the name itself). Override where derive() flattens
+        or renames a fact."""
+        return name
 
     # -------------------------------------------------------- extraction --
 

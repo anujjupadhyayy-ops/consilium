@@ -124,7 +124,6 @@
   .node.active{color:var(--ink);border-color:var(--coral);background:var(--coral-tint)}
   .node.active .dot{background:var(--coral);box-shadow:0 0 0 4px var(--coral-tint);animation:pulse 1s infinite}
   .node.done{color:var(--ink);border-color:var(--good)} .node.done .dot{background:var(--good)}
-  .node.skipped{opacity:.4;text-decoration:line-through}
   @keyframes pulse{50%{box-shadow:0 0 0 7px transparent}}
   .arrow{color:var(--line);font-size:14px}
 
@@ -135,8 +134,7 @@
   .step-k{font:700 10px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ground);background:var(--ink);padding:3px 8px;border-radius:6px}
   .bhead h3{font-size:15px;margin:0}
   .bbody{padding:16px 18px}
-  .route-line{font-size:14px;color:var(--ink-soft);margin:0 0 14px}
-  .route-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px}
+  .msg-line{font-size:14px;color:var(--ink-soft);margin:0 0 14px}
   .rcard{border:1px solid var(--line);border-radius:var(--r);padding:11px 13px;background:var(--ground)}
   .rcard.eng{border-left:3px solid var(--coral)} .rcard.skip{opacity:.65;border-left:3px solid var(--line)}
   .rcard .an{font:700 13px var(--sans);display:flex;align-items:center;gap:7px}
@@ -275,7 +273,7 @@
   .cos .nm{font-size:20px;letter-spacing:-.02em} .cos p{font-size:14.5px;line-height:1.55}
   .cos .role,.sect-h,.panel h4,.srow label,.rules .rl,.crow dt{font-feature-settings:"tnum"}
   .flag .ft{font-size:14px;letter-spacing:-.01em} .cch .nm{letter-spacing:-.01em}
-  .rec{font-size:19px;line-height:1.28} .route-line{font-size:14px;line-height:1.55}
+  .rec{font-size:19px;line-height:1.28} .msg-line{font-size:14px;line-height:1.55}
   .lbody{line-height:1.55} .rules{line-height:1.5}
   .hrow .ht{font-family:var(--display);letter-spacing:-.01em;font-size:15px}
   .mch .nm{font-size:17px} .ccard .cch .nm{font-size:14.5px}
@@ -438,9 +436,8 @@ document.getElementById("theme").addEventListener("click",()=>{const r=document.
 document.getElementById("pfp").addEventListener("click",()=>switchView("settings"));
 
 // ---------------------------------------------------------- the live run --
-// P3.6: no routing node -- every agent is fanned out to unconditionally, so
-// the pipeline rail always shows all four plus reconcile, never a "skipped"
-// state (agents/base.py's run() is what actually decides triggered vs not,
+// P3.6: every agent is fanned out to unconditionally, so the pipeline
+// rail always shows all four plus reconcile, with no per-agent opt-out state (agents/base.py's run() is what actually decides triggered vs not,
 // per-agent, in code -- see handleCheck below).
 function railInit(){const nodes=ORDER.map(k=>[k,AGENTS[k].nm]).concat([["reconcile","Reconcile"]]);
   rail.innerHTML=nodes.map((n,i)=>`${i?'<span class="arrow">→</span>':''}<span class="node pending" id="n-${n[0]}"><span class="dot"></span>${n[1]}</span>`).join("");}
@@ -485,10 +482,10 @@ function runLive({text,seedId,label}){
   source.addEventListener("stream_error",e=>{
     let message="Something went wrong running this decision.";
     try{message=JSON.parse(e.data).message;}catch(_){}
-    block("Error","The run couldn't complete","",`<p class="route-line">${message}</p>`);
+    block("Error","The run couldn't complete","",`<p class="msg-line">${message}</p>`);
     finishRun();
   });
-  source.addEventListener("error",()=>{ if(running){ block("Error","Connection lost","",`<p class="route-line">The orchestration stream was interrupted.</p>`); finishRun(); } });
+  source.addEventListener("error",()=>{ if(running){ block("Error","Connection lost","",`<p class="msg-line">The orchestration stream was interrupted.</p>`); finishRun(); } });
   source.addEventListener("done",()=>{ source.close(); finishRun(); });
 }
 
@@ -529,7 +526,7 @@ function handleCheck(check){
     return;
   }
 
-  // Not triggered: never "skipped"/"no impact" wording (P3.6 §5.8). Two
+  // Not triggered: never wording that implies the agent was left out (P3.6 §5.8). Two
   // distinct states -- every rule was checkable and none tripped (the
   // all-clear card), or something couldn't be checked at all.
   st.textContent="done"; st.classList.remove("thinking","checking");
@@ -551,7 +548,7 @@ async function handlePosition(position){
   if(rs) rs.insertAdjacentHTML("beforeend", evidenceHtml(collectedChecks[k]));
   const ft=document.getElementById("ft-"+k);
   if(ft){
-    ft.innerHTML += `<div class="lead">${position.lead_figure}</div><div class="constr">${position.driving_constraint}</div>`;
+    ft.innerHTML += `<div class="lead">${position.lead_figure}</div>`+(position.lead_figure===position.driving_constraint?"":`<div class="constr">${position.driving_constraint}</div>`);
   }
   const st=document.getElementById("st-"+k);
   if(st){st.textContent="done";st.classList.remove("thinking");}
@@ -577,7 +574,7 @@ function handleConflict(payload){
 function handleReconciliation(payload){
   const assumeText=(payload.assumptions||[]).join(" "), notText=(payload.not_considered||[]).join(" ");
   block("Step 3 · Reconcile","Chief of Staff adjudicates","verdict-block",
-    `<p class="rec">${payload.recommendation}</p><dl class="kv"><dt>Why</dt><dd>${payload.why}</dd><dt>Key trade-off</dt><dd>${payload.trade_off}</dd><dt>Assumptions</dt><dd>${assumeText}</dd><dt>Not considered</dt><dd>${notText}</dd></dl><div class="policy"><b>Policy applied:</b> a hard operational blocker outranks a cost/schedule trade-off; positions are adjudicated, never averaged.</div>`);
+    `<p class="rec">${payload.recommendation}</p><dl class="kv"><dt>Why</dt><dd>${payload.why}</dd><dt>Key trade-off</dt><dd>${payload.trade_off}</dd><dt>Assumptions</dt><dd>${assumeText}</dd><dt>Not considered</dt><dd>${notText}</dd></dl>${Object.values(collectedPositions).some(p=>p.stance==="blocker")?`<div class="policy"><b>Policy applied:</b> a hard operational blocker outranks a cost/schedule trade-off; positions are adjudicated, never averaged.</div>`:""}`);
   setNode("reconcile","done");
 }
 

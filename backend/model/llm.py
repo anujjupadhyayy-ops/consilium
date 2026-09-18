@@ -1,5 +1,5 @@
-"""The one seam every LLM call in Consilium goes through: routing,
-per-agent narration, and reconciliation all call `call_structured()`.
+"""The one seam every LLM call in Consilium goes through: per-agent
+extraction, narration, and reconciliation all call `call_structured()`.
 Mock this single function in tests rather than mocking the OpenAI client
 directly -- see tests/test_chief_of_staff.py.
 """

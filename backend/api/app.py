@@ -198,7 +198,7 @@ def get_chief_of_staff_config() -> dict:
 
 @app.put("/chief-of-staff/config")
 def put_chief_of_staff_config(req: ChiefOfStaffConfigRequest) -> dict:
-    """Persona/routing-guidance only -- the adjudication policy
+    """Persona/wording guidance only -- the adjudication policy
     (operational-blocker-wins) and guardrails are not settable through
     this or any endpoint; see chief_of_staff._enforce_blocker_policy,
     which holds regardless of what this persona says."""

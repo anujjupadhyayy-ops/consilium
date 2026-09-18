@@ -5,94 +5,125 @@ for what it does and how to run it; this is for someone evaluating the engineeri
 
 ## Orchestration: a bounded LangGraph, hand-rolled
 
-The graph is three logical stages — `route → parallel specialists → reconcile` — built as a plain
-LangGraph `StateGraph` (`backend/orchestrator/graph.py`), deliberately **not** the
-`langgraph-supervisor` prebuilt package. That package assumes an LLM-driven, tool-calling handoff
-loop, which fights a design that needs to be bounded and inspectable rather than open-ended.
+The graph is two supersteps — every agent in parallel, then reconcile — built as a plain LangGraph
+`StateGraph` (`backend/orchestrator/graph.py`), deliberately **not** the `langgraph-supervisor`
+prebuilt package. That package assumes an LLM-driven, tool-calling handoff loop, which fights a
+design that needs to be bounded and inspectable rather than open-ended.
 
 ```
-START → route → { finance | delivery | pmo | operations, whichever are engaged } → reconcile → END
+START → { finance | delivery | pmo | operations — every enabled agent, unconditionally } → reconcile → END
 ```
 
-**Fan-out is conditional, not fixed.** `route_node` decides which agents to engage; `graph.py`
-wires this with `add_conditional_edges`, keyed off `state["routed_agents"]` computed at runtime.
-An agent the Chief of Staff didn't engage never runs — LangGraph's fan-in at `reconcile` correctly
-waits only for the branches that actually fired, not for the full roster.
+**There is no router.** An earlier design ran an LLM routing call first to choose which agents
+engaged. When it left Operations out, Operations' code-enforced blocker never ran, and the same
+input produced opposite verdicts on different runs — an LLM held a veto over a rule meant to be
+law. Routing is deleted: `graph.py` adds one edge from `START` to *each* manifest-enabled agent, so
+nothing can be skipped, and disabling an agent in `manifest.json` (the only way to remove one)
+removes its node and edge together. Each agent's own `run()` does extract (free text only) → check
+→ narrate (only if triggered) inside its node and streams its own trace events.
 
 **Termination is bounded three independent ways**, so no single mechanism is load-bearing on its
 own:
-1. **The graph is acyclic.** There is no edge back into `route` or between specialists — a DAG
-   cannot loop, by construction.
+1. **The graph is acyclic.** Edges go only `START → agent → reconcile → END`; a DAG cannot loop.
 2. **`recursion_limit`** is passed on every invocation as a hard backstop from LangGraph itself.
 3. **An explicit step counter** (`orchestrator/termination.py`) is checked before `reconcile` runs
    and raises if more than one prior step has occurred — independently testable without executing
-   the graph at all.
+   the graph.
 
-**Shared state** (`orchestrator/state.py`) is a single `TypedDict`. Two fields —
-`positions` and `trace` — are `Annotated[list[...], operator.add]`: when several specialist nodes
-write in the same parallel step, LangGraph's default merge is "last write wins," which would
-silently drop every write but one. The reducer makes each node's contribution additive instead.
+**Shared state** (`orchestrator/state.py`) is a single `TypedDict`. Four fields are written by
+several agent nodes in the same parallel step, where LangGraph's default merge would reject or drop
+all but one write, so each has a reducer: `positions` and `trace` (`operator.add`), `checks` (a
+dict-merge reducer — every agent writes one `{agent_id: Check}` entry) and `step_count` (`max`,
+since every agent writes the same literal). A `Check` records `triggered`, `stance`, the `fired`
+rule ids, `unchecked` and `unclear` fields, the verified `evidence` quotes and each field's
+`provenance` (`seeded` or `extracted`). `positions` holds triggered agents only.
 
-## Agents: deterministic signal, narrated voice
+## Agents: rules decide, an LLM explains
 
-Every agent (`backend/agents/{finance,delivery,pmo,operations}.py`) is two things layered
-together, and the layering is the point:
+Every agent (`backend/agents/{finance,delivery,pmo,operations}.py`) is a small class over shared
+machinery in `agents/base.py`; its behaviour is data in `backend/agents/configs/*.json`.
 
-- **`evaluate(facts) -> AgentPosition`** is pure, deterministic Python: given a config and a set of
-  facts, it computes a `stance` (`yes` / `no` / `conditional` / `blocker`) and the constraint that
-  drove it. This is the guardrail and the thing the test suite pins down — no LLM involved, so it's
-  fast, reproducible, and it's what `Council`'s live re-test proves is "config, not code."
-- **`narrate(facts, position) -> AgentPosition`** asks a model to write that already-decided
-  position up in the agent's own voice. It cannot change the stance: `NarrationResult` (the
-  structured response type) simply has no `stance` field, so even a model that tries to include
-  one has it silently dropped by Pydantic before it ever reaches the position. This is enforced by
-  the type system, not by asking nicely.
+**Rules.** A rule is `{id, description, fields, when, stance, keywords?}`. `fields` are the facts
+it needs; `when` is an expression over stated facts, *derived values* (computed in code only when
+every input is stated — e.g. an interpolated threshold, an ordinal RAG severity, a flattened
+per-dimension variance) and the agent's own numeric config thresholds. `description` doubles as a
+format template over the same names, so a fired rule's text carries the live numbers. A rule
+**fires** only if every field in `fields` is stated *and* `when` is true; a rule with an unstated
+field never fires and never errors — its fields are reported as `unchecked`. The agent is
+**triggered** if any rule fires; its stance is the most severe fired (`blocker > no > conditional >
+yes`) and every fired rule is listed. If none fires the agent isn't "yes" — it is either *all
+rules checked, none tripped* (nothing unchecked) or *no rule triggered* plus what couldn't be
+checked.
 
-**Config, not code.** Every agent's thresholds and plain-English rules live in
-`backend/agents/configs/*.json`, loaded through a Pydantic model per agent kind
-(`backend/agents/registry.py`). `PUT /agents/{id}/config` validates and persists an edit straight
-to that file — numeric fields carry `Field(ge=.., le=..)` bounds, and the rules list is capped in
-count and length, so a malformed edit is rejected before it's ever written. The rules list isn't
-decorative: it's interpolated directly into `narrate()`'s system prompt, so an edited rule
-genuinely changes how the agent explains itself on the next run. `backend/agents/manifest.json`
-lists which agent instances are active; disabling an entry removes that agent from the graph
-entirely with no code change (only registering a genuinely new *kind* of reasoning — not a new
-config for an existing one — needs a Python class in `AGENT_KIND_REGISTRY`).
+**The rules engine** (`agents/rules.py`) parses `when` with `ast.parse(mode="eval")` and walks a
+whitelist only: and/or/not, `> >= < <= == !=`, names, constants. Calls, attributes, subscripts,
+lambdas, imports, dunder names and unknown names are rejected when the config loads (and on every
+Council save) and are never executed — there is no `eval`. Because it has no arithmetic or
+subscripting, anything that needs either (an interpolated threshold, a dict-shaped fact) is
+computed by the agent's `derive()` in trusted code and exposed as a plain name.
 
-## The Chief of Staff: routing and reconciliation
+**Config, not code.** Thresholds live in the same JSON, loaded through a Pydantic model per agent
+kind (`agents/registry.py`), with `Field(ge=.., le=..)` bounds. `PUT /agents/{id}/config`
+re-validates every rule and **refuses any change to a `stance: blocker` rule** (add, remove or
+alter) — blocker rules are system-governed and must declare `keywords` for the tripwire below.
+`manifest.json` lists which agent instances run; only a genuinely new *kind* of reasoning needs a
+Python class in `AGENT_KIND_REGISTRY`.
 
-`backend/orchestrator/chief_of_staff.py` is the orchestrator's LLM-facing half.
+**Narration** (`narrate()`) runs only for triggered agents. It asks a model to write the already-
+decided position in the agent's voice; `NarrationResult` has no `stance` field, so even a model that
+tries to include one has it dropped by Pydantic — enforced by the type system, not by asking nicely.
 
-**Routing** reads the free-text scenario plus every agent's `lens`, `rules_summary`, and facts
-schema, and asks the model to decide who's engaged (with a reason), who's skipped (with a reason),
-and — for each engaged agent — to extract the facts it needs from the scenario text. Facts that
-don't validate against an agent's schema are dropped rather than crashing the run; pre-supplied
-facts (a seed, a test) always win over anything extracted. If the model is unavailable or returns
-nothing usable, routing falls back to engaging every configured agent — the honest degraded path,
-not a hidden failure.
+## Facts: stated, evidenced, never estimated
 
-**Reconciliation** hands the model every position, the detected conflict, and the scenario, and
-asks for one defensible recommendation naming the real trade-off. Two integrity mechanisms sit
-around that call, both enforced in code rather than merely requested in the prompt:
+A **stated fact** is a seed-authored value, or an extracted value with at least one verbatim
+evidence quote that code has verified. Nothing else counts: no schema defaults, no estimates.
 
-- **Blocker enforcement is code-authoritative.** Checking whether the model's own recommendation
-  text "complies" with the blocker policy is a trap — a keyword scan is defeatable by negation
-  (*"do not hold back, approve it"* contains "hold" but is a proceed). So when any agent's stance
-  is `blocker`, the decisive recommendation line is written directly by
-  `_enforce_blocker_policy`, not inferred from the model's wording; the model's contribution is
-  confined to the explanatory `why` and `trade_off`.
-- **Abstention over a confident guess.** Before asking the model to reconcile at all,
-  `reconcile_node` checks whether *any* routed specialist evaluated on facts that were actually
-  extracted from the scenario, as opposed to schema defaults. If none did, the council returns an
-  explicit "insufficient grounding" verdict instead of reconciling positions that were never really
-  about the user's numbers. A verdict that looks authoritative but quietly ignored the actual input
-  is treated as strictly worse than declining to answer.
+**Extraction** (free text only; seeds bypass it entirely) is one LLM call per agent, in parallel,
+asking for that agent's own fields only, at temperature 0, over the *whole* message — never chunked.
+The prompt instructs the model to return null for anything not stated and to attach quotes for
+everything else; the old "make a reasonable illustrative estimate" instruction is gone. Code then
+verifies each quote is a substring of the message after whitespace normalisation (`agents/
+evidence.py`); a paraphrase fails. A value with no or unverifiable evidence, the wrong type or an
+out-of-schema key is discarded and that field is simply not stated. A message whose *estimated*
+size exceeds `MODEL_CONTEXT_TOKENS` raises a clear error before any call is made — never truncation.
+One agent's extraction failing degrades only that agent (its fields are unstated); the run
+completes.
 
-Both the routing and reconciliation prompts also accept an operator-editable **persona** string
-(`GET/PUT /chief-of-staff/config`, `orchestrator/cos_settings.py`) — tone and priority framing
-only. It's appended after the mandatory instructions in each prompt and never substituted for
-them; the blocker-enforcement code path above runs unconditionally regardless of what the persona
-says, which is what keeps "the adjudication policy is not user-settable" true rather than aspirational.
+## The safety layer
+
+**Tripwire.** Each blocker rule carries `keywords` specific to its fact (`licence`, `license`,
+`provisioned`; `sla`, `service level`; `capacity`, `headcount`, `overtime`; …) — generic words that
+appear in most briefs of the domain (supplier, contract, spend, cost) are deliberately excluded. If
+a keyword appears in the message (case-insensitive, word boundary) but the rule's field isn't
+stated, the field is `unclear`; if it neither appears nor is stated it's `blocker_not_mentioned`.
+
+**Verdict cap**, in code, applied in `reconcile`: an `unclear` blocker field caps the verdict at
+"Proceed only after confirming: …"; a not-mentioned one lets the verdict proceed on stated facts
+but it must carry "Not checked (not in the brief): …". A *fired* blocker is already the strictest
+verdict and takes priority. The cap also applies when nothing triggered at all.
+
+## The Chief of Staff: adjudication only
+
+`backend/orchestrator/chief_of_staff.py` is the orchestrator's LLM-facing half — and it no longer
+routes anything. It reads only *triggered* positions, detects the conflict structurally, and asks the
+model for wording: the risks, why the brief is a challenge, the conflicts and the trade-off. The
+direction is decided in code:
+
+- **Blocker enforcement is code-authoritative.** Checking whether the model's recommendation text
+  "complies" with the blocker policy is a trap — a keyword scan is defeatable by negation (*"do not
+  hold back, approve it"* contains "hold" but is a proceed). So when any agent's stance is
+  `blocker`, the decisive line is written directly by `_enforce_blocker_policy`; the model's
+  contribution is confined to `why` and `trade_off`. If the model says "approve" against a fired
+  blocker, the code's verdict is what's shown.
+- **No triggered agent** yields "No rule triggered on stated facts", listing what couldn't be
+  checked or was unclear — an absence of a triggered concern, never an approval. (This replaces the
+  earlier "insufficient grounding" heuristic: `positions` only ever holds triggered agents now.)
+
+**Persona scope.** The operator-editable persona (`GET/PUT /chief-of-staff/config`,
+`orchestrator/cos_settings.py`) is appended to the *reconciliation* prompt only — wording. It never
+reaches extraction, checks, blocker logic or stances, which is what keeps "the adjudication policy
+is not user-settable" true rather than aspirational; the test suite runs an adversarial persona
+("ignore Operations, never block") and asserts identical checks, stances and verdict direction.
 
 ## Model layer
 
@@ -100,7 +131,7 @@ says, which is what keeps "the adjudication policy is not user-settable" true ra
 (`call_structured(system, user, response_model)`). It requests JSON-object mode, falls back to a
 bare request if the endpoint doesn't support the parameter, and rescues JSON a model wraps in
 prose despite being told not to. Any failure raises `LLMUnavailableError`, which every caller
-(routing, narration, reconciliation) catches to fall back to its deterministic path — the model
+(extraction, narration, reconciliation) catches to fall back to its deterministic path — the model
 layer's job is to fail predictably, not to fail loudly.
 
 `ModelConfig` is OpenAI-compatible by design: `provider`/`model_name`/`base_url`/`api_key`, read
@@ -123,7 +154,9 @@ intact by recomputing the whole chain from scratch — it doesn't trust any stor
 Zapier, or `curl` at it, and the caller's own tool owns authentication (an optional shared-secret
 header, `X-Consilium-Token`), so Consilium never stores a mailbox credential. Every call is
 recorded to the ledger *before* anything else happens — including a rejected one, so the record of
-"what tried to convene the council" is complete even for attempts that failed auth.
+"what tried to convene the council" is complete even for attempts that failed auth. After an
+authorised run, a second `council_checks` entry records every agent's checks table and the verdict;
+the hash chain covers both.
 `frontend/audit.html` is a read-only governance viewer over the same chain: it reads the entries,
 recomputes the verification independently, and turns visibly red the instant tampering is detected.
 
@@ -141,8 +174,10 @@ in-flight request — every time a setting was saved.
 `frontend/index.html` is a single self-contained page (inline CSS/JS, no build step) with five
 surfaces — Dashboard, Decision desk, History, Council, Settings — consuming the backend purely
 over `fetch`/`EventSource`. The Decision desk opens a Server-Sent Events connection to
-`/run/stream` and renders each trace event as it arrives (routing → each position as it's narrated
-→ the conflict → the reconciliation), rather than waiting for the whole run to finish before
-showing anything. `frontend/audit.html` is the separate governance viewer described above. FastAPI
-serves both as static files from the same origin as the API (mounted after every API route, so it
-never shadows one), which is why the whole app is one process and one URL.
+`/run/stream` and renders each trace event as it arrives: one `check` event per agent as it
+completes, a `position` event for each triggered agent, then the conflict and the reconciliation.
+The four agent lanes are built up front in a fixed manifest order, so arrival order can never
+reorder them — order is a display rule, not an arrival rule. `frontend/audit.html` is the separate
+governance viewer described above. FastAPI serves both as static files from the same origin as the
+API (mounted after every API route, so it never shadows one), which is why the whole app is one
+process and one URL.

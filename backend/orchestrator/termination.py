@@ -20,6 +20,6 @@ def assert_bounded(state: ConsiliumState, max_prior_steps: int = MAX_PRIOR_STEPS
         raise BoundedTerminationError(
             f"step_count {state['step_count']} exceeds the bound of "
             f"{max_prior_steps} -- refusing to continue. Consilium v1 is a "
-            "single-pass orchestration: one routing pass, one parallel "
-            "specialist pass, one reconcile. No agent-to-agent loops."
+            "single-pass orchestration: one parallel specialist pass "
+            "(extract -> check -> narrate), one reconcile. No agent-to-agent loops."
         )
