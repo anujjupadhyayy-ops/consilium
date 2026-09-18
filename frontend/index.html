@@ -162,7 +162,10 @@
   .notchecked h4{margin:0 0 8px;font:700 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft)}
   .confirmfirst{background:var(--amber-tint);color:var(--amber);border-radius:6px;padding:7px 10px;margin-bottom:10px;font-size:13px;font-weight:600}
   .ncgroup{margin-top:8px} .ncgroup .an{font:700 12.5px var(--sans);color:var(--ink)}
-  .ncgroup li{font-size:12.5px;color:var(--ink-soft)} .nctag{margin-left:6px;font:700 9.5px var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--amber)}
+  .ncgroup li{font-size:12.5px;color:var(--ink-soft)} .nctag{display:inline-block;margin-left:8px;padding:1px 7px;border-radius:5px;background:var(--amber-tint);font:700 9.5px var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--amber);white-space:nowrap;vertical-align:1px}
+  .ncmore{margin-top:8px;font:700 11.5px var(--mono);color:var(--muted)}
+  .othernote{margin-top:10px;padding-top:8px;border-top:1px dashed var(--line);font-size:12.5px;color:var(--muted)}
+  .verdict-block>.bbody>.othernote{margin:0 0 14px;border-top:0;padding-top:0}
   .lane.notrig{opacity:.85;border-left:3px solid var(--line)} .lane.eng{border-left:3px solid var(--coral)}
   .lhead .st.checking{color:var(--muted)}
   .allclear-line{color:var(--good);font-weight:600} .notrig-line{color:var(--ink-soft);font-weight:600}
@@ -581,24 +584,36 @@ function handleConflict(payload){
   setNode("reconcile","active");
 }
 
-// The "Not checked" block: facts no rule could be checked on, by human label,
-// grouped by agent (blocker-related agents first, then manifest order), with
-// the confirm-first line leading when a blocker fact was mentioned but not confirmed.
+// Verdict panel: ONLY facts that belong to a blocker rule (the ones that could
+// stop the decision) are listed, grouped by agent (most at risk first), capped
+// at 6 with "+N more". Every other unchecked fact is collapsed into one
+// sentence naming the agents -- their cards keep the full lists. The
+// confirm-first line leads when a blocker fact was mentioned but unconfirmed.
+const NC_CAP=6;
 function notCheckedHtml(nc){
   const groups=(nc&&nc.groups)||[];
-  if(!groups.length) return "";
   const agentName=id=>(AGENTS[id]&&AGENTS[id].nm)||id;
   const rank=id=>{const i=ORDER.indexOf(id);return i<0?ORDER.length:i;};
-  const sorted=groups.slice().sort((a,b)=>{
-    const ab=a.items.some(i=>i.blocker)?0:1, bb=b.items.some(i=>i.blocker)?0:1;
-    return ab-bb||rank(a.agent)-rank(b.agent);
-  });
+  const blockerGroups=groups.map(g=>({agent:g.agent,items:g.items.filter(i=>i.blocker)})).filter(g=>g.items.length)
+    .sort((a,b)=>b.items.length-a.items.length||rank(a.agent)-rank(b.agent));
+  const otherAgents=groups.filter(g=>g.items.some(i=>!i.blocker)).sort((a,b)=>rank(a.agent)-rank(b.agent)).map(g=>agentName(g.agent));
+
+  const nameList=ns=>ns.length<2?ns.join(""):ns.slice(0,-1).join(", ")+" and "+ns[ns.length-1];
+  const other=otherAgents.length
+    ?`<div class="othernote">${esc(nameList(otherAgents))} also needed facts the brief doesn't state — see ${otherAgents.length>1?"their cards":"its card"}.</div>`:"";
+  if(!blockerGroups.length) return other;
+
+  const total=blockerGroups.reduce((n,g)=>n+g.items.length,0);
+  let budget=NC_CAP;
+  const shown=blockerGroups.map(g=>{const take=g.items.slice(0,Math.max(budget,0));budget-=take.length;return {agent:g.agent,items:take};}).filter(g=>g.items.length);
+  const more=total>NC_CAP?`<div class="ncmore">+${total-NC_CAP} more</div>`:"";
+
   const confirm=(nc.confirm_first||[]);
   const lead=confirm.length
     ?`<div class="confirmfirst">Confirm first — mentioned in the brief but not confirmed: ${esc(confirm.map(c=>`${c.label} (${agentName(c.agent)})`).join("; "))}</div>`:"";
-  const body=sorted.map(g=>`<div class="ncgroup"><div class="an">${esc(agentName(g.agent))}</div>${listHtml(g.items.map(i=>
-    `${esc(i.label)}${i.unclear?'<span class="nctag">mentioned, not confirmed</span>':(i.blocker?'<span class="nctag">blocker-related</span>':"")}`),"factlist")}</div>`).join("");
-  return `<div class="notchecked"><h4>Not checked — not stated in the brief</h4>${lead}${body}</div>`;
+  const body=shown.map(g=>`<div class="ncgroup"><div class="an">${esc(agentName(g.agent))}</div>${listHtml(g.items.map(i=>
+    `${esc(i.label)}${i.unclear?' <span class="nctag">mentioned, not confirmed</span>':""}`),"factlist")}</div>`).join("");
+  return `<div class="notchecked"><h4>Could stop this — not stated in the brief</h4>${lead}${body}${more}${other}</div>`;
 }
 
 function handleReconciliation(payload){

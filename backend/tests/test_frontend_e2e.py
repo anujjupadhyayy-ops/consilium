@@ -378,7 +378,7 @@ def test_verdict_panel_headline_is_the_recommendation_only_and_facts_move_to_the
     # DOM order: headline, then the not-checked block, then WHY / KEY TRADE-OFF / ASSUMPTIONS / NOT CONSIDERED
     order = panel.evaluate("""el => [...el.querySelectorAll('.rec, .notchecked, .kv')].map(n => n.className.split(' ')[0])""")
     assert order == ["rec", "notchecked", "kv"]
-    assert panel.locator(".notchecked h4").inner_text().lower() == "not checked — not stated in the brief"
+    assert panel.locator(".notchecked h4").inner_text().lower() == "could stop this — not stated in the brief"
     labels = [t.lower() for t in panel.locator(".kv dt").all_inner_texts()]
     assert labels == ["why", "key trade-off", "assumptions", "not considered"]
 
@@ -388,12 +388,16 @@ def test_verdict_panel_headline_is_the_recommendation_only_and_facts_move_to_the
     assert "licence provisioned for the new date" in panel.locator(".confirmfirst").inner_text()
     assert "Operations" in panel.locator(".confirmfirst").inner_text()
 
-    # grouped by agent, blocker-related agent first; blocker facts before the rest within a group
+    # only the agent that owns blocker rules is listed, named once as a group heading
     agents = panel.locator(".ncgroup .an").all_inner_texts()
-    assert agents[0] == "Operations" and sorted(agents) == sorted(["Operations", "Delivery", "Finance", "PMO"])
+    assert agents == ["Operations"]
     ops_items = panel.locator(".ncgroup").first.locator("li").all_inner_texts()
-    assert ops_items[0].lower().startswith("licence provisioned for the new date")
+    assert ops_items[0].lower().startswith("licence provisioned for the new date")  # unclear one first
     assert "mentioned, not confirmed" in ops_items[0].lower()
+    # no per-item "blocker-related" tag, and the marker is separated from its label by a space
+    assert "blocker-related" not in panel.locator(".notchecked").inner_text().lower()  # (the headline sentence may say it)
+    assert "(%)mentioned" not in panel.locator(".notchecked").inner_text().lower()
+    assert "date mentioned, not confirmed" in ops_items[0].lower()
 
 
 def test_not_checked_block_without_an_unclear_blocker_fact_has_no_confirm_first_line(page):
@@ -408,3 +412,104 @@ def test_fully_stated_seed_has_no_not_checked_block(page):
     _run_seed_in_ui(page)
     assert page.locator("#stage .verdict-block .notchecked").count() == 0
     assert page.locator("#stage .verdict-block .rec").inner_text().startswith("Decline as currently scoped")
+
+
+# ------------------------ verdict panel: blocker facts only, collapse, cap --
+
+_BLOCKER_LABELS = {
+    "capacity utilisation if accepted (%)", "third-party spend (% of budget)", "savings delivered vs committed (ratio)",
+    "licence provisioned for the new date", "supplier SLA in place",
+}
+_NON_BLOCKER_SAMPLE = [
+    "supplier cost increase (%)", "project margin erosion (points)", "milestone is resourced",
+    "the change is a contract variation", "reported RAG status after the change",
+]
+
+
+def test_verdict_panel_lists_only_blocker_related_facts_and_names_the_other_agents(page):
+    _free_text_run_in_ui(page, "A 3rd-party supplier offers to pull a delivery milestone forward 3 weeks for a 15% cost increase and a contract variation.")
+    panel = page.locator("#stage .verdict-block")
+    listed = [t.split(" mentioned, not confirmed")[0].strip().lower() for t in panel.locator(".notchecked li").all_inner_texts()]
+    assert listed and set(listed) <= {l.lower() for l in _BLOCKER_LABELS}
+    panel_text = panel.inner_text().lower()
+    for label in _NON_BLOCKER_SAMPLE:
+        assert label.lower() not in panel_text, f"non-blocker fact leaked into the verdict panel: {label}"
+    assert panel.locator(".notchecked .an").all_inner_texts() == ["Operations"]  # agent named once
+    assert (
+        "Finance, Delivery and PMO also needed facts the brief doesn't state — see their cards."
+        in panel.locator(".othernote").inner_text()
+    )
+    # ...while the agent cards keep their full lists
+    assert "supplier cost increase (%)" in page.locator("#lane-finance").inner_text().lower()
+    assert "milestone is resourced" in page.locator("#lane-delivery").inner_text().lower()
+
+
+def test_verdict_panel_has_no_raw_field_names_and_lists_render_as_items(page):
+    _free_text_run_in_ui(page, "We are still checking whether the licence will be ready for the earlier date.")
+    panel = page.locator("#stage .verdict-block")
+    assert not _RAW.search(panel.inner_text())
+    assert panel.locator(".notchecked li").count() >= 1
+    assert panel.locator(".assumptions li").count() >= 1 and panel.locator(".notconsidered li").count() >= 1
+
+
+def _stream_with_not_checked(base_url, not_checked, mutate_checks=None):
+    events = _real_stream_events(base_url, "seed_id=supplier_milestone")
+    for kind, data in events:
+        if kind == "trace" and data["kind"] == "reconciliation":
+            data["payload"]["not_checked"] = not_checked
+    return events
+
+
+def _item(label, unclear=False, blocker=True):
+    return {"field": label.replace(" ", "_"), "label": label, "blocker": blocker, "unclear": unclear}
+
+
+def test_more_than_six_blocker_facts_shows_six_plus_n_more_biggest_agent_first(page, base_url):
+    nc = {
+        "confirm_first": [],
+        "groups": [
+            {"agent": "finance", "items": [_item("finance fact one"), _item("finance fact two")]},
+            {"agent": "operations", "items": [_item(f"operations fact {n}") for n in range(1, 7)]},
+        ],
+    }
+    events = _stream_with_not_checked(base_url, nc)
+    page.route("**/run/stream*", lambda route: route.fulfill(
+        status=200, content_type="text/event-stream", body=_sse_body(events)))
+    _run_seed_in_ui(page)
+    panel = page.locator("#stage .verdict-block")
+    assert panel.locator(".notchecked li").count() == 6
+    assert panel.locator(".ncmore").inner_text() == "+2 more"
+    assert panel.locator(".notchecked .an").all_inner_texts() == ["Operations"]  # 6 fill the cap; Finance's fall under "+2 more"
+    page.unroute("**/run/stream*")
+
+
+def test_cap_spills_into_the_next_agent_and_orders_by_most_at_risk(page, base_url):
+    nc = {
+        "confirm_first": [],
+        "groups": [
+            {"agent": "finance", "items": [_item("finance fact one"), _item("finance fact two")]},
+            {"agent": "operations", "items": [_item(f"operations fact {n}") for n in range(1, 6)]},
+        ],
+    }
+    events = _stream_with_not_checked(base_url, nc)
+    page.route("**/run/stream*", lambda route: route.fulfill(
+        status=200, content_type="text/event-stream", body=_sse_body(events)))
+    _run_seed_in_ui(page)
+    panel = page.locator("#stage .verdict-block")
+    assert panel.locator(".notchecked .an").all_inner_texts() == ["Operations", "Finance"]  # most facts at risk first
+    assert panel.locator(".notchecked li").count() == 6
+    assert panel.locator(".ncmore").inner_text() == "+1 more"
+    page.unroute("**/run/stream*")
+
+
+def test_single_other_agent_sentence_and_no_block_when_no_blocker_fact_is_unchecked(page, base_url):
+    nc = {"confirm_first": [], "groups": [{"agent": "finance", "items": [_item("supplier cost increase (%)", blocker=False)]}]}
+    events = _stream_with_not_checked(base_url, nc)
+    page.route("**/run/stream*", lambda route: route.fulfill(
+        status=200, content_type="text/event-stream", body=_sse_body(events)))
+    _run_seed_in_ui(page)
+    panel = page.locator("#stage .verdict-block")
+    assert panel.locator(".notchecked").count() == 0  # nothing that could stop it -> no block
+    assert panel.locator(".othernote").inner_text() == "Finance also needed facts the brief doesn't state — see its card."
+    assert "supplier cost increase" not in panel.locator(".othernote").inner_text().lower()  # named by agent only, never by fact
+    page.unroute("**/run/stream*")
