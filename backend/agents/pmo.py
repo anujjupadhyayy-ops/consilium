@@ -53,12 +53,14 @@ class PMOConfig(AgentConfig):
 
 
 class PMOFacts(BaseModel):
-    is_contract_variation: bool = False
-    continued_business_case_justified: bool = True
-    portfolio_contention: bool = False
+    is_contract_variation: bool = Field(False, title="the change is a contract variation")
+    continued_business_case_justified: bool = Field(True, title="the continued business case is justified")
+    portfolio_contention: bool = Field(False, title="the change clashes with another workstream's resources")
     # % variance per PRINCE2 dimension this decision represents, e.g.
     # {"cost": 15.0} for a 15% cost increase. Omitted dimensions = no variance.
-    tolerance_variances_pct: dict[str, float] = {}
+    tolerance_variances_pct: dict[str, float] = Field(
+        default_factory=dict, title="variance against each PRINCE2 tolerance (cost, time, scope, quality, risk, benefit)"
+    )
 
 
 class PMOAgent(ConfigurableAgent):

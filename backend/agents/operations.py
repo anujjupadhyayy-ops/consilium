@@ -33,11 +33,11 @@ class OperationsFacts(BaseModel):
     # Neutral/no-concern defaults (all-green) -- used when the Chief of
     # Staff's LLM extraction is unavailable and evaluation must degrade
     # gracefully.
-    capacity_utilisation_pct_if_accepted: float = 50.0
-    third_party_spend_pct_of_budget: float = 50.0
-    savings_delivery_ratio: float = 1.0
-    licence_provisioned_for_new_date: bool = True
-    supplier_sla_in_place: bool = True
+    capacity_utilisation_pct_if_accepted: float = Field(50.0, title="capacity utilisation if accepted (%)")
+    third_party_spend_pct_of_budget: float = Field(50.0, title="third-party spend (% of budget)")
+    savings_delivery_ratio: float = Field(1.0, title="savings delivered vs committed (ratio)")
+    licence_provisioned_for_new_date: bool = Field(True, title="licence provisioned for the new date")
+    supplier_sla_in_place: bool = Field(True, title="supplier SLA in place")
 
 
 class OperationsAgent(ConfigurableAgent):

@@ -98,8 +98,13 @@ a keyword appears in the message (case-insensitive, word boundary) but the rule'
 stated, the field is `unclear`; if it neither appears nor is stated it's `blocker_not_mentioned`.
 
 **Verdict cap**, in code, applied in `reconcile`: an `unclear` blocker field caps the verdict at
-"Proceed only after confirming: …"; a not-mentioned one lets the verdict proceed on stated facts
-but it must carry "Not checked (not in the brief): …". A *fired* blocker is already the strictest
+"Proceed only after confirming the blocker-related facts listed below."; a not-mentioned one lets
+the verdict proceed on stated facts. The headline is the recommendation only: the facts themselves
+travel as structured data (`reconciliation.not_checked`: a `confirm_first` list plus per-agent groups,
+blocker-related facts first) and are rendered in their own "Not checked — not stated in the brief"
+block. Facts are named by a human label — the `title` on each field of the agent's facts model,
+carried on every `check` as `labels` — never a raw field name or `agent.field`. This is display data
+only; it never feeds a stance or the verdict's direction. A *fired* blocker is already the strictest
 verdict and takes priority. The cap also applies when nothing triggered at all.
 
 ## The Chief of Staff: adjudication only

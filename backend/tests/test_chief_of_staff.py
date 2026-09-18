@@ -223,7 +223,10 @@ def test_model_unavailable_free_text_lists_what_could_not_be_checked_no_crash():
     assert result["positions"] == []
     assert all(not c["triggered"] for c in result["checks"].values())
     assert "no rule triggered" in result["reconciliation"]["recommendation"].lower()
-    assert "finance.supplier_cost_increase_pct" in result["reconciliation"]["why"]
+    # changed: the unchecked facts are listed by human label in the structured
+    # block rather than as `finance.supplier_cost_increase_pct` inside `why`
+    finance = next(g for g in result["reconciliation"]["not_checked"]["groups"] if g["agent"] == "finance")
+    assert "supplier cost increase (%)" in [i["label"] for i in finance["items"]]
 
 
 def test_model_unavailable_seed_runs_fully_with_the_deterministic_summary(seed_input, seed_facts):

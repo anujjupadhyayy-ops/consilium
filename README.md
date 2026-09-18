@@ -84,7 +84,9 @@ indicator makes that state visible rather than silent.
 - **A verdict cap for what wasn't confirmed.** If a blocker-relevant field is *mentioned* (a
   specific keyword like "licence" or "SLA") but not confirmed, the card shows "Unclear" and the
   verdict cannot be better than "proceed only after confirming". If it isn't in the brief at all,
-  the verdict may proceed on stated facts but must say "Not checked (not in the brief)". Never a
+  the verdict may proceed on stated facts, but the panel lists those facts in a separate
+  "Not checked — not stated in the brief" block (by plain-English label, grouped by agent, blocker-related
+  first; if a blocker fact was mentioned but unconfirmed the block leads with "Confirm first"). Never a
   clean approve resting on silence.
 - **A tamper-evident audit ledger on the inbound trigger.** `POST /trigger/webhook` is a real,
   credential-free way to convene the council from an external event (a mail rule, Zapier, `curl`).

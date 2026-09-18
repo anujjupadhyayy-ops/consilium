@@ -33,10 +33,13 @@ class FinanceFacts(BaseModel):
     # Neutral/no-concern defaults -- used when the Chief of Staff's LLM
     # extraction is unavailable and evaluation must degrade gracefully
     # rather than crash on a missing required field.
-    margin_erosion_pts: float = 0.0
-    supplier_cost_increase_pct: float = 0.0
-    budget_forecast_utilisation_pct: float = 50.0
-    fy_month_elapsed: int = 6
+    # `title` is the human label shown wherever a field is named to a user
+    # (couldn't-check lines, evidence, the verdict panel) -- never the raw
+    # field name.
+    margin_erosion_pts: float = Field(0.0, title="project margin erosion (points)")
+    supplier_cost_increase_pct: float = Field(0.0, title="supplier cost increase (%)")
+    budget_forecast_utilisation_pct: float = Field(50.0, title="full-year 3PP forecast (% of budget)")
+    fy_month_elapsed: int = Field(6, title="financial-year month the forecast is read in")
 
 
 class FinanceAgent(ConfigurableAgent):

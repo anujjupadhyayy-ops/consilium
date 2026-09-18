@@ -183,6 +183,17 @@ class ConfigurableAgent(ABC):
         sources = tuple(sorted({self.source_field(f) for f in result.unchecked}))
         return replace(result, unchecked=sources)
 
+    def field_label(self, name: str) -> str:
+        """Human label for a fact (its facts-model `title`); a humanised
+        field name only as a last resort, so a raw identifier with
+        underscores never reaches the UI."""
+        info = self.facts_model.model_fields.get(name)
+        title = getattr(info, "title", None)
+        return title or name.replace("_", " ")
+
+    def field_labels(self) -> dict[str, str]:
+        return {name: self.field_label(name) for name in self.facts_model.model_fields}
+
     def source_field(self, name: str) -> str:
         """Map a derived name back to the stated fact it comes from, for
         display (default: the name itself). Override where derive() flattens
@@ -380,6 +391,7 @@ class ConfigurableAgent(ABC):
             blocker_not_mentioned=blocker_not_mentioned,
             evidence=evidence,
             provenance=provenance,
+            labels=self.field_labels(),
         )
         check_event = make_trace_event(step, "check", self.id, self._check_summary(check), dict(check))
 

@@ -157,6 +157,12 @@
   .stance{display:inline-flex;align-items:center;gap:6px;font:700 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;padding:4px 9px;border-radius:6px}
   .s-yes{background:var(--good-tint);color:var(--good)} .s-no{background:var(--crit-tint);color:var(--crit)}
   .s-cond{background:var(--amber-tint);color:var(--amber)} .s-block{background:var(--crit);color:#fff}
+  .kv dd ul,.factlist{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:3px} .factlist{margin-top:4px;font-size:12px}
+  .notchecked{margin:0 0 16px;padding:12px 14px;border:1px solid var(--line);border-left:3px solid var(--amber);border-radius:var(--r-sm);background:var(--surface-2)}
+  .notchecked h4{margin:0 0 8px;font:700 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft)}
+  .confirmfirst{background:var(--amber-tint);color:var(--amber);border-radius:6px;padding:7px 10px;margin-bottom:10px;font-size:13px;font-weight:600}
+  .ncgroup{margin-top:8px} .ncgroup .an{font:700 12.5px var(--sans);color:var(--ink)}
+  .ncgroup li{font-size:12.5px;color:var(--ink-soft)} .nctag{margin-left:6px;font:700 9.5px var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--amber)}
   .lane.notrig{opacity:.85;border-left:3px solid var(--line)} .lane.eng{border-left:3px solid var(--coral)}
   .lhead .st.checking{color:var(--muted)}
   .allclear-line{color:var(--good);font-weight:600} .notrig-line{color:var(--ink-soft);font-weight:600}
@@ -496,14 +502,18 @@ function finishRun(){
   recordRun();
 }
 
+// A fact is always shown by its human label (the facts model's `title`, sent
+// on every check as `labels`) -- never a raw field name, never `agent.field`.
+function fl(check,f){const l=check&&check.labels&&check.labels[f];return l||String(f).replace(/_/g," ");}
+function listHtml(items,cls){return `<ul${cls?` class="${cls}"`:""}>${items.map(i=>`<li>${i}</li>`).join("")}</ul>`;}
 function evidenceHtml(check){
   const provenance=(check&&check.provenance)||{}, evidence=(check&&check.evidence)||{};
   const fields=Object.keys(provenance);
   if(!fields.length) return "";
   const items=fields.map(f=>{
-    if(provenance[f]==="seeded") return `<div class="ev-item"><b>${esc(f)}:</b> seeded</div>`;
+    if(provenance[f]==="seeded") return `<div class="ev-item"><b>${esc(fl(check,f))}:</b> seeded</div>`;
     const quotes=(evidence[f]||[]).map(q=>`"${esc(q)}"`).join(" · ");
-    return quotes?`<div class="ev-item"><b>${esc(f)}:</b> ${quotes}</div>`:"";
+    return quotes?`<div class="ev-item"><b>${esc(fl(check,f))}:</b> ${quotes}</div>`:"";
   }).join("");
   return items?`<div class="evidence">${items}</div>`:"";
 }
@@ -533,9 +543,9 @@ function handleCheck(check){
   document.getElementById("lane-"+k).classList.add("notrig");
   const unchecked=check.unchecked||[], unclear=check.unclear||[];
   let html = unchecked.length
-    ? `<div class="notrig-line">No rule triggered</div><div class="couldnt-line">Couldn't check: ${esc(unchecked.join(", "))}</div>`
+    ? `<div class="notrig-line">No rule triggered</div><div class="couldnt-line">Couldn't check:${listHtml(unchecked.map(f=>esc(fl(check,f))),"factlist")}</div>`
     : `<div class="allclear-line">All rules checked — none tripped</div>`;
-  if(unclear.length) html += `<div class="unclear-line">Unclear: ${esc(unclear.join(", "))} — mentioned but not confirmed</div>`;
+  if(unclear.length) html += `<div class="unclear-line">Unclear: ${esc(unclear.map(f=>fl(check,f)).join("; "))} — mentioned but not confirmed</div>`;
   document.getElementById("rs-"+k).innerHTML=html;
   setNode(k,"done");
 }
@@ -571,10 +581,30 @@ function handleConflict(payload){
   setNode("reconcile","active");
 }
 
+// The "Not checked" block: facts no rule could be checked on, by human label,
+// grouped by agent (blocker-related agents first, then manifest order), with
+// the confirm-first line leading when a blocker fact was mentioned but not confirmed.
+function notCheckedHtml(nc){
+  const groups=(nc&&nc.groups)||[];
+  if(!groups.length) return "";
+  const agentName=id=>(AGENTS[id]&&AGENTS[id].nm)||id;
+  const rank=id=>{const i=ORDER.indexOf(id);return i<0?ORDER.length:i;};
+  const sorted=groups.slice().sort((a,b)=>{
+    const ab=a.items.some(i=>i.blocker)?0:1, bb=b.items.some(i=>i.blocker)?0:1;
+    return ab-bb||rank(a.agent)-rank(b.agent);
+  });
+  const confirm=(nc.confirm_first||[]);
+  const lead=confirm.length
+    ?`<div class="confirmfirst">Confirm first — mentioned in the brief but not confirmed: ${esc(confirm.map(c=>`${c.label} (${agentName(c.agent)})`).join("; "))}</div>`:"";
+  const body=sorted.map(g=>`<div class="ncgroup"><div class="an">${esc(agentName(g.agent))}</div>${listHtml(g.items.map(i=>
+    `${esc(i.label)}${i.unclear?'<span class="nctag">mentioned, not confirmed</span>':(i.blocker?'<span class="nctag">blocker-related</span>':"")}`),"factlist")}</div>`).join("");
+  return `<div class="notchecked"><h4>Not checked — not stated in the brief</h4>${lead}${body}</div>`;
+}
+
 function handleReconciliation(payload){
-  const assumeText=(payload.assumptions||[]).join(" "), notText=(payload.not_considered||[]).join(" ");
+  const items=xs=>listHtml((xs||[]).map(esc));
   block("Step 3 · Reconcile","Chief of Staff adjudicates","verdict-block",
-    `<p class="rec">${payload.recommendation}</p><dl class="kv"><dt>Why</dt><dd>${payload.why}</dd><dt>Key trade-off</dt><dd>${payload.trade_off}</dd><dt>Assumptions</dt><dd>${assumeText}</dd><dt>Not considered</dt><dd>${notText}</dd></dl>${Object.values(collectedPositions).some(p=>p.stance==="blocker")?`<div class="policy"><b>Policy applied:</b> a hard operational blocker outranks a cost/schedule trade-off; positions are adjudicated, never averaged.</div>`:""}`);
+    `<p class="rec">${esc(payload.recommendation)}</p>${notCheckedHtml(payload.not_checked)}<dl class="kv"><dt>Why</dt><dd>${esc(payload.why)}</dd><dt>Key trade-off</dt><dd>${esc(payload.trade_off)}</dd><dt>Assumptions</dt><dd class="assumptions">${items(payload.assumptions)}</dd><dt>Not considered</dt><dd class="notconsidered">${items(payload.not_considered)}</dd></dl>${Object.values(collectedPositions).some(p=>p.stance==="blocker")?`<div class="policy"><b>Policy applied:</b> a hard operational blocker outranks a cost/schedule trade-off; positions are adjudicated, never averaged.</div>`:""}`);
   setNode("reconcile","done");
 }
 

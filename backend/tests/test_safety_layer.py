@@ -1,7 +1,7 @@
 """P3.6-Rules-Trigger-Spec.md §6.5 -- the tripwire (unclear vs unchecked)
 and the two-level verdict cap it feeds."""
 from agents.base import AgentConfig, ConfigurableAgent, RuleConfig
-from orchestrator.chief_of_staff import _apply_verdict_cap, _blocker_field_lists
+from orchestrator.chief_of_staff import _apply_verdict_cap, _blocker_field_lists, _not_checked_block
 from orchestrator.state import Reconciliation
 
 
@@ -86,16 +86,24 @@ def _reconciliation(recommendation="Proceed") -> Reconciliation:
 def test_unclear_blocker_field_caps_the_verdict_at_conditional():
     checks = {"operations": {"unclear": ["licence_ok"], "blocker_not_mentioned": []}}
     capped = _apply_verdict_cap(_reconciliation("Proceed unconditionally"), checks)
+    # Changed: the headline is the recommendation only; WHICH facts to
+    # confirm now live in the structured not_checked block (by human label),
+    # not spliced into the headline as `operations.licence_ok`.
     assert "proceed only after confirming" in capped["recommendation"].lower()
-    assert "operations.licence_ok" in capped["recommendation"]
+    assert "operations" not in capped["recommendation"] and "licence_ok" not in capped["recommendation"]
 
 
 def test_unmentioned_blocker_field_discloses_but_does_not_block_proceeding():
     checks = {"operations": {"unclear": [], "blocker_not_mentioned": ["licence_ok"]}}
-    disclosed = _apply_verdict_cap(_reconciliation("Proceed as scoped"), checks)
-    assert disclosed["recommendation"].startswith("Proceed as scoped")
-    assert "not checked (not in the brief)" in disclosed["recommendation"].lower()
-    assert "operations.licence_ok" in disclosed["recommendation"]
+    # Changed: the weaker level leaves the headline alone (the verdict may
+    # proceed on stated facts) and is disclosed in the not_checked block,
+    # which the panel always renders -- so the headline no longer carries
+    # the "Not checked (...)" text.
+    result = _apply_verdict_cap(_reconciliation("Proceed as scoped"), checks)
+    assert result["recommendation"] == "Proceed as scoped"
+    block = _not_checked_block({"operations": {**checks["operations"], "unchecked": ["licence_ok"], "labels": {"licence_ok": "licence provisioned"}}})
+    assert block["confirm_first"] == []
+    assert block["groups"][0]["items"][0] == {"field": "licence_ok", "label": "licence provisioned", "blocker": True, "unclear": False}
 
 
 def test_unclear_takes_priority_over_not_mentioned_when_both_present():
@@ -166,9 +174,14 @@ def test_supplier_email_without_licence_sla_or_capacity_wording_produces_no_uncl
 def test_unmentioned_blocker_fields_disclosed_verdict_not_a_clean_approve(monkeypatch):
     result = _free_text_run(monkeypatch, SUPPLIER_EMAIL, {})
     rec = result["reconciliation"]["recommendation"]
-    # nothing triggered at all here -> the no-trigger verdict, listing what couldn't be checked
+    # nothing triggered at all here -> the no-trigger verdict; what couldn't be
+    # checked is in the structured block (changed: it used to be spelled out,
+    # with raw names, inside `why`)
     assert "no rule triggered" in rec.lower()
-    assert "operations.licence_provisioned_for_new_date" in result["reconciliation"]["why"]
+    ops = next(g for g in result["reconciliation"]["not_checked"]["groups"] if g["agent"] == "operations")
+    licence = next(i for i in ops["items"] if i["label"] == "licence provisioned for the new date")
+    assert licence["blocker"] and not licence["unclear"]
+    assert result["reconciliation"]["not_checked"]["confirm_first"] == []
 
 
 def test_licence_mentioned_but_unconfirmed_is_unclear_and_caps_the_verdict(monkeypatch):
@@ -178,7 +191,10 @@ def test_licence_mentioned_but_unconfirmed_is_unclear_and_caps_the_verdict(monke
     assert "licence_provisioned_for_new_date" in ops["unclear"]
     rec = result["reconciliation"]["recommendation"].lower()
     assert "proceed only after confirming" in rec
-    assert "operations.licence_provisioned_for_new_date" in rec
+    # changed: the fact to confirm is listed by label in the block, not in the headline
+    assert result["reconciliation"]["not_checked"]["confirm_first"] == [
+        {"agent": "operations", "field": "licence_provisioned_for_new_date", "label": "licence provisioned for the new date"}
+    ]
 
 
 def test_stated_licence_blocker_extracted_with_evidence_blocks_the_verdict(monkeypatch):
@@ -190,3 +206,59 @@ def test_stated_licence_blocker_extracted_with_evidence_blocks_the_verdict(monke
     assert result["checks"]["operations"]["stance"] == "blocker"
     assert result["checks"]["operations"]["provenance"]["licence_provisioned_for_new_date"] == "extracted"
     assert "decline" in result["reconciliation"]["recommendation"].lower()
+
+
+# ------------------------------- human labels + the not-checked block (UI data) --
+
+import re
+
+_RAW_NAME = re.compile(r"[a-z0-9]+_[a-z0-9_]+|\b(finance|delivery|pmo|operations)\.[a-z]")
+
+
+def test_every_facts_field_of_every_agent_has_a_human_title():
+    from agents.registry import load_agents_from_manifest
+
+    for agent in load_agents_from_manifest():
+        for name, info in agent.facts_model.model_fields.items():
+            assert info.title, f"{agent.id}.{name} has no title"
+            assert not _RAW_NAME.search(info.title), f"{agent.id}.{name}: title {info.title!r} looks like a raw name"
+            assert agent.field_label(name) == info.title
+
+
+def test_check_payload_carries_labels_for_every_fact():
+    from agents.registry import get_agent
+    from orchestrator.state import initial_state
+
+    update = get_agent("operations").run(initial_state("no figures here", {}))
+    labels = update["checks"]["operations"]["labels"]
+    assert labels["licence_provisioned_for_new_date"] == "licence provisioned for the new date"
+    assert set(labels) == set(get_agent("operations").facts_model.model_fields)
+
+
+def test_not_checked_block_orders_blocker_facts_first_unclear_before_unmentioned_and_uses_labels():
+    check = {
+        "unchecked": ["margin", "licence", "capacity", "sla"],
+        "unclear": ["licence"],
+        "blocker_not_mentioned": ["capacity", "sla"],
+        "labels": {"margin": "margin erosion", "licence": "licence provisioned", "capacity": "capacity utilisation", "sla": "SLA in place"},
+    }
+    block = _not_checked_block({"operations": check})
+    items = block["groups"][0]["items"]
+    assert [i["label"] for i in items] == ["licence provisioned", "capacity utilisation", "SLA in place", "margin erosion"]
+    assert [(i["blocker"], i["unclear"]) for i in items] == [(True, True), (True, False), (True, False), (False, False)]
+    assert block["confirm_first"] == [{"agent": "operations", "field": "licence", "label": "licence provisioned"}]
+
+
+def test_not_checked_block_is_empty_when_everything_was_checked():
+    assert _not_checked_block({"finance": {"unchecked": [], "unclear": [], "blocker_not_mentioned": []}}) == {"confirm_first": [], "groups": []}
+
+
+def test_reconciliation_text_and_block_never_contain_a_raw_field_name(monkeypatch):
+    result = _free_text_run(monkeypatch, "We are still checking whether the licence will be ready.", {})
+    rec = result["reconciliation"]
+    user_text = " ".join([rec["recommendation"], rec["why"], rec["trade_off"], *rec["assumptions"], *rec["not_considered"]])
+    for group in rec["not_checked"]["groups"]:
+        for item in group["items"]:
+            user_text += " " + item["label"]
+    assert not _RAW_NAME.search(user_text), _RAW_NAME.search(user_text)
+    assert rec["recommendation"] == "Proceed only after confirming the blocker-related facts listed below."

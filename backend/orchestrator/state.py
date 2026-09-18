@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import operator
-from typing import Annotated, Literal, Optional, TypedDict
+from typing import Annotated, Literal, NotRequired, Optional, TypedDict
 
 # "blocker" added in P2: a hard, agent-agnostic operational/structural
 # constraint that the reconcile engine treats as decisive regardless of
@@ -49,6 +49,9 @@ class Check(TypedDict):
     blocker_not_mentioned: list[str]
     evidence: dict[str, list[str]]
     provenance: dict[str, Literal["seeded", "extracted"]]
+    # field name -> the human label (the facts model's `title`) for every
+    # fact of this agent. The UI shows these, never a raw field name.
+    labels: dict[str, str]
 
 
 class Conflict(TypedDict):
@@ -64,6 +67,11 @@ class Reconciliation(TypedDict):
     trade_off: str
     assumptions: list[str]
     not_considered: list[str]
+    # Facts that couldn't be checked, structured for the verdict panel:
+    # {"confirm_first": [{agent, field, label}], "groups": [{agent, items:
+    # [{field, label, blocker, unclear}]}]}. Display data only -- it never
+    # feeds a stance or the verdict's direction.
+    not_checked: NotRequired[dict]
 
 
 def _max2(a: int, b: int) -> int:

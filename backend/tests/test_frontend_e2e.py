@@ -317,3 +317,94 @@ def test_council_shows_the_backend_validation_error_for_a_rejected_threshold_edi
     text = page.inner_text("#res-finance")
     assert "margin_erosion_threshold_pts" in text and "not saved" in text.lower()
     assert "all clear" not in text.lower() and "saved to config" not in text.lower()
+
+
+# ---------------------- verdict panel structure, list rendering, human labels --
+
+import re as _re
+
+_RAW = _re.compile(r"[a-z0-9]+_[a-z0-9_]+|\b(finance|delivery|pmo|operations)\.[a-z]")
+
+
+def _free_text_run_in_ui(page, text):
+    page.click("[data-v='decision']")
+    page.fill("#q", text)
+    page.click("#run")
+    page.wait_for_selector("#stage .verdict-block.show", timeout=20000)
+    page.wait_for_function("!document.getElementById('run').disabled", timeout=20000)
+
+
+def test_three_assumptions_render_as_three_separate_items(page, base_url):
+    events = _real_stream_events(base_url, "seed_id=supplier_milestone")
+    for i, (kind, data) in enumerate(events):
+        if kind == "trace" and data["kind"] == "reconciliation":
+            data["payload"]["assumptions"] = ["First assumption.", "Second assumption.", "Third assumption."]
+            data["payload"]["not_considered"] = ["Alpha.", "Beta."]
+    page.route("**/run/stream*", lambda route: route.fulfill(
+        status=200, content_type="text/event-stream", body=_sse_body(events)))
+    _run_seed_in_ui(page)
+    items = page.locator("#stage .verdict-block .assumptions li")
+    assert items.count() == 3
+    assert [items.nth(i).inner_text() for i in range(3)] == ["First assumption.", "Second assumption.", "Third assumption."]
+    assert page.locator("#stage .verdict-block .notconsidered li").count() == 2
+    page.unroute("**/run/stream*")
+
+
+def test_no_raw_field_name_appears_in_user_facing_text(page):
+    """Checked on the seed run, a nothing-stated run and a licence-mentioned-
+    but-unconfirmed run: the stage (lanes + verdict panel) may show human
+    labels only -- no `snake_case` identifier and no `agent.field`. (The
+    developer inspector, a collapsed <details>, deliberately shows the raw
+    trace and is outside this check.)"""
+    _run_seed_in_ui(page)
+    seed_text = page.inner_text("#stage")
+    _free_text_run_in_ui(page, "Please advise on this vague request; no figures are given at all.")
+    vague_text = page.inner_text("#stage")
+    _free_text_run_in_ui(page, "We are still checking whether the licence will be ready for the earlier date.")
+    unclear_text = page.inner_text("#stage")
+    for name, text in (("seed", seed_text), ("vague", vague_text), ("unclear", unclear_text)):
+        assert not _RAW.search(text), f"{name}: raw name leaked: {_RAW.search(text).group(0)!r}"
+    assert "licence provisioned for the new date" in unclear_text.lower()
+    assert "supplier cost increase (%)" in vague_text.lower()
+
+
+def test_verdict_panel_headline_is_the_recommendation_only_and_facts_move_to_their_own_block(page):
+    _free_text_run_in_ui(page, "We are still checking whether the licence will be ready for the earlier date.")
+    panel = page.locator("#stage .verdict-block")
+    headline = panel.locator(".rec").inner_text()
+    assert headline == "Proceed only after confirming the blocker-related facts listed below."
+    assert "licence" not in headline.lower()
+
+    # DOM order: headline, then the not-checked block, then WHY / KEY TRADE-OFF / ASSUMPTIONS / NOT CONSIDERED
+    order = panel.evaluate("""el => [...el.querySelectorAll('.rec, .notchecked, .kv')].map(n => n.className.split(' ')[0])""")
+    assert order == ["rec", "notchecked", "kv"]
+    assert panel.locator(".notchecked h4").inner_text().lower() == "not checked — not stated in the brief"
+    labels = [t.lower() for t in panel.locator(".kv dt").all_inner_texts()]
+    assert labels == ["why", "key trade-off", "assumptions", "not considered"]
+
+    # the confirm-first line leads the block (first thing after its heading)
+    first_after_heading = panel.locator(".notchecked").evaluate("el => el.children[1].className")
+    assert "confirmfirst" in first_after_heading
+    assert "licence provisioned for the new date" in panel.locator(".confirmfirst").inner_text()
+    assert "Operations" in panel.locator(".confirmfirst").inner_text()
+
+    # grouped by agent, blocker-related agent first; blocker facts before the rest within a group
+    agents = panel.locator(".ncgroup .an").all_inner_texts()
+    assert agents[0] == "Operations" and sorted(agents) == sorted(["Operations", "Delivery", "Finance", "PMO"])
+    ops_items = panel.locator(".ncgroup").first.locator("li").all_inner_texts()
+    assert ops_items[0].lower().startswith("licence provisioned for the new date")
+    assert "mentioned, not confirmed" in ops_items[0].lower()
+
+
+def test_not_checked_block_without_an_unclear_blocker_fact_has_no_confirm_first_line(page):
+    _free_text_run_in_ui(page, "Please advise on this vague request; no figures are given at all.")
+    panel = page.locator("#stage .verdict-block")
+    assert panel.locator(".notchecked").count() == 1
+    assert panel.locator(".confirmfirst").count() == 0
+    assert panel.locator(".rec").inner_text() == "No rule triggered on stated facts."
+
+
+def test_fully_stated_seed_has_no_not_checked_block(page):
+    _run_seed_in_ui(page)
+    assert page.locator("#stage .verdict-block .notchecked").count() == 0
+    assert page.locator("#stage .verdict-block .rec").inner_text().startswith("Decline as currently scoped")

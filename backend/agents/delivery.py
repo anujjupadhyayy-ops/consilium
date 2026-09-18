@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any, ClassVar, Literal, Type
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from .base import AgentConfig, ConfigurableAgent
 
@@ -22,17 +22,17 @@ class DeliveryConfig(AgentConfig):
 class DeliveryFacts(BaseModel):
     # Neutral/no-concern defaults -- used when the Chief of Staff's LLM
     # extraction is unavailable and evaluation must degrade gracefully.
-    budget: float = 100_000.0
-    actual_pct: float = 0.5  # 0-1: proportion of budget's worth of work done
-    schedule_pct: float = 0.5  # 0-1: proportion of work planned to be done by now
-    spend_to_date: float = 50_000.0
-    slip_days_before_change: float = 0.0
-    is_resourced: bool = True
-    is_on_critical_path: bool = False
-    is_revenue_tagged: bool = False
-    revenue_value: float = 0.0
-    reported_rag_before: RAG = "green"
-    reported_rag_after: RAG = "green"  # if the proposed change is accepted
+    budget: float = Field(100_000.0, title="milestone budget")
+    actual_pct: float = Field(0.5, title="work completed so far (share of budget)")  # 0-1
+    schedule_pct: float = Field(0.5, title="work planned to be done by now (share)")  # 0-1
+    spend_to_date: float = Field(50_000.0, title="spend to date")
+    slip_days_before_change: float = Field(0.0, title="days behind schedule before the change")
+    is_resourced: bool = Field(True, title="milestone is resourced")
+    is_on_critical_path: bool = Field(False, title="milestone is on the critical path")
+    is_revenue_tagged: bool = Field(False, title="milestone is revenue-tagged")
+    revenue_value: float = Field(0.0, title="revenue tied to the milestone")
+    reported_rag_before: RAG = Field("green", title="reported RAG status before the change")
+    reported_rag_after: RAG = Field("green", title="reported RAG status after the change")  # if accepted
 
 
 class DeliveryAgent(ConfigurableAgent):

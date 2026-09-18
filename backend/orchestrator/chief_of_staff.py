@@ -203,62 +203,84 @@ def _apply_verdict_cap(reconciliation: Reconciliation, checks: dict) -> Reconcil
     -- never inferred from the model's wording). Two levels, only reached
     when no stance-blocker actually fired (that case is already the
     strictest possible verdict via _enforce_blocker_policy and takes
-    priority): a blocker-relevant field that's `unclear` (mentioned, not
-    confirmed) caps the verdict at "proceed only after confirming"; one
-    that's simply not in the brief at all still lets the verdict proceed on
-    stated facts, but must disclose it rather than present a clean approve.
+    priority):
+
+    - a blocker-relevant fact that's `unclear` (mentioned, not confirmed)
+      caps the verdict at "proceed only after confirming". The HEADLINE says
+      only that; which facts to confirm are listed in the structured
+      `not_checked` block (see _not_checked_block), by human label.
+    - a blocker fact that's simply not in the brief leaves the headline as
+      it is -- the verdict may proceed on stated facts -- and is disclosed
+      in the same `not_checked` block, which the panel always shows, so it
+      is never presented as a clean approve.
     """
-    unclear_fields, not_mentioned_fields = _blocker_field_lists(checks)
+    unclear_fields, _not_mentioned = _blocker_field_lists(checks)
 
     if unclear_fields:
-        forced = (
-            f"Proceed only after confirming: {', '.join(unclear_fields)}. A blocker-relevant field "
-            "was mentioned in the brief but not confirmed with verified evidence, so the verdict "
-            "cannot be an unconditional approve until it is."
-        )
         return Reconciliation(
-            recommendation=forced,
-            why=reconciliation["why"],
+            recommendation="Proceed only after confirming the blocker-related facts listed below.",
+            why=(
+                f"{reconciliation['why']} A blocker-relevant fact was mentioned in the brief but not "
+                "confirmed with verified evidence, so the verdict cannot be an unconditional approve until it is."
+            ),
             trade_off=reconciliation["trade_off"],
             assumptions=reconciliation["assumptions"],
             not_considered=reconciliation["not_considered"],
         )
-
-    if not_mentioned_fields:
-        note = f"Not checked (not in the brief): {', '.join(not_mentioned_fields)}."
-        return Reconciliation(
-            recommendation=f"{reconciliation['recommendation']} {note}",
-            why=reconciliation["why"],
-            trade_off=reconciliation["trade_off"],
-            assumptions=reconciliation["assumptions"],
-            not_considered=reconciliation["not_considered"],
-        )
-
     return reconciliation
+
+
+def _not_checked_block(checks: dict) -> dict:
+    """Display data for the verdict panel's "Not checked -- not stated in the
+    brief" block: every fact no rule could be checked on, grouped by agent,
+    by HUMAN label (the facts model's title), blocker-related facts first
+    within each agent (unclear before not-mentioned). `confirm_first` lists
+    the blocker facts that were mentioned but unconfirmed -- the panel leads
+    with it. Never feeds a stance or the verdict's direction."""
+    confirm_first: list[dict] = []
+    groups: list[dict] = []
+    for agent_id, check in checks.items():
+        labels = check.get("labels", {})
+
+        def label(field: str) -> str:
+            return labels.get(field) or field.replace("_", " ")
+
+        unclear = list(check.get("unclear", []))
+        not_mentioned = [f for f in check.get("blocker_not_mentioned", []) if f not in unclear]
+        blocker_related = set(unclear) | set(not_mentioned)
+        others = sorted((f for f in check.get("unchecked", []) if f not in blocker_related), key=label)
+
+        items = (
+            [{"field": f, "label": label(f), "blocker": True, "unclear": True} for f in unclear]
+            + [{"field": f, "label": label(f), "blocker": True, "unclear": False} for f in not_mentioned]
+            + [{"field": f, "label": label(f), "blocker": False, "unclear": False} for f in others]
+        )
+        if items:
+            groups.append({"agent": agent_id, "items": items})
+        confirm_first += [{"agent": agent_id, "field": f, "label": label(f)} for f in unclear]
+    return {"confirm_first": confirm_first, "groups": groups}
 
 
 def _no_trigger_reconciliation(checks: dict) -> Reconciliation:
     """P3.6 §5.6: no agent's rules fired on the facts as stated. Not an
-    approval -- the absence of a triggered concern, disclosed alongside
-    whatever couldn't be checked or was left unclear."""
-    unchecked: list[str] = []
-    unclear: list[str] = []
-    for agent_id, check in checks.items():
-        unchecked += [f"{agent_id}.{f}" for f in check.get("unchecked", [])]
-        unclear += [f"{agent_id}.{f}" for f in check.get("unclear", [])]
+    approval -- the absence of a triggered concern. What couldn't be checked
+    is listed in the verdict panel's structured block, not spelled out here."""
+    any_unchecked = any(c.get("unchecked") for c in checks.values())
 
     why = "Every agent checked its rules against the facts available and none fired."
-    if unchecked:
-        why += f" Couldn't check: {', '.join(unchecked)}."
-    if unclear:
-        why += f" Unclear: {', '.join(unclear)}."
+    if any_unchecked:
+        why += " Some facts could not be checked -- they are listed below."
 
     return Reconciliation(
         recommendation="No rule triggered on stated facts.",
         why=why,
         trade_off="Not assessable -- no rule fired to name a trade-off.",
         assumptions=["No agent's rules were triggered by the facts as stated."],
-        not_considered=unchecked or ["Nothing outstanding -- every referenced field was stated and checked."],
+        not_considered=(
+            ["The facts listed under \"Not checked\" -- no rule could be evaluated on them."]
+            if any_unchecked
+            else ["Nothing outstanding -- every referenced fact was stated and checked."]
+        ),
     )
 
 
@@ -290,6 +312,8 @@ def reconcile_node(state: ConsiliumState) -> dict:
         reconciliation = _enforce_blocker_policy(reconciliation, blockers)
         if not blockers:
             reconciliation = _apply_verdict_cap(reconciliation, checks)
+
+    reconciliation = Reconciliation(**{**reconciliation, "not_checked": _not_checked_block(checks)})
 
     conflict_event = make_trace_event(step, "conflict", None, conflict["summary"], dict(conflict))
     reconciliation_event = make_trace_event(
