@@ -205,7 +205,10 @@ class ConfigurableAgent(ABC):
         except LLMUnavailableError:
             return {}, {}
 
-        verified = verify_extraction(result, message, allowed_fields=set(fields.keys()))
+        verified = verify_extraction(
+            result, message, allowed_fields=set(fields.keys()),
+            field_types={name: info.annotation for name, info in fields.items()},
+        )
         raw_facts = {field: v["value"] for field, v in verified.items()}
         evidence = {field: v["evidence"] for field, v in verified.items()}
         return raw_facts, evidence

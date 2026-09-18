@@ -165,6 +165,9 @@ def test_cross_paragraph_fact_accepted_with_both_quotes(monkeypatch):
 
 
 def test_wrong_type_is_discarded_run_continues(monkeypatch):
+    """A string for a numeric field (with a perfectly valid quote) must be
+    discarded -- otherwise it would reach a rule comparison and crash it --
+    while a correctly-typed sibling field survives."""
     def fake_call_structured(system, user, response_model, config=None, temperature=0.2):
         return ExtractionResult(fields={
             "supplier_cost_increase_pct": ExtractedValue(value="fifteen percent-ish", evidence=["fifteen percent-ish"]),
@@ -173,10 +176,30 @@ def test_wrong_type_is_discarded_run_continues(monkeypatch):
 
     monkeypatch.setattr("model.llm.call_structured", fake_call_structured)
     raw_facts, evidence = _agent().extract_facts("fifteen percent-ish, 6 points of margin erosion")
-    # both fields are pydantic Union[float,int,bool,str] so a string "value" isn't
-    # itself rejected by ExtractedValue -- the OUT-OF-SCHEMA-KEY case is what's
-    # actually dropped, exercised below. Both values survive verification here.
+    assert "supplier_cost_increase_pct" not in raw_facts
     assert raw_facts["margin_erosion_pts"] == 6.0
+
+
+def test_boolean_for_a_numeric_field_and_a_number_for_a_boolean_field_are_discarded():
+    from agents.evidence import value_matches_type
+
+    assert not value_matches_type(True, float)
+    assert not value_matches_type(1, bool)
+    assert value_matches_type(False, bool) and value_matches_type(3, float)
+
+
+def test_pmo_dict_shaped_variance_fact_can_be_extracted_with_evidence(monkeypatch):
+    from agents.pmo import PMOAgent, PMOConfig
+
+    def fake_call_structured(system, user, response_model, config=None, temperature=0.2):
+        return ExtractionResult(fields={
+            "tolerance_variances_pct": ExtractedValue(value={"cost": 15.0}, evidence=["a 15% cost increase"]),
+        })
+
+    monkeypatch.setattr("model.llm.call_structured", fake_call_structured)
+    agent = PMOAgent(agent_id="pmo", config=PMOConfig(lens="t", rules_summary=[]))
+    raw, ev = agent.extract_facts("The supplier wants a 15% cost increase.")
+    assert raw == {"tolerance_variances_pct": {"cost": 15.0}} and ev["tolerance_variances_pct"]
 
 
 def test_out_of_schema_key_is_dropped_run_continues(monkeypatch):
