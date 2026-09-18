@@ -262,7 +262,7 @@
   .addform label.wide,.addform .addact{grid-column:1/-1}
   .addform input{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;padding:7px 9px;font:500 12.5px var(--sans);text-transform:none;letter-spacing:0}
   .addform select{text-transform:none;letter-spacing:0}
-  .addact{display:flex;gap:10px;align-items:center;flex-wrap:wrap} .adderr{font-size:12px;color:var(--crit)}
+  .addact{display:flex;gap:10px;align-items:center;flex-wrap:wrap} .adderr{font-size:12px;color:var(--crit)} .adderr.ok{color:var(--good)}
   .saverow{display:flex;gap:10px;align-items:center;flex-wrap:wrap} .dirty{font:700 10px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--coral)}
   .addrule{align-self:flex-start;border:1px dashed var(--line);background:transparent;color:var(--coral);border-radius:8px;padding:6px 11px;font:700 11.5px var(--sans);cursor:pointer;margin-top:2px}
   .addrule:hover{border-color:var(--coral)}
@@ -801,7 +801,7 @@ function addFormHtml(k){
     <label>Value<span id="af-val-${k}"></span></label>
     <label>Then this agent says<select id="af-stance-${k}">${STANCE_OPTS.map(([s,l])=>`<option value="${s}"${s==="conditional"?" selected":""}>${l}</option>`).join("")}</select></label>
     <label class="wide">Description<input id="af-label-${k}" maxlength="240" placeholder="e.g. Fee uplift is too steep"></label>
-    <div class="addact"><button class="retest" data-addgo="${k}" type="button">Add to list</button><span class="adderr" id="af-err-${k}" role="alert"></span></div></div></details>`;
+    <div class="addact"><button class="retest" data-addgo="${k}" type="button">Add &amp; save rule</button><span class="adderr" id="af-err-${k}" role="alert"></span></div></div></details>`;
 }
 function syncAddForm(k){
   const v=RULES[k], sel=document.getElementById("af-field-"+k); if(!v||!sel) return;
@@ -836,10 +836,10 @@ function specCard(k){
   const a=AGENTS[k];
   const ops=k==="operations"?`<div class="field"><label>Re-test with the early-cutover licence provisioned?</label><span class="toggle"><button data-lic="no" class="on">No</button><button data-lic="yes">Yes</button></span></div>`:"";
   const tag=RULES[k]?`${RULES[k].rules.length} rules`:"rules unavailable";
-  const rulesSec=RULES[k]?`<section class="rulesec"><div class="rlab">Rules — these decide whether ${a.nm} triggers</div>
+  const rulesSec=RULES[k]?`<section class="rulesec"><div class="rlab">Rules — these decide whether ${a.nm} triggers <span class="dirty" id="dirty-${k}" hidden>● Unsaved changes — press Save rules below</span></div>
     <p class="rnote">Edit a rule's description, stance or threshold, add your own, or delete one you added. Saving checks the rules and the next run uses them. Blocker rules are system-governed: only their threshold can change.</p>
     <div class="xrules" id="xr-${k}"></div>${addFormHtml(k)}
-    <div class="fields">${ops}<div class="saverow"><button class="retest" data-retest="${k}">Save rules &amp; re-test on supplier scenario ▸</button><span class="dirty" id="dirty-${k}" hidden>Unsaved changes</span></div><div class="result" id="res-${k}"></div></div></section>`
+    <div class="fields">${ops}<div class="saverow"><button class="retest" data-retest="${k}">Save rules &amp; re-test on supplier scenario ▸</button></div><div class="result" id="res-${k}"></div></div></section>`
     :`<section class="rulesec"><div class="rlab">Rules — these decide whether ${a.nm} triggers</div>
     <p class="rnote unavail" role="alert">Couldn't load this agent's rules from the server, so they can't be shown or edited. The backend is probably running an older version than this page — restart it (then reload) to fix this.</p></section>`;
   return `<div class="ccard"><div class="cch"><span class="ic" style="background:${a.c}">${a.ic}</span><div><div class="nm">${a.nm}</div><div class="ln">${a.lens}</div></div><span class="tag">${tag}</span></div><div class="ccb">
@@ -897,6 +897,26 @@ const UNCHANGED_NOTE="Nothing was changed, so nothing was saved — this is the 
 function showSavedOnly(id,msg){const el=document.getElementById(id);
   el.innerHTML=`<div>${msg}</div><div style="color:var(--muted);margin-top:6px;font-size:11.5px">${WORDING_NOTE}</div>`;el.classList.add("show");}
 
+// Save every pending change on one agent's card (edits, threshold changes, added and deleted
+// rules) with one validated request, then re-test. Returns {ok, error}. Nothing is claimed
+// as saved unless the backend accepted it; on a refusal the draft is kept so it can be fixed.
+async function saveRules(k){
+  const out=document.getElementById("res-"+k); out.classList.remove("show");
+  const dirty=draftDirty(k);
+  if(dirty){
+    const putRes=await fetch(`/agents/${k}/rules`,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(draftBody(k))});
+    if(!putRes.ok){const err=await putRes.json().catch(()=>({})); const msg=err.detail||"Could not save"; showError(`res-${k}`,msg); return {ok:false,error:msg};}
+    RULES[k]=await putRes.json(); DRAFT[k]=draftFromView(RULES[k]); renderRules(k); markDraft(k);
+    const tag=out.closest(".ccard").querySelector(".cch .tag"); if(tag)tag.textContent=`${RULES[k].rules.length} rules`;
+  }
+  const retestBody={agent_id:k};
+  if(k==="operations")retestBody.fact_overrides={licence_provisioned_for_new_date:licState==="yes"};
+  const retestRes=await fetch("/council/retest",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(retestBody)});
+  const pos=await retestRes.json();
+  showResult(`res-${k}`,pos.stance,pos.reasoning||pos.detail,dirty?RULES_NOTE:UNCHANGED_NOTE);
+  return {ok:true};
+}
+
 const councilEl=document.getElementById("council");
 function markDraft(k){const chip=document.getElementById("dirty-"+k);if(chip)chip.hidden=!draftDirty(k);}
 councilEl.addEventListener("input",e=>{
@@ -933,11 +953,18 @@ councilEl.addEventListener("click",async e=>{
   if(rd){const k=rd.dataset.k; DRAFT[k].rows.splice(+rd.dataset.i,1); renderRules(k); return;}
 
   const go=e.target.closest("[data-addgo]");
-  if(go){const k=go.dataset.addgo, err=document.getElementById("af-err-"+k);
-    const {row,err:msg}=freshRow(k); if(msg){err.textContent=msg; return;}
-    err.textContent=""; DRAFT[k].rows.push(row); renderRules(k);
-    document.getElementById("af-label-"+k).value="";
-    const rows=document.querySelectorAll(`#xr-${k} .xrule`); if(rows.length)rows[rows.length-1].scrollIntoView({block:"nearest"});
+  if(go){const k=go.dataset.addgo, msgEl=document.getElementById("af-err-"+k);
+    msgEl.className="adderr"; msgEl.textContent="";
+    const {row,err:msg}=freshRow(k); if(msg){msgEl.textContent=msg; return;}
+    go.disabled=true;
+    try{
+      DRAFT[k].rows.push(row); renderRules(k);
+      const r=await saveRules(k);
+      if(r.ok){ msgEl.className="adderr ok"; msgEl.textContent="✓ Rule saved — the next run uses it.";
+        document.getElementById("af-label-"+k).value=""; }
+      else{ // refused: take it back out of the list so the form is the place to fix it; the reason shows here and below
+        DRAFT[k].rows=DRAFT[k].rows.filter(x=>x!==row); renderRules(k); msgEl.textContent="Not saved — "+r.error; }
+    } finally { go.disabled=false; }
     return;}
 
   const lic=e.target.closest("[data-lic]");
@@ -959,24 +986,7 @@ councilEl.addEventListener("click",async e=>{
   }
 
   const rt=e.target.closest("[data-retest]");
-  if(rt){
-    const k=rt.dataset.retest; rt.disabled=true; document.getElementById("res-"+k).classList.remove("show");
-    try{
-      const dirty=draftDirty(k);
-      if(dirty){
-        const putRes=await fetch(`/agents/${k}/rules`,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(draftBody(k))});
-        if(!putRes.ok){const err=await putRes.json();showError(`res-${k}`,err.detail||"Could not save");return;}  // draft kept so it can be fixed
-        RULES[k]=await putRes.json(); DRAFT[k]=draftFromView(RULES[k]); renderRules(k);
-        const tag=document.querySelector(`#res-${k}`).closest(".ccard").querySelector(".cch .tag"); if(tag)tag.textContent=`${RULES[k].rules.length} rules`;
-      }
-      const retestBody={agent_id:k};
-      if(k==="operations")retestBody.fact_overrides={licence_provisioned_for_new_date:licState==="yes"};
-      const retestRes=await fetch("/council/retest",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(retestBody)});
-      const pos=await retestRes.json();
-      showResult(`res-${k}`,pos.stance,pos.reasoning||pos.detail,dirty?RULES_NOTE:UNCHANGED_NOTE);
-    } finally { rt.disabled=false; }
-    return;
-  }
+  if(rt){ const k=rt.dataset.retest; rt.disabled=true; try{ await saveRules(k); } finally { rt.disabled=false; } return; }
 });
 document.getElementById("council").addEventListener("click",async e=>{
   const b=e.target.closest("#cos-save"); if(!b) return;

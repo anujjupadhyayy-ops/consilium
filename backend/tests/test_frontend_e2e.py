@@ -529,6 +529,20 @@ def _rules_of(base_url, agent):
         return _json.loads(r.read())["rules"]
 
 
+def _add_rule_via_form(page, agent, field_label, op, value, stance, description):
+    """Fill the guided form and press its one button ('Add & save rule')."""
+    page.locator(f"#ab-{agent} summary").click()
+    page.select_option(f"#af-field-{agent}", label=field_label)
+    page.select_option(f"#af-op-{agent}", value=op)
+    page.fill(f"#af-value-{agent}", str(value))
+    page.select_option(f"#af-stance-{agent}", stance)
+    page.fill(f"#af-label-{agent}", description)
+    page.click(f"[data-addgo='{agent}']")
+    page.wait_for_function(
+        f"document.getElementById('af-err-{agent}').textContent.trim() !== '' && !document.querySelector(\"[data-addgo='{agent}']\").disabled")
+    return page.inner_text(f"#af-err-{agent}")
+
+
 def _rule_descriptions(page, agent):
     """The editable descriptions on a card (they live in inputs, so not in inner_text)."""
     return page.eval_on_selector_all(f"#xr-{agent} .rlabel", "els => els.map(e => e.value)")
@@ -604,21 +618,19 @@ def test_editing_a_finance_rule_so_it_triggers_on_the_15pct_supplier_uplift(page
         _restore_finance(page)
 
 
-def test_adding_a_rule_through_the_form_persists_and_fires_in_the_next_run(page, base_url):
+def test_adding_a_rule_through_the_form_saves_in_one_click_and_fires_in_the_next_run(page, base_url):
     try:
         _council_finance(page)
         page.fill("#cf-supplier", "50")                             # so only the new rule can trip Finance
-        page.locator("#ab-finance summary").click()
-        page.select_option("#af-field-finance", label="Supplier cost increase (%)")
-        page.select_option("#af-op-finance", value=">")
-        page.fill("#af-value-finance", "12")
-        page.select_option("#af-stance-finance", "conditional")
-        page.fill("#af-label-finance", "Fee uplift above twelve per cent")
-        page.click("[data-addgo='finance']")
-        assert "new · unsaved" in page.inner_text("#xr-finance").lower()
-        assert not any(r["user_added"] for r in _rules_of(base_url, "finance"))   # not saved until Save
-        assert "Saved." in _save_rules(page, "finance")
-        assert any(r["label"] == "Fee uplift above twelve per cent" for r in _rules_of(base_url, "finance"))
+        page.click("[data-retest='finance']")
+        page.wait_for_selector("#res-finance.show")
+        assert not any(r["user_added"] for r in _rules_of(base_url, "finance"))
+        msg = _add_rule_via_form(page, "finance", "Supplier cost increase (%)", ">", 12, "conditional",
+                                 "Fee uplift above twelve per cent")
+        assert "Rule saved" in msg                                   # confirmed near the form ...
+        assert any(r["label"] == "Fee uplift above twelve per cent" for r in _rules_of(base_url, "finance"))  # ... and really stored
+        assert "unsaved" not in page.inner_text("#xr-finance").lower()          # nothing left pending
+        assert page.locator("#dirty-finance").is_hidden()
 
         page.reload()                                               # survives a reload: it came from the backend
         _council_finance(page)
@@ -631,16 +643,38 @@ def test_adding_a_rule_through_the_form_persists_and_fires_in_the_next_run(page,
         _restore_finance(page)
 
 
+def test_adding_supplier_cost_increase_above_5_percent_as_no_is_saved_not_left_pending(page, base_url):
+    """The reported scenario: one press of the add button must persist the rule
+    -- it must not sit as 'new - unsaved' waiting for a second, distant button."""
+    try:
+        _council_finance(page)
+        msg = _add_rule_via_form(page, "finance", "Supplier cost increase (%)", ">", 5, "no",
+                                 "Supplier Cost Increase more than 5%")
+        assert "Rule saved" in msg
+        stored = [r for r in _rules_of(base_url, "finance") if r["user_added"]]
+        assert len(stored) == 1 and stored[0]["stance"] == "no" and stored[0]["condition_text"] == "Supplier cost increase (%) is above 5%"
+        assert "new · unsaved" not in page.inner_text("#xr-finance").lower()
+        assert page.locator("#xr-finance .newtag.saved").count() == 1    # shown as 'your rule'
+    finally:
+        _restore_finance(page)
+
+
+def test_pending_edits_are_flagged_next_to_the_rules_heading_until_saved(page):
+    _council_finance(page)
+    assert page.locator("#dirty-finance").is_hidden()
+    page.locator("#xr-finance .xrule:has(#cf-supplier) .rstance").select_option("conditional")
+    assert page.locator("#dirty-finance").is_visible()
+    assert "unsaved changes" in page.inner_text("#dirty-finance").lower()
+    page.locator("#xr-finance .xrule:has(#cf-supplier) .rstance").select_option("no")     # back to saved state
+    assert page.locator("#dirty-finance").is_hidden()
+
+
 def test_only_rules_you_added_can_be_deleted(page, base_url):
     try:
         _council_finance(page)
         assert page.locator("#xr-finance .rdel").count() == 0            # shipped rules: no delete control
-        page.locator("#ab-finance summary").click()
-        page.fill("#af-value-finance", "3")
-        page.fill("#af-label-finance", "Mine")
-        page.click("[data-addgo='finance']")
+        _add_rule_via_form(page, "finance", "Supplier cost increase (%)", ">", 3, "no", "Mine")
         assert page.locator("#xr-finance .rdel").count() == 1
-        _save_rules(page, "finance")
         assert any(r["user_added"] for r in _rules_of(base_url, "finance"))
         page.locator("#xr-finance .rdel").click()
         _save_rules(page, "finance")
@@ -654,16 +688,15 @@ def test_invalid_input_shows_the_backends_reason_and_does_not_save(page, base_ur
     try:
         before = _rules_of(base_url, "finance")
         _council_finance(page)
-        page.locator("#ab-finance summary").click()
-        page.select_option("#af-field-finance", label="Financial-year month the forecast is read in")
-        page.fill("#af-value-finance", "99")                        # a month can't be 99
-        page.fill("#af-label-finance", "Impossible month")
-        page.click("[data-addgo='finance']")
-        text = _save_rules(page, "finance")
-        assert "not saved" in text.lower() and "out of range" in text and "between 1 and 12" in text
-        assert "Saved." not in text and "checks with these rules" not in text     # never claims a save
+        msg = _add_rule_via_form(page, "finance", "Financial-year month the forecast is read in", ">", 99, "no", "Impossible month")
+        below = page.inner_text("#res-finance")
+        for text in (msg, below):                                    # the reason is shown at the form and in the result
+            assert "out of range" in text and "between 1 and 12" in text
+        assert msg.startswith("Not saved") and "not saved" in below.lower()
+        assert "Saved." not in below and "Rule saved" not in msg      # never claims a save
         assert _rules_of(base_url, "finance") == before
-        assert "Impossible month" in _rule_descriptions(page, "finance")          # the draft stays so it can be fixed
+        assert "Impossible month" not in _rule_descriptions(page, "finance")      # not left in the list ...
+        assert page.input_value("#af-label-finance") == "Impossible month"        # ... the form keeps what was typed, to fix
         page.reload()
         _council_finance(page)
         assert "Impossible month" not in _rule_descriptions(page, "finance")      # and it really wasn't stored
