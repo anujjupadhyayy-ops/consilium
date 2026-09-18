@@ -27,63 +27,135 @@
     {
       "id": "capacity_red",
       "description": "capacity utilisation {capacity_utilisation_pct_if_accepted:g}% (>={capacity_red_threshold_pct:g}% red line)",
-      "fields": ["capacity_utilisation_pct_if_accepted"],
+      "fields": [
+        "capacity_utilisation_pct_if_accepted"
+      ],
       "when": "capacity_utilisation_pct_if_accepted >= capacity_red_threshold_pct",
       "stance": "blocker",
-      "keywords": ["capacity", "headcount", "overtime"]
+      "keywords": [
+        "capacity",
+        "headcount",
+        "overtime"
+      ],
+      "label": "Capacity is at the red line",
+      "threshold": {
+        "key": "capacity_red_threshold_pct",
+        "label": "capacity red line",
+        "unit": "%"
+      }
     },
     {
       "id": "spend_red",
       "description": "third-party spend {third_party_spend_pct_of_budget:g}% of budget (>={spend_red_threshold_pct:g}% red line)",
-      "fields": ["third_party_spend_pct_of_budget"],
+      "fields": [
+        "third_party_spend_pct_of_budget"
+      ],
       "when": "third_party_spend_pct_of_budget >= spend_red_threshold_pct",
       "stance": "blocker",
-      "keywords": ["third-party spend", "third party spend", "3pp"]
+      "keywords": [
+        "third-party spend",
+        "third party spend",
+        "3pp"
+      ],
+      "label": "Third-party spend is at the red line",
+      "threshold": {
+        "key": "spend_red_threshold_pct",
+        "label": "spend red line",
+        "unit": "%"
+      }
     },
     {
       "id": "savings_red",
       "description": "savings delivery ratio {savings_delivery_ratio:g} (<{savings_red_threshold_ratio:g} red line)",
-      "fields": ["savings_delivery_ratio"],
+      "fields": [
+        "savings_delivery_ratio"
+      ],
       "when": "savings_delivery_ratio < savings_red_threshold_ratio",
       "stance": "blocker",
-      "keywords": ["savings", "cost reduction"]
+      "keywords": [
+        "savings",
+        "cost reduction"
+      ],
+      "label": "Savings delivery is below the red line",
+      "threshold": {
+        "key": "savings_red_threshold_ratio",
+        "label": "savings red line",
+        "unit": "ratio"
+      }
     },
     {
       "id": "licence_not_provisioned",
       "description": "licence not provisioned for the new date",
-      "fields": ["licence_provisioned_for_new_date"],
+      "fields": [
+        "licence_provisioned_for_new_date"
+      ],
       "when": "licence_provisioned_for_new_date == False",
       "stance": "blocker",
-      "keywords": ["licence", "license", "provisioned"]
+      "keywords": [
+        "licence",
+        "license",
+        "provisioned"
+      ],
+      "label": "Licence isn't provisioned for the new date"
     },
     {
       "id": "supplier_sla_not_in_place",
       "description": "supplier SLA not in place",
-      "fields": ["supplier_sla_in_place"],
+      "fields": [
+        "supplier_sla_in_place"
+      ],
       "when": "supplier_sla_in_place == False",
       "stance": "blocker",
-      "keywords": ["sla", "service level"]
+      "keywords": [
+        "sla",
+        "service level"
+      ],
+      "label": "No supplier SLA is in place"
     },
     {
       "id": "capacity_amber",
       "description": "capacity utilisation {capacity_utilisation_pct_if_accepted:g}% (>={capacity_amber_threshold_pct:g}% amber line)",
-      "fields": ["capacity_utilisation_pct_if_accepted"],
+      "fields": [
+        "capacity_utilisation_pct_if_accepted"
+      ],
       "when": "capacity_utilisation_pct_if_accepted >= capacity_amber_threshold_pct and capacity_utilisation_pct_if_accepted < capacity_red_threshold_pct",
-      "stance": "conditional"
+      "stance": "conditional",
+      "label": "Capacity is in the amber band",
+      "threshold": {
+        "key": "capacity_amber_threshold_pct",
+        "label": "capacity amber line",
+        "unit": "%"
+      }
     },
     {
       "id": "spend_amber",
       "description": "third-party spend {third_party_spend_pct_of_budget:g}% of budget (>={spend_amber_threshold_pct:g}% amber line)",
-      "fields": ["third_party_spend_pct_of_budget"],
+      "fields": [
+        "third_party_spend_pct_of_budget"
+      ],
       "when": "third_party_spend_pct_of_budget >= spend_amber_threshold_pct and third_party_spend_pct_of_budget < spend_red_threshold_pct",
-      "stance": "conditional"
+      "stance": "conditional",
+      "label": "Third-party spend is in the amber band",
+      "threshold": {
+        "key": "spend_amber_threshold_pct",
+        "label": "spend amber line",
+        "unit": "%"
+      }
     },
     {
       "id": "savings_amber",
       "description": "savings delivery ratio {savings_delivery_ratio:g} (<{savings_amber_threshold_ratio:g} amber line)",
-      "fields": ["savings_delivery_ratio"],
+      "fields": [
+        "savings_delivery_ratio"
+      ],
       "when": "savings_delivery_ratio < savings_amber_threshold_ratio and savings_delivery_ratio >= savings_red_threshold_ratio",
-      "stance": "conditional"
+      "stance": "conditional",
+      "label": "Savings delivery is in the amber band",
+      "threshold": {
+        "key": "savings_amber_threshold_ratio",
+        "label": "savings amber line",
+        "unit": "ratio"
+      }
     }
   ]
 }

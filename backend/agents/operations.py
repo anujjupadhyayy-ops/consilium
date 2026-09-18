@@ -35,14 +35,14 @@ class OperationsFacts(BaseModel):
     # gracefully.
     # `description` is plain-English guidance for the extraction prompt.
     capacity_utilisation_pct_if_accepted: float = Field(
-        50.0, title="capacity utilisation if accepted (%)",
+        50.0, title="capacity utilisation if accepted (%)", json_schema_extra={"min": 0, "max": 1000},
         description="How full the team's capacity would be if the change is accepted, as a percentage "
                     "(e.g. 'we would be at 95% utilisation' is 95).")
     third_party_spend_pct_of_budget: float = Field(
-        50.0, title="third-party spend (% of budget)",
+        50.0, title="third-party spend (% of budget)", json_schema_extra={"min": 0, "max": 1000},
         description="Third-party (3PP) spend as a percentage of its budget (e.g. 'spent 88% of the 3PP budget' is 88).")
     savings_delivery_ratio: float = Field(
-        1.0, title="savings delivered vs committed (ratio)",
+        1.0, title="savings delivered vs committed (ratio)", json_schema_extra={"min": 0, "max": 10},
         description="Savings delivered divided by savings committed, as a ratio (e.g. delivered 70% of the "
                     "committed savings is 0.7).")
     licence_provisioned_for_new_date: bool = Field(

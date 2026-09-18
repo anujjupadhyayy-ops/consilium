@@ -39,20 +39,20 @@ class FinanceFacts(BaseModel):
     # prompt: it says what the fact means and the everyday phrasings it
     # appears under, so a differently-worded brief still maps to the field.
     margin_erosion_pts: float = Field(
-        0.0, title="project margin erosion (points)",
+        0.0, title="project margin erosion (points)", json_schema_extra={"min": -100, "max": 100},
         description="How many percentage points the project's margin would fall by if the change goes ahead "
                     "(e.g. 'margin drops from 22% to 15%' is 7).")
     supplier_cost_increase_pct: float = Field(
-        0.0, title="supplier cost increase (%)",
+        0.0, title="supplier cost increase (%)", json_schema_extra={"min": -100, "max": 1000},
         description="The percentage by which a supplier is raising what it charges us, however it is worded: "
                     "price rise, cost increase, fee or rate uplift, or '15% on our fee' / 'a 15% uplift on our fee' "
                     "(all mean 15). A percentage only -- do not work it out from amounts.")
     budget_forecast_utilisation_pct: float = Field(
-        50.0, title="full-year 3PP forecast (% of budget)",
+        50.0, title="full-year 3PP forecast (% of budget)", json_schema_extra={"min": 0, "max": 1000},
         description="The full-year forecast spend on third-party (3PP) suppliers as a percentage of the annual 3PP "
                     "budget (e.g. 'forecasting 92% of budget' is 92).")
     fy_month_elapsed: int = Field(
-        6, title="financial-year month the forecast is read in",
+        6, title="financial-year month the forecast is read in", json_schema_extra={"min": 1, "max": 12},
         description="Which month of the financial year the forecast is read in, counting from 1 "
                     "(e.g. 'month 4', or 'four months in' is 4).")
 
@@ -83,6 +83,10 @@ class FinanceAgent(ConfigurableAgent):
 
     def derived_field_names(self) -> set[str]:
         return {"hard_breach_threshold_pct", "forecast_concern_threshold_pct"}
+
+    def derived_labels(self) -> dict[str, str]:
+        return {"hard_breach_threshold_pct": "the hard-breach line",
+                "forecast_concern_threshold_pct": "the early-warning line for that month"}
 
     def _early_late_threshold(self, month_elapsed: int) -> float:
         cfg: FinanceConfig = self.config

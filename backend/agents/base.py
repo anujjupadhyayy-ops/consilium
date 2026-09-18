@@ -4,9 +4,9 @@ import json
 import re
 from dataclasses import replace
 from abc import ABC
-from typing import Any, ClassVar, Literal, Optional, Type
+from typing import Any, ClassVar, Literal, Optional, Type, Union
 
-from pydantic import BaseModel, Field, field_validator, model_validator
+from pydantic import BaseModel, Field, StrictBool, StrictFloat, StrictInt, StrictStr, field_validator, model_validator
 
 from orchestrator.state import AgentPosition, Check, ConsiliumState
 from orchestrator.trace import make_trace_event, next_step
@@ -22,6 +22,28 @@ MAX_RULES = 12
 MAX_RULE_LENGTH = 240
 
 STANCE_VERB = {"yes": "Yes", "conditional": "Conditional", "no": "No", "blocker": "Blocked"}
+
+
+class RuleThreshold(BaseModel):
+    """Which config scalar a shipped rule compares against, so the Council UI
+    can offer it as that rule's editable threshold. `key` is a config field
+    name, or `field.subkey` for one entry of a dict-shaped field (PMO's
+    tolerances_pct). Only ever names a config value that already exists --
+    editing it goes through the same bounded config validation as before."""
+
+    key: str
+    label: str
+    unit: str = ""
+
+
+class RuleCondition(BaseModel):
+    """The structured form of a USER-ADDED rule: a fact field, one of six
+    comparison operators, and a typed value. The rule's `when` is generated
+    from this in code (rule_edit.build_when) -- never typed by a user."""
+
+    field: str
+    op: Literal[">", ">=", "<", "<=", "==", "!="]
+    value: Union[StrictBool, StrictInt, StrictFloat, StrictStr]
 
 
 class RuleConfig(BaseModel):
@@ -40,6 +62,15 @@ class RuleConfig(BaseModel):
     when: str
     stance: Literal["yes", "conditional", "no", "blocker"]
     keywords: list[str] = []
+    # Plain-English name shown (and edited) in the Council tab -- no template
+    # variables. For a rule a user edited or added, `description` is this same
+    # text with braces escaped, so the fired-rule text a run shows is what they wrote.
+    label: str = ""
+    # Shipped rules: the config scalar offered as the editable threshold.
+    threshold: Optional[RuleThreshold] = None
+    # User-added rules only (see rule_edit.enforce_rule_policy).
+    user_added: bool = False
+    condition: Optional[RuleCondition] = None
 
     @model_validator(mode="after")
     def _blocker_requires_keywords(self) -> "RuleConfig":
@@ -134,6 +165,12 @@ class ConfigurableAgent(ABC):
         (rules_summary, trigger_keywords, rules, ...) are naturally
         excluded (isinstance below is False for both)."""
         return {k: v for k, v in self.config.model_dump().items() if isinstance(v, (int, float, bool, str))}
+
+    def derived_labels(self) -> dict[str, str]:
+        """Plain-English names for the derived values a rule can mention, so
+        the Council tab can describe a condition without showing an internal
+        name. Override alongside derive()."""
+        return {}
 
     def allowed_rule_names(self) -> set[str]:
         return set(self.facts_model.model_fields.keys()) | self.derived_field_names() | set(self._config_scalar_env().keys())

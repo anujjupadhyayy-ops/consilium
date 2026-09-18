@@ -24,21 +24,21 @@ class DeliveryFacts(BaseModel):
     # extraction is unavailable and evaluation must degrade gracefully.
     # `description` is plain-English guidance for the extraction prompt.
     budget: float = Field(
-        100_000.0, title="milestone budget",
+        100_000.0, title="milestone budget", json_schema_extra={"min": 0, "max": 1000000000000},
         description="The total budget of the milestone, as a plain number in the currency used (no symbol).")
     actual_pct: float = Field(  # 0-1
-        0.5, title="work completed so far (share of budget)",
+        0.5, title="work completed so far (share of budget)", json_schema_extra={"min": 0, "max": 1},
         description="How much of the milestone's work is done so far, as a fraction between 0 and 1 "
                     "(e.g. '40% complete' is 0.4).")
     schedule_pct: float = Field(  # 0-1
-        0.5, title="work planned to be done by now (share)",
+        0.5, title="work planned to be done by now (share)", json_schema_extra={"min": 0, "max": 1},
         description="How much of the milestone's work the plan says should be done by now, as a fraction "
                     "between 0 and 1 (e.g. 'should be 60% complete' is 0.6).")
     spend_to_date: float = Field(
-        50_000.0, title="spend to date",
+        50_000.0, title="spend to date", json_schema_extra={"min": 0, "max": 1000000000000},
         description="Money already spent on the milestone so far, as a plain number in the currency used.")
     slip_days_before_change: float = Field(
-        0.0, title="days behind schedule before the change",
+        0.0, title="days behind schedule before the change", json_schema_extra={"min": 0, "max": 3650},
         description="How many days the milestone is already behind its planned date before the proposed change.")
     is_resourced: bool = Field(
         True, title="milestone is resourced",
@@ -50,7 +50,7 @@ class DeliveryFacts(BaseModel):
         False, title="milestone is revenue-tagged",
         description="True if revenue is tied to the milestone being completed (e.g. an invoicing or payment milestone).")
     revenue_value: float = Field(
-        0.0, title="revenue tied to the milestone",
+        0.0, title="revenue tied to the milestone", json_schema_extra={"min": 0, "max": 1000000000000},
         description="The amount of revenue that depends on this milestone, as a plain number in the currency used.")
     reported_rag_before: RAG = Field(
         "green", title="reported RAG status before the change",
@@ -112,6 +112,17 @@ class DeliveryAgent(ConfigurableAgent):
             "crar_direction": "reduced" if reduction > 0 else ("increased" if reduction < 0 else "unchanged"),
         })
         return derived
+
+    def derived_labels(self) -> dict[str, str]:
+        return {
+            "rag_before_severity": "RAG severity before the change",
+            "rag_after_severity": "RAG severity after the change",
+            "crar_before": "Critical Revenue at Risk before the change (£)",
+            "crar_after": "Critical Revenue at Risk after the change (£)",
+            "crar_reduction": "reduction in Critical Revenue at Risk (£)",
+            "crar_abs_reduction": "size of the change in Critical Revenue at Risk (£)",
+            "crar_direction": "direction of the change in Critical Revenue at Risk",
+        }
 
     def derived_field_names(self) -> set[str]:
         return {

@@ -20,24 +20,48 @@
   "rules": [
     {
       "id": "reduces_critical_revenue_at_risk",
-      "description": "Critical Revenue at Risk {crar_direction} by £{crar_abs_reduction:,.0f} (£{crar_before:,.0f} -> £{crar_after:,.0f})",
-      "fields": ["is_resourced", "is_on_critical_path", "is_revenue_tagged", "revenue_value", "reported_rag_before", "reported_rag_after"],
+      "description": "Critical Revenue at Risk {crar_direction} by \u00a3{crar_abs_reduction:,.0f} (\u00a3{crar_before:,.0f} -> \u00a3{crar_after:,.0f})",
+      "fields": [
+        "is_resourced",
+        "is_on_critical_path",
+        "is_revenue_tagged",
+        "revenue_value",
+        "reported_rag_before",
+        "reported_rag_after"
+      ],
       "when": "crar_reduction > 0",
-      "stance": "yes"
+      "stance": "yes",
+      "label": "The change reduces Critical Revenue at Risk"
     },
     {
       "id": "schedule_improves_but_does_not_reduce_crar",
-      "description": "Critical Revenue at Risk {crar_direction} by £{crar_abs_reduction:,.0f} (£{crar_before:,.0f} -> £{crar_after:,.0f})",
-      "fields": ["is_resourced", "is_on_critical_path", "is_revenue_tagged", "revenue_value", "reported_rag_before", "reported_rag_after"],
+      "description": "Critical Revenue at Risk {crar_direction} by \u00a3{crar_abs_reduction:,.0f} (\u00a3{crar_before:,.0f} -> \u00a3{crar_after:,.0f})",
+      "fields": [
+        "is_resourced",
+        "is_on_critical_path",
+        "is_revenue_tagged",
+        "revenue_value",
+        "reported_rag_before",
+        "reported_rag_after"
+      ],
       "when": "rag_after_severity < rag_before_severity and crar_reduction <= 0",
-      "stance": "conditional"
+      "stance": "conditional",
+      "label": "Schedule improves but Critical Revenue at Risk doesn't fall"
     },
     {
       "id": "no_schedule_improvement",
-      "description": "Critical Revenue at Risk {crar_direction} by £{crar_abs_reduction:,.0f} (£{crar_before:,.0f} -> £{crar_after:,.0f})",
-      "fields": ["is_resourced", "is_on_critical_path", "is_revenue_tagged", "revenue_value", "reported_rag_before", "reported_rag_after"],
+      "description": "Critical Revenue at Risk {crar_direction} by \u00a3{crar_abs_reduction:,.0f} (\u00a3{crar_before:,.0f} -> \u00a3{crar_after:,.0f})",
+      "fields": [
+        "is_resourced",
+        "is_on_critical_path",
+        "is_revenue_tagged",
+        "revenue_value",
+        "reported_rag_before",
+        "reported_rag_after"
+      ],
       "when": "rag_after_severity >= rag_before_severity",
-      "stance": "no"
+      "stance": "no",
+      "label": "The change doesn't improve the schedule"
     }
   ]
 }

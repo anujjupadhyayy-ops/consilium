@@ -39,76 +39,202 @@
     {
       "id": "missing_business_case",
       "description": "Continued business case: not justified",
-      "fields": ["continued_business_case_justified"],
+      "fields": [
+        "continued_business_case_justified"
+      ],
       "when": "continued_business_case_justified == False",
-      "stance": "no"
+      "stance": "no",
+      "label": "The continued business case isn't justified"
     },
     {
       "id": "cost_tolerance_hard_reject",
       "description": "cost variance {tv_cost:+.0f}% vs {tol_cost:g}% tolerance (hard reject)",
-      "fields": ["tv_cost"], "when": "tv_cost > tol_cost_hard_reject", "stance": "no"
+      "fields": [
+        "tv_cost"
+      ],
+      "when": "tv_cost > tol_cost_hard_reject",
+      "stance": "no",
+      "label": "Cost variance is past the hard-reject line",
+      "threshold": {
+        "key": "hard_reject_multiple_of_tolerance",
+        "label": "hard-reject multiple of tolerance (all six dimensions)",
+        "unit": "x"
+      }
     },
     {
       "id": "time_tolerance_hard_reject",
       "description": "time variance {tv_time:+.0f}% vs {tol_time:g}% tolerance (hard reject)",
-      "fields": ["tv_time"], "when": "tv_time > tol_time_hard_reject", "stance": "no"
+      "fields": [
+        "tv_time"
+      ],
+      "when": "tv_time > tol_time_hard_reject",
+      "stance": "no",
+      "label": "Time variance is past the hard-reject line",
+      "threshold": {
+        "key": "hard_reject_multiple_of_tolerance",
+        "label": "hard-reject multiple of tolerance (all six dimensions)",
+        "unit": "x"
+      }
     },
     {
       "id": "scope_tolerance_hard_reject",
       "description": "scope variance {tv_scope:+.0f}% vs {tol_scope:g}% tolerance (hard reject)",
-      "fields": ["tv_scope"], "when": "tv_scope > tol_scope_hard_reject", "stance": "no"
+      "fields": [
+        "tv_scope"
+      ],
+      "when": "tv_scope > tol_scope_hard_reject",
+      "stance": "no",
+      "label": "Scope variance is past the hard-reject line",
+      "threshold": {
+        "key": "hard_reject_multiple_of_tolerance",
+        "label": "hard-reject multiple of tolerance (all six dimensions)",
+        "unit": "x"
+      }
     },
     {
       "id": "risk_tolerance_hard_reject",
       "description": "risk variance {tv_risk:+.0f}% vs {tol_risk:g}% tolerance (hard reject)",
-      "fields": ["tv_risk"], "when": "tv_risk > tol_risk_hard_reject", "stance": "no"
+      "fields": [
+        "tv_risk"
+      ],
+      "when": "tv_risk > tol_risk_hard_reject",
+      "stance": "no",
+      "label": "Risk variance is past the hard-reject line",
+      "threshold": {
+        "key": "hard_reject_multiple_of_tolerance",
+        "label": "hard-reject multiple of tolerance (all six dimensions)",
+        "unit": "x"
+      }
     },
     {
       "id": "quality_tolerance_hard_reject",
       "description": "quality variance {tv_quality:+.0f}% vs {tol_quality:g}% tolerance (hard reject)",
-      "fields": ["tv_quality"], "when": "tv_quality < neg_tol_quality_hard_reject", "stance": "no"
+      "fields": [
+        "tv_quality"
+      ],
+      "when": "tv_quality < neg_tol_quality_hard_reject",
+      "stance": "no",
+      "label": "Quality variance is past the hard-reject line",
+      "threshold": {
+        "key": "hard_reject_multiple_of_tolerance",
+        "label": "hard-reject multiple of tolerance (all six dimensions)",
+        "unit": "x"
+      }
     },
     {
       "id": "benefit_tolerance_hard_reject",
       "description": "benefit variance {tv_benefit:+.0f}% vs {tol_benefit:g}% tolerance (hard reject)",
-      "fields": ["tv_benefit"], "when": "tv_benefit < neg_tol_benefit_hard_reject", "stance": "no"
+      "fields": [
+        "tv_benefit"
+      ],
+      "when": "tv_benefit < neg_tol_benefit_hard_reject",
+      "stance": "no",
+      "label": "Benefit variance is past the hard-reject line",
+      "threshold": {
+        "key": "hard_reject_multiple_of_tolerance",
+        "label": "hard-reject multiple of tolerance (all six dimensions)",
+        "unit": "x"
+      }
     },
     {
       "id": "cost_tolerance_breach",
       "description": "cost variance {tv_cost:+.0f}% breaches the {tol_cost:g}% delegated tolerance",
-      "fields": ["tv_cost"], "when": "tv_cost > tol_cost", "stance": "conditional"
+      "fields": [
+        "tv_cost"
+      ],
+      "when": "tv_cost > tol_cost",
+      "stance": "conditional",
+      "label": "Cost variance breaches the delegated tolerance",
+      "threshold": {
+        "key": "tolerances_pct.cost",
+        "label": "cost tolerance",
+        "unit": "%"
+      }
     },
     {
       "id": "time_tolerance_breach",
       "description": "time variance {tv_time:+.0f}% breaches the {tol_time:g}% delegated tolerance",
-      "fields": ["tv_time"], "when": "tv_time > tol_time", "stance": "conditional"
+      "fields": [
+        "tv_time"
+      ],
+      "when": "tv_time > tol_time",
+      "stance": "conditional",
+      "label": "Time variance breaches the delegated tolerance",
+      "threshold": {
+        "key": "tolerances_pct.time",
+        "label": "time tolerance",
+        "unit": "%"
+      }
     },
     {
       "id": "scope_tolerance_breach",
       "description": "scope variance {tv_scope:+.0f}% breaches the {tol_scope:g}% delegated tolerance",
-      "fields": ["tv_scope"], "when": "tv_scope > tol_scope", "stance": "conditional"
+      "fields": [
+        "tv_scope"
+      ],
+      "when": "tv_scope > tol_scope",
+      "stance": "conditional",
+      "label": "Scope variance breaches the delegated tolerance",
+      "threshold": {
+        "key": "tolerances_pct.scope",
+        "label": "scope tolerance",
+        "unit": "%"
+      }
     },
     {
       "id": "risk_tolerance_breach",
       "description": "risk variance {tv_risk:+.0f}% breaches the {tol_risk:g}% delegated tolerance",
-      "fields": ["tv_risk"], "when": "tv_risk > tol_risk", "stance": "conditional"
+      "fields": [
+        "tv_risk"
+      ],
+      "when": "tv_risk > tol_risk",
+      "stance": "conditional",
+      "label": "Risk variance breaches the delegated tolerance",
+      "threshold": {
+        "key": "tolerances_pct.risk",
+        "label": "risk tolerance",
+        "unit": "%"
+      }
     },
     {
       "id": "quality_tolerance_breach",
       "description": "quality variance {tv_quality:+.0f}% breaches the {tol_quality:g}% delegated tolerance",
-      "fields": ["tv_quality"], "when": "tv_quality < neg_tol_quality", "stance": "conditional"
+      "fields": [
+        "tv_quality"
+      ],
+      "when": "tv_quality < neg_tol_quality",
+      "stance": "conditional",
+      "label": "Quality variance breaches the delegated tolerance",
+      "threshold": {
+        "key": "tolerances_pct.quality",
+        "label": "quality tolerance",
+        "unit": "%"
+      }
     },
     {
       "id": "benefit_tolerance_breach",
       "description": "benefit variance {tv_benefit:+.0f}% breaches the {tol_benefit:g}% delegated tolerance",
-      "fields": ["tv_benefit"], "when": "tv_benefit < neg_tol_benefit", "stance": "conditional"
+      "fields": [
+        "tv_benefit"
+      ],
+      "when": "tv_benefit < neg_tol_benefit",
+      "stance": "conditional",
+      "label": "Benefit variance breaches the delegated tolerance",
+      "threshold": {
+        "key": "tolerances_pct.benefit",
+        "label": "benefit tolerance",
+        "unit": "%"
+      }
     },
     {
       "id": "contract_variation_gate",
       "description": "this is a contract variation, which always needs sign-off regardless of tolerance status",
-      "fields": ["is_contract_variation"],
+      "fields": [
+        "is_contract_variation"
+      ],
       "when": "is_contract_variation == True",
-      "stance": "conditional"
+      "stance": "conditional",
+      "label": "The change is a contract variation"
     }
   ]
 }

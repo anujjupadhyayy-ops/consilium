@@ -112,6 +112,9 @@ class PMOAgent(ConfigurableAgent):
     def source_field(self, name: str) -> str:
         return "tolerance_variances_pct" if name.startswith("tv_") else name
 
+    def derived_labels(self) -> dict[str, str]:
+        return {f"tv_{dim}": f"{dim} variance (%)" for dim in self.config.tolerances_pct}
+
     def derived_field_names(self) -> set[str]:
         names: set[str] = set()
         for dim in self.config.tolerances_pct:

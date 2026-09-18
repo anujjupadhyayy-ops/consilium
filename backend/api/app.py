@@ -174,8 +174,15 @@ def put_agent_config(agent_id: str, body: dict[str, Any]) -> dict:
     (a rule too long, too many rules, a threshold out of range, ...) is
     rejected with 422 and never applied -- see AgentConfig's validators
     and each agent's Field(ge=.., le=..) bounds."""
+    agent = _save_or_reject(agent_id, lambda: save_agent_config(agent_id, body))
+    return agent.config.model_dump()
+
+
+def _save_or_reject(agent_id: str, save):
+    """Run a config save; turn every refusal into a readable 422 and never
+    a partial write (the registry validates before it writes)."""
     try:
-        agent = save_agent_config(agent_id, body)
+        return save()
     except UnknownAgentError:
         raise HTTPException(status_code=404, detail=f"Unknown agent '{agent_id}'.")
     except ValidationError as exc:
@@ -185,9 +192,32 @@ def put_agent_config(agent_id: str, body: dict[str, Any]) -> dict:
             f"{'.'.join(str(p) for p in e['loc'])}: {e['msg'].removeprefix('Value error, ')}" for e in exc.errors()
         )
         raise HTTPException(status_code=422, detail=f"Rejected -- {reasons}") from exc
-    except Exception as exc:  # RuleError, BlockerRuleImmutableError, ...
+    except Exception as exc:  # RuleError, RuleEditError, BlockerRuleImmutableError, ...
         raise HTTPException(status_code=422, detail=f"Rejected -- {exc}") from exc
-    return agent.config.model_dump()
+
+
+@app.get("/agents/{agent_id}/rules")
+def get_agent_rules(agent_id: str) -> dict:
+    """The Council tab's view of one agent's rules: plain-English conditions,
+    the editable threshold of each, and what a guided new rule may use."""
+    from agents.rule_edit import rules_view
+
+    agent = get_agent(agent_id)
+    if agent is None:
+        raise HTTPException(status_code=404, detail=f"Unknown agent '{agent_id}'.")
+    return rules_view(agent)
+
+
+@app.put("/agents/{agent_id}/rules")
+def put_agent_rules(agent_id: str, body: dict[str, Any]) -> dict:
+    """Guided rule edits -- see registry.apply_rules_request. Validates with
+    the rules engine and the registry's policy; on any refusal nothing is
+    saved. Returns the saved view."""
+    from agents.registry import apply_rules_request
+    from agents.rule_edit import rules_view
+
+    agent = _save_or_reject(agent_id, lambda: apply_rules_request(agent_id, body))
+    return rules_view(agent)
 
 
 # ------------------------------------------------------------ chief of staff --
