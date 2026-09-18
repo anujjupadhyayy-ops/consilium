@@ -143,12 +143,12 @@ def test_agent_rule_editable_after_saving(page):
     rule = page.locator("#rl-pmo .rin").first
     rule.fill("Escalate any contract variation above tolerance to governance.")
     page.click("[data-save='pmo']")
-    page.wait_for_selector("#res-pmo.show")
+    page.wait_for_selector("#resw-pmo.show")
     # still editable after a save -- the reported bug
     rule2 = page.locator("#rl-pmo .rin").first
     rule2.fill("Escalate contract variations above tolerance to the governance gate.")
     page.click("[data-save='pmo']")
-    page.wait_for_selector("#res-pmo:has-text('saved')")
+    page.wait_for_selector("#resw-pmo:has-text('saved')")
 
 
 def test_selecting_a_provider_sets_its_model_and_base_url(page):
@@ -301,8 +301,8 @@ def test_council_shows_the_backend_validation_error_for_a_rejected_rule_edit(pag
     page.click("[data-v='council']")
     page.locator("#rl-pmo .rin").first.fill("x" * 300)  # over the 240-char rule limit
     page.click("[data-save='pmo']")
-    page.wait_for_selector("#res-pmo.show")
-    text = page.inner_text("#res-pmo")
+    page.wait_for_selector("#resw-pmo.show")
+    text = page.inner_text("#resw-pmo")
     assert "240" in text and "not saved" in text.lower()  # the backend's own reason, readable
     assert "saved to config" not in text.lower()  # never claims success on a rejection
     assert "value_error" not in text and "pydantic" not in text.lower()
@@ -515,20 +515,188 @@ def test_single_other_agent_sentence_and_no_block_when_no_blocker_fact_is_unchec
     page.unroute("**/run/stream*")
 
 
-# --------------- Council: executable rules read-only, wording box honest --
+# ------------------- Council: real rule editing, wording box kept honest --
 
-def test_council_shows_executable_rules_read_only_with_condition_and_stance(page):
+def _council_finance(page):
     page.click("[data-v='council']")
-    page.wait_for_selector("#view-council .xrule")
-    card = page.locator(".ccard", has_text="Finance").first
-    rules = card.locator(".xrule")
-    assert rules.count() == 4                                   # finance.json's four rules
-    assert card.locator(".xrules input, .xrules textarea, .xrules button").count() == 0
-    text = card.locator(".xrules").inner_text()
-    assert "supplier_cost_increase_pct > supplier_cost_increase_threshold_pct" in text   # the condition
-    assert "7" in text and "{" not in text and "‹" in text      # thresholds filled in; no raw template braces
-    assert "no" in text.lower() and "conditional" in text.lower()                      # stances shown
-    assert "read-only" in card.inner_text().lower()
+    page.wait_for_selector("#xr-finance .xrule")
+
+
+def _rules_of(base_url, agent):
+    import json as _json
+
+    with urllib.request.urlopen(f"{base_url}/agents/{agent}/rules") as r:
+        return _json.loads(r.read())["rules"]
+
+
+def _rule_descriptions(page, agent):
+    """The editable descriptions on a card (they live in inputs, so not in inner_text)."""
+    return page.eval_on_selector_all(f"#xr-{agent} .rlabel", "els => els.map(e => e.value)")
+
+
+def _save_rules(page, agent):
+    page.click(f"[data-retest='{agent}']")
+    page.wait_for_selector(f"#res-{agent}.show")
+    return page.inner_text(f"#res-{agent}")
+
+
+def _restore_finance(page):
+    """These tests share one live server; leave Finance exactly as shipped."""
+    page.reload()
+    _council_finance(page)
+    for row in page.locator("#xr-finance .rdel").all():
+        row.click()
+    page.fill("#cf-supplier", "7")
+    page.locator("#xr-finance .xrule:has(#cf-supplier) .rstance").select_option("no")
+    page.click("[data-retest='finance']")
+    page.wait_for_selector("#res-finance.show")
+
+
+def test_council_rules_read_in_plain_english_no_raw_names_or_placeholders(page):
+    import re
+
+    page.click("[data-v='council']")
+    page.wait_for_selector(".xrule")
+    page.locator(".addbox summary").first.click()
+    shown = page.inner_text("#view-council")
+    # what a person sees -- an option's visible text, not its hidden value
+    shown += " ".join(page.eval_on_selector_all(
+        "#view-council input, #view-council option", "els => els.map(e => e.tagName === 'OPTION' ? e.textContent : e.value)"))
+    assert not re.search(r"\b[a-z]+_[a-z_]+\b", shown), re.findall(r"\b[a-z]+_[a-z_]+\b", shown)   # no raw field names
+    assert not re.search(r"[{}\u2039\u203a]|<[a-z ]+>", shown)                                            # no {template} / <placeholder>
+    for junk in ("undefined", "NaN", "[object"):
+        assert junk not in shown
+    assert "Supplier cost increase (%) is above 7%" in shown        # a condition, in words, with its value
+    assert "Licence provisioned for the new date: no" in shown
+
+
+def test_blocker_rules_render_read_only_with_no_edit_controls_but_an_editable_threshold(page):
+    page.click("[data-v='council']")
+    page.wait_for_selector(".blockerrule")
+    blockers = page.locator(".xrule:has(.blockerrule)")
+    assert blockers.count() == 5                                   # Operations' five blockers
+    for i in range(blockers.count()):
+        row = blockers.nth(i)
+        assert row.locator(".blockerrule input, .blockerrule select, .blockerrule button, .blockerrule textarea").count() == 0
+        assert row.locator(".rlabel, .rstance, .rdel").count() == 0     # no edit, restance or delete control
+        assert "system-governed" in row.inner_text().lower() and "blocker" in row.inner_text().lower()
+    # the threshold of a threshold-driven blocker is still editable
+    assert page.locator("#xr-operations .xrule:has(.blockerrule) input[data-tkey]").count() == 3
+
+
+def test_editing_a_finance_rule_so_it_triggers_on_the_15pct_supplier_uplift(page):
+    try:
+        _council_finance(page)
+        page.fill("#cf-supplier", "50")                             # relax it: 15% no longer trips
+        assert "saved" in _save_rules(page, "finance").lower()
+        _run_seed_in_ui(page)
+        assert "All rules checked" in page.locator("#lane-finance").inner_text()
+
+        _council_finance(page)                                      # now edit the rule: line 10%, softer stance
+        page.locator("#xr-finance .xrule:has(#cf-supplier) .rstance").select_option("conditional")
+        page.fill("#cf-supplier", "10")
+        result = _save_rules(page, "finance")
+        assert "Saved. The next Decision-desk run checks with these rules" in result and "conditional" in result.lower()
+        _run_seed_in_ui(page)
+        lane = page.locator("#lane-finance").inner_text()
+        assert "All rules checked" not in lane and "conditional" in lane.lower()   # Finance now triggers, at the edited stance
+    finally:
+        _restore_finance(page)
+
+
+def test_adding_a_rule_through_the_form_persists_and_fires_in_the_next_run(page, base_url):
+    try:
+        _council_finance(page)
+        page.fill("#cf-supplier", "50")                             # so only the new rule can trip Finance
+        page.locator("#ab-finance summary").click()
+        page.select_option("#af-field-finance", label="Supplier cost increase (%)")
+        page.select_option("#af-op-finance", value=">")
+        page.fill("#af-value-finance", "12")
+        page.select_option("#af-stance-finance", "conditional")
+        page.fill("#af-label-finance", "Fee uplift above twelve per cent")
+        page.click("[data-addgo='finance']")
+        assert "new · unsaved" in page.inner_text("#xr-finance").lower()
+        assert not any(r["user_added"] for r in _rules_of(base_url, "finance"))   # not saved until Save
+        assert "Saved." in _save_rules(page, "finance")
+        assert any(r["label"] == "Fee uplift above twelve per cent" for r in _rules_of(base_url, "finance"))
+
+        page.reload()                                               # survives a reload: it came from the backend
+        _council_finance(page)
+        assert "Supplier cost increase (%) is above 12" in page.inner_text("#xr-finance")
+
+        _run_seed_in_ui(page)
+        lane = page.locator("#lane-finance").inner_text()
+        assert "Fee uplift above twelve per cent" in lane and "conditional" in lane.lower()
+    finally:
+        _restore_finance(page)
+
+
+def test_only_rules_you_added_can_be_deleted(page, base_url):
+    try:
+        _council_finance(page)
+        assert page.locator("#xr-finance .rdel").count() == 0            # shipped rules: no delete control
+        page.locator("#ab-finance summary").click()
+        page.fill("#af-value-finance", "3")
+        page.fill("#af-label-finance", "Mine")
+        page.click("[data-addgo='finance']")
+        assert page.locator("#xr-finance .rdel").count() == 1
+        _save_rules(page, "finance")
+        assert any(r["user_added"] for r in _rules_of(base_url, "finance"))
+        page.locator("#xr-finance .rdel").click()
+        _save_rules(page, "finance")
+        assert not any(r["user_added"] for r in _rules_of(base_url, "finance"))
+        assert len(_rules_of(base_url, "finance")) == 4
+    finally:
+        _restore_finance(page)
+
+
+def test_invalid_input_shows_the_backends_reason_and_does_not_save(page, base_url):
+    try:
+        before = _rules_of(base_url, "finance")
+        _council_finance(page)
+        page.locator("#ab-finance summary").click()
+        page.select_option("#af-field-finance", label="Financial-year month the forecast is read in")
+        page.fill("#af-value-finance", "99")                        # a month can't be 99
+        page.fill("#af-label-finance", "Impossible month")
+        page.click("[data-addgo='finance']")
+        text = _save_rules(page, "finance")
+        assert "not saved" in text.lower() and "out of range" in text and "between 1 and 12" in text
+        assert "Saved." not in text and "checks with these rules" not in text     # never claims a save
+        assert _rules_of(base_url, "finance") == before
+        assert "Impossible month" in _rule_descriptions(page, "finance")          # the draft stays so it can be fixed
+        page.reload()
+        _council_finance(page)
+        assert "Impossible month" not in _rule_descriptions(page, "finance")      # and it really wasn't stored
+    finally:
+        _restore_finance(page)
+
+
+def test_a_rejected_threshold_on_a_rule_row_is_not_saved(page, base_url):
+    try:
+        _council_finance(page)
+        page.evaluate("document.getElementById('cf-supplier').removeAttribute('min')")
+        page.fill("#cf-supplier", "-3")
+        text = _save_rules(page, "finance")
+        assert "not saved" in text.lower() and "Saved." not in text
+        assert next(r for r in _rules_of(base_url, "finance") if r["id"] == "supplier_cost_high")["threshold"]["value"] == 7
+    finally:
+        _restore_finance(page)
+
+
+def test_changing_a_rule_changes_the_verdict_you_get_for_the_same_decision(page):
+    try:
+        _run_seed_in_ui(page)
+        before = page.inner_text("#stage .verdict-block")
+        assert "supplier cost increase" in before.lower()            # Finance's 15% objection is in the verdict
+
+        _council_finance(page)
+        page.fill("#cf-supplier", "50")
+        _save_rules(page, "finance")
+        _run_seed_in_ui(page)                                        # same decision, re-run
+        after = page.inner_text("#stage .verdict-block")
+        assert after != before and "supplier cost increase" not in after.lower()   # the objection is gone from the verdict
+    finally:
+        _restore_finance(page)
 
 
 def test_council_wording_box_is_labelled_narration_only_and_messages_match(page):
@@ -541,32 +709,23 @@ def test_council_wording_box_is_labelled_narration_only_and_messages_match(page)
 
     page.locator("#rl-pmo .rin").first.fill("Escalate variations above tolerance to the governance gate.")
     page.click("[data-save='pmo']")
-    page.wait_for_selector("#res-pmo.show")
-    saved = page.inner_text("#res-pmo").lower()
+    page.wait_for_selector("#resw-pmo.show")
+    saved = page.inner_text("#resw-pmo").lower()
     assert "wording" in saved and "not whether it triggers" in saved
-    assert "reasons with this" not in saved                     # never claims the next run reasons with it
-
-
-def test_finance_threshold_save_says_thresholds_change_the_next_run(page):
-    page.click("[data-v='council']")
-    page.click("[data-retest='finance']")
-    page.wait_for_selector("#res-finance.show")
-    saved = page.inner_text("#res-finance").lower()
-    assert "thresholds saved" in saved and "next decision-desk run checks with them" in saved
-    assert "narration only" in saved
+    assert "checks with these rules" not in saved               # a wording save never claims changed reasoning
 
 
 def test_editing_wording_never_changes_the_executable_rules(page, base_url):
-    import json as _json
-
-    def rules_of(agent):
-        with urllib.request.urlopen(f"{base_url}/agents/{agent}/config") as r:
-            return _json.loads(r.read())["rules"]
-
-    before = rules_of("pmo")
+    before = _rules_of(base_url, "pmo")
     page.click("[data-v='council']")
     page.wait_for_selector("#rl-pmo .rin")
     page.locator("#rl-pmo .rin").first.fill("Reworded note that must not touch the rules.")
     page.click("[data-save='pmo']")
-    page.wait_for_selector("#res-pmo.show")
-    assert rules_of("pmo") == before
+    page.wait_for_selector("#resw-pmo.show")
+    assert _rules_of(base_url, "pmo") == before
+
+
+def test_saving_with_no_changes_says_nothing_was_saved(page):
+    _council_finance(page)
+    text = _save_rules(page, "finance")
+    assert "nothing was saved" in text.lower() and "checks with these rules" not in text

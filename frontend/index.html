@@ -232,11 +232,42 @@
   .xrule .xdesc{font-size:12.5px;color:var(--ink-soft);line-height:1.45}
   .xrule code{font:500 11px var(--mono);color:var(--muted);overflow-wrap:anywhere}
   .rnote{font-size:11.5px;color:var(--muted);margin:0 0 6px;line-height:1.45}
+  .rulesec,.wordsec{display:flex;flex-direction:column;gap:8px}
+  .wordsec{border-top:1px dashed var(--line);padding-top:14px;margin-top:4px}
+  .wordsec .rlab{color:var(--teal)}
+  .rulesec .rnote,.wordsec .rnote{margin:0}
+  .xrules{display:flex;flex-direction:column;gap:8px}
+  .xrule{background:var(--ground);border:1px solid var(--line);border-radius:10px;padding:10px 11px;display:flex;flex-direction:column;gap:8px}
+  .xrule.fresh{border-color:var(--coral)}
+  .rdef{display:flex;flex-direction:column;gap:5px}
+  .rtop{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .rname{flex:1;min-width:0;font:600 13px var(--sans);color:var(--ink)}
+  .rlabel{flex:1;min-width:150px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;padding:6px 9px;font:600 12.5px var(--sans)}
+  .rlabel:focus,.rstance:focus,.thin:focus,.rval:focus,.addform input:focus,.addform select:focus{outline:2px solid var(--coral);outline-offset:1px}
+  .rstance,.rval,.addform select{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;padding:6px 8px;font:600 12px var(--sans)}
+  .rtop .stance{flex:none} .rtop .sysgov{margin-left:0}
+  .rdel{flex:none;border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:8px;width:28px;height:30px;cursor:pointer;font-size:15px;line-height:1}
+  .rdel:hover{border-color:var(--crit);color:var(--crit)}
+  .rcond{font-size:12px;color:var(--muted);line-height:1.45;display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+  .newtag{font:700 9px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--coral);border:1px solid var(--coral);border-radius:5px;padding:1px 6px} .newtag.saved{color:var(--muted);border-color:var(--line)}
+  .thline{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding-top:8px;border-top:1px solid var(--line)}
+  .thl{font-size:12px;color:var(--ink-soft);flex:1;min-width:120px} .thu{font:600 11.5px var(--mono);color:var(--muted);min-width:22px}
+  .thl.shared{color:var(--muted);font-style:italic}
+  .thin{width:96px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;padding:6px 8px;font:600 12.5px var(--sans)}
+  .addbox summary{list-style:none} .addbox summary::-webkit-details-marker{display:none}
+  .addbox[open] summary{border-color:var(--coral)}
+  .addform{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:10px;padding:12px;border:1px solid var(--line);border-radius:10px;background:var(--ground)}
+  .addform label{display:flex;flex-direction:column;gap:4px;font:600 10px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+  .addform label.wide,.addform .addact{grid-column:1/-1}
+  .addform input{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;padding:7px 9px;font:500 12.5px var(--sans);text-transform:none;letter-spacing:0}
+  .addform select{text-transform:none;letter-spacing:0}
+  .addact{display:flex;gap:10px;align-items:center;flex-wrap:wrap} .adderr{font-size:12px;color:var(--crit)}
+  .saverow{display:flex;gap:10px;align-items:center;flex-wrap:wrap} .dirty{font:700 10px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--coral)}
   .addrule{align-self:flex-start;border:1px dashed var(--line);background:transparent;color:var(--coral);border-radius:8px;padding:6px 11px;font:700 11.5px var(--sans);cursor:pointer;margin-top:2px}
   .addrule:hover{border-color:var(--coral)}
   .cospersona{width:100%;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:9px;padding:9px 11px;font:500 12.5px var(--sans);resize:vertical;min-height:58px}
   .cospersona:focus{outline:2px solid var(--coral);outline-offset:1px}
-  .cgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(288px,1fr));gap:14px}
+  .cgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:14px;align-items:start}
   .ccard{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column}
   .cch{display:flex;align-items:center;gap:10px;padding:13px 15px;border-bottom:1px solid var(--line)}
   .cch .ic{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;color:#fff;font:700 14px var(--display)}
@@ -688,30 +719,110 @@ document.getElementById("sim").addEventListener("click",async()=>{
 });
 
 // ---------------------------------------------------------------- council --
-// Two different things live on a Council card. `rules[]` are the executable
-// rules that decide whether an agent triggers -- shown READ-ONLY here.
-// `rules_summary` is free-text that only feeds the narration prompt (how the
-// agent words its position) -- that is the editable box, labelled as such.
-// Both are hydrated from the persisted config (GET /agents/{id}/config).
-function ruleText(k,r){
-  const cfg=CONFIGS[k]||{};
-  return esc(r.description).replace(/\{(\w+)(?::[^}]*)?\}/g,(_,n)=>{
-    const v=cfg[n];
-    if(typeof v==="number"||typeof v==="string") return String(v);
-    return "‹"+n.replace(/_(pct|pts)$/,"").replace(/_/g," ")+"›";
+// Two separate things live on a Council card:
+//  * RULES decide whether an agent triggers. Edited here (stance, description,
+//    threshold; guided add; delete your own) and saved with PUT /agents/{id}/rules,
+//    which validates with the rules engine -- the very next run uses them.
+//  * NARRATION WORDING (`rules_summary`) only shapes how an agent explains itself.
+// Both are hydrated from the backend, never a hardcoded copy. Conditions arrive
+// already in plain English (GET /agents/{id}/rules) -- the UI never sees an
+// expression or an internal field name.
+const STANCE_OPTS=[["yes","Yes"],["conditional","Conditional"],["no","No"]];
+// The Finance thresholds keep the ids they have always had.
+const TH_IDS={supplier_cost_increase_threshold_pct:"cf-supplier",margin_erosion_threshold_pts:"cf-margin",early_forecast_threshold_pct:"cf-forecast"};
+const thId=(k,key)=>TH_IDS[key]&&k==="finance"?TH_IDS[key]:`th-${k}-${key.replace(/\W+/g,"-")}`;
+const attr=s=>String(s==null?"":s).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;");
+const cap=s=>s?s.charAt(0).toUpperCase()+s.slice(1):s;
+let RULES={}, DRAFT={};
+
+function draftFromView(v){
+  const rows=v.rules.map(r=>({id:r.id,label:r.label,stance:r.stance,gov:r.system_governed,user:r.user_added,del:r.deletable,
+    cond:r.condition_text,th:r.threshold,value:r.threshold&&r.threshold.kind==="value"?r.threshold.value:undefined,fresh:false}));
+  const thresholds={};
+  v.rules.forEach(r=>{if(r.threshold&&r.threshold.kind==="config")thresholds[r.threshold.key]=r.threshold.value;});
+  return {rows,thresholds};
+}
+function draftBody(k){return bodyOf(DRAFT[k]);}
+function bodyOf(d){
+  const rules=d.rows.map(r=>{
+    if(r.fresh)return {label:r.label,stance:r.stance,condition:r.condition};
+    if(r.gov)return {id:r.id};
+    const o={id:r.id,label:r.label,stance:r.stance};
+    if(r.user&&r.value!==undefined)o.value=r.value;
+    return o;
   });
+  return {rules,thresholds:d.thresholds};
 }
-function executableRulesHtml(k){
-  const rules=(CONFIGS[k]&&CONFIGS[k].rules)||[];
-  if(!rules.length) return "";
-  return `<div class="rlab">Rules that decide whether it triggers <span class="sysgov">read-only</span></div>`+
-    `<p class="rnote">These are the executable rules. They are set in the agent's config file, not here — editing the wording box below does not change them.</p>`+
-    `<div class="xrules">`+rules.map(r=>{
-      const [cl,lb]=STANCE[r.stance]||["s-cond",r.stance];
-      const gov=r.stance==="blocker"?` <span class="sysgov">system-governed</span>`:"";
-      return `<div class="xrule${r.stance==="blocker"?" blockerrule":""}"><div class="xtop"><div class="xdesc">${ruleText(k,r)}${gov}</div><span class="stance ${cl}">${lb}</span></div><code>${esc(r.when)}</code></div>`;
-    }).join("")+`</div>`;
+function draftDirty(k){
+  const v=RULES[k]; if(!v||!DRAFT[k]) return false;
+  const base=draftFromView(v);
+  return JSON.stringify(draftBody(k))!==JSON.stringify(bodyOf(base));
 }
+
+function valueControl(k,i,r){
+  const t=r.th, id=`rv-${k}-${i}`;
+  if(t.type==="boolean")return `<select class="rval" id="${id}" data-k="${k}" data-i="${i}"><option value="true"${r.value===true?" selected":""}>Yes</option><option value="false"${r.value===false?" selected":""}>No</option></select>`;
+  if(t.type==="enum")return `<select class="rval" id="${id}" data-k="${k}" data-i="${i}">${(t.options||[]).map(o=>`<option${o===r.value?" selected":""}>${attr(o)}</option>`).join("")}</select>`;
+  return `<input class="rval thin" type="number" step="any" id="${id}" data-k="${k}" data-i="${i}" value="${attr(r.value)}"${t.min!=null?` min="${t.min}"`:""}${t.max!=null?` max="${t.max}"`:""}>`;
+}
+function ruleRow(k,r,i,firstOf){
+  const badge=r.gov
+    ?`<span class="stance s-block">Blocker</span><span class="sysgov">system-governed</span>`
+    :`<select class="rstance" data-k="${k}" data-i="${i}" aria-label="Stance">${STANCE_OPTS.map(([v,l])=>`<option value="${v}"${v===r.stance?" selected":""}>${l}</option>`).join("")}</select>`;
+  const name=r.gov?`<span class="rname">${esc(r.label)}</span>`
+    :`<input class="rlabel" data-k="${k}" data-i="${i}" value="${attr(r.label)}" maxlength="240" aria-label="Rule description">`;
+  const del=r.del?`<button class="rdel" data-k="${k}" data-i="${i}" title="Delete this rule">×</button>`:"";
+  let th="";
+  if(r.th&&r.th.kind==="config"&&firstOf[r.th.key]!==i){
+    // one threshold serving several rules is edited once, on the first of them
+    th=`<div class="thline"><span class="thl shared">Uses the shared ${esc(r.th.label)} set above</span></div>`;
+  }else if(r.th&&r.th.kind==="config"){
+    const key=r.th.key, val=DRAFT[k].thresholds[key];
+    th=`<div class="thline"><span class="thl">${cap(esc(r.th.label))}</span><input class="thin" type="number" step="any" id="${thId(k,key)}" data-k="${k}" data-tkey="${attr(key)}" value="${attr(val)}"${r.th.min!=null?` min="${r.th.min}"`:""}${r.th.max!=null?` max="${r.th.max}"`:""}><span class="thu">${esc(r.th.unit)}</span></div>`;
+  }else if(r.th&&r.th.kind==="value"){
+    th=`<div class="thline"><span class="thl">Value</span>${valueControl(k,i,r)}</div>`;
+  }
+  const tag=r.fresh?`<span class="newtag">new · unsaved</span>`:(r.user?`<span class="newtag saved">your rule</span>`:"");
+  return `<div class="xrule${r.fresh?" fresh":""}"><div class="rdef${r.gov?" blockerrule":""}"><div class="rtop">${name}${badge}${del}</div><div class="rcond">${esc(r.cond)}${tag}</div></div>${th}</div>`;
+}
+function renderRules(k){
+  const el=document.getElementById("xr-"+k); if(!el||!DRAFT[k]) return;
+  const firstOf={}; DRAFT[k].rows.forEach((r,i)=>{if(r.th&&r.th.kind==="config"&&!(r.th.key in firstOf))firstOf[r.th.key]=i;});
+  el.innerHTML=DRAFT[k].rows.map((r,i)=>ruleRow(k,r,i,firstOf)).join("");
+  const chip=document.getElementById("dirty-"+k); if(chip)chip.hidden=!draftDirty(k);
+}
+function opLabel(v,op){return `${op}  ${v.operator_words[op]}`;}
+function addFormHtml(k){
+  const v=RULES[k]; if(!v||!v.fields.length) return "";
+  return `<details class="addbox" id="ab-${k}"><summary class="addrule">+ Add a rule</summary><div class="addform">
+    <label>When<select id="af-field-${k}" data-k="${k}">${v.fields.map(f=>`<option value="${attr(f.name)}">${esc(cap(f.label))}</option>`).join("")}</select></label>
+    <label>Is<select id="af-op-${k}"></select></label>
+    <label>Value<span id="af-val-${k}"></span></label>
+    <label>Then this agent says<select id="af-stance-${k}">${STANCE_OPTS.map(([s,l])=>`<option value="${s}"${s==="conditional"?" selected":""}>${l}</option>`).join("")}</select></label>
+    <label class="wide">Description<input id="af-label-${k}" maxlength="240" placeholder="e.g. Fee uplift is too steep"></label>
+    <div class="addact"><button class="retest" data-addgo="${k}" type="button">Add to list</button><span class="adderr" id="af-err-${k}" role="alert"></span></div></div></details>`;
+}
+function syncAddForm(k){
+  const v=RULES[k], sel=document.getElementById("af-field-"+k); if(!v||!sel) return;
+  const f=v.fields.find(x=>x.name===sel.value);
+  document.getElementById("af-op-"+k).innerHTML=v.operators[f.type].map(o=>`<option value="${attr(o)}">${esc(opLabel(v,o))}</option>`).join("");
+  const box=document.getElementById("af-val-"+k);
+  if(f.type==="boolean")box.innerHTML=`<select id="af-value-${k}"><option value="true">Yes</option><option value="false">No</option></select>`;
+  else if(f.type==="enum")box.innerHTML=`<select id="af-value-${k}">${f.options.map(o=>`<option>${attr(o)}</option>`).join("")}</select>`;
+  else box.innerHTML=`<input id="af-value-${k}" type="number" step="${f.integer?1:"any"}" min="${f.min}" max="${f.max}" placeholder="a number">`;
+}
+function freshRow(k){
+  const v=RULES[k], f=v.fields.find(x=>x.name===document.getElementById("af-field-"+k).value);
+  const op=document.getElementById("af-op-"+k).value, raw=document.getElementById("af-value-"+k).value;
+  const label=document.getElementById("af-label-"+k).value.trim();
+  if(!label) return {err:"Write a short description of the rule."};
+  if(raw==="") return {err:"Enter a value."};
+  const value=f.type==="boolean"?raw==="true":(f.type==="enum"?raw:Number(raw));
+  const shown=f.type==="boolean"?`${cap(f.label)}: ${((op==="==")===value)?"yes":"no"}`:`${cap(f.label)} ${v.operator_words[op]} ${f.type==="enum"?raw:raw}`;
+  return {row:{id:null,label,stance:document.getElementById("af-stance-"+k).value,gov:false,user:true,del:true,cond:shown,fresh:true,
+    condition:{field:f.name,op,value},value,th:{kind:"value",type:f.type,options:f.options,min:f.min,max:f.max}}};
+}
+
 function ruleList(k){
   const rules=(CONFIGS[k]&&CONFIGS[k].rules_summary)||[];
   return `<div class="rulelist" id="rl-${k}">`+
@@ -722,12 +833,16 @@ function renderRuleList(k){const el=document.getElementById("rl-"+k);if(el)el.ou
 
 function specCard(k){
   const a=AGENTS[k];
-  const cfg=CONFIGS[k]||{};
-  let controls="";
-  if(k==="finance")controls=`<div class="fields"><div class="field"><label>Project-margin floor (pts)</label><input type="number" id="cf-margin" value="${cfg.margin_erosion_threshold_pts??5}" min="0" max="100"></div><div class="field"><label>Supplier-cost line (%)</label><input type="number" id="cf-supplier" value="${cfg.supplier_cost_increase_threshold_pct??7}" min="0" max="200"></div><div class="field"><label>3PP forecast flag (%)</label><input type="number" id="cf-forecast" value="${cfg.early_forecast_threshold_pct??80}" min="0" max="100"></div><button class="retest" data-retest="finance">Save & re-test on supplier scenario ▸</button><div class="result" id="res-finance"></div></div>`;
-  if(k==="operations")controls=`<div class="fields"><div class="field"><label>Early-cutover licence provisioned?</label><span class="toggle"><button data-lic="no" class="on">No</button><button data-lic="yes">Yes</button></span></div><button class="retest" data-retest="operations">Save & re-test on supplier scenario ▸</button><div class="result" id="res-operations"></div></div>`;
-  if(k==="delivery"||k==="pmo")controls=`<button class="retest" data-save="${k}">Save wording ▸</button><div class="result" id="res-${k}"></div>`;
-  return `<div class="ccard"><div class="cch"><span class="ic" style="background:${a.c}">${a.ic}</span><div><div class="nm">${a.nm}</div><div class="ln">${a.lens}</div></div><span class="tag">${k==="finance"?"thresholds + wording editable":"wording editable"}</span></div><div class="ccb">${executableRulesHtml(k)}<div class="rlab">Narration wording — how this agent explains itself</div><p class="rnote">Free text that only shapes how the agent's position is worded. It never changes whether the agent triggers or what its stance is.</p>${ruleList(k)}${controls}</div></div>`;
+  const ops=k==="operations"?`<div class="field"><label>Re-test with the early-cutover licence provisioned?</label><span class="toggle"><button data-lic="no" class="on">No</button><button data-lic="yes">Yes</button></span></div>`:"";
+  const tag=`${(RULES[k]&&RULES[k].rules.length)||0} rules`;
+  return `<div class="ccard"><div class="cch"><span class="ic" style="background:${a.c}">${a.ic}</span><div><div class="nm">${a.nm}</div><div class="ln">${a.lens}</div></div><span class="tag">${tag}</span></div><div class="ccb">
+    <section class="rulesec"><div class="rlab">Rules — these decide whether ${a.nm} triggers</div>
+    <p class="rnote">Edit a rule's description, stance or threshold, add your own, or delete one you added. Saving checks the rules and the next run uses them. Blocker rules are system-governed: only their threshold can change.</p>
+    <div class="xrules" id="xr-${k}"></div>${addFormHtml(k)}
+    <div class="fields">${ops}<div class="saverow"><button class="retest" data-retest="${k}">Save rules &amp; re-test on supplier scenario ▸</button><span class="dirty" id="dirty-${k}" hidden>Unsaved changes</span></div><div class="result" id="res-${k}"></div></div></section>
+    <section class="wordsec"><div class="rlab">Narration wording — how ${a.nm} explains itself</div>
+    <p class="rnote">Free text that only shapes how the agent's position is worded. It never changes whether the agent triggers or what its stance is.</p>
+    ${ruleList(k)}<button class="retest" data-save="${k}">Save wording ▸</button><div class="result" id="resw-${k}"></div></section></div></div>`;
 }
 
 async function loadConfigs(){
@@ -736,6 +851,12 @@ async function loadConfigs(){
     catch(_){ return [k, {rules_summary:[]}]; }
   }));
   CONFIGS=Object.fromEntries(entries);
+  const views=await Promise.all(ORDER.map(async k=>{
+    try{ const res=await fetch(`/agents/${k}/rules`); return [k, await res.json()]; }
+    catch(_){ return [k, {rules:[],fields:[],operators:{},operator_words:{}}]; }
+  }));
+  RULES=Object.fromEntries(views);
+  DRAFT=Object.fromEntries(ORDER.map(k=>[k,draftFromView(RULES[k])]));
 }
 async function loadPersona(){
   try{
@@ -756,29 +877,61 @@ async function renderCouncil(){
     <div class="prefbox"><div class="pl">Configure your Chief of Staff — persona &amp; wording guidance</div><textarea class="cospersona" id="cos-persona">${persona.replace(/</g,"&lt;")}</textarea><button class="retest" style="margin-top:8px" id="cos-save">Save persona ▸</button><span class="saved" id="cos-saved">✓ Saved</span></div>
     <div class="prefbox"><div class="pl">What to flag to me</div><div class="field" style="margin-bottom:8px"><label>Escalate verdicts at or above</label><span class="toggle"><button class="on">Blocker</button><button>Any conflict</button><button>All</button></span></div><div class="field"><label>Revenue-at-risk alert threshold (£k)</label><input type="number" value="250" min="0"></div></div></div></div>`;
   document.getElementById("council").innerHTML=master+`<div class="cgrid">${ORDER.map(specCard).join("")}</div>`;
+  ORDER.forEach(renderRules);
+  ORDER.forEach(syncAddForm);   // build the add-form controls once, so opening the panel never rebuilds them
 }
 function showResult(id,stance,msg,note){const[cl,lb]=STANCE[stance]||(stance==null?["s-yes","All clear"]:["s-cond",stance]);const el=document.getElementById(id);
   el.innerHTML=`<span class="stance ${cl}">${lb}</span><div>${msg}</div><div style="color:var(--muted);margin-top:6px;font-size:11.5px">${note}</div>`;el.classList.add("show");}
 function showError(id,msg){const el=document.getElementById(id);
   el.innerHTML=`<span class="stance s-no">Not saved</span><div>⚠ ${esc(msg)}</div><div style="color:var(--muted);margin-top:6px;font-size:11.5px">Nothing was changed — fix the value and try again.</div>`;el.classList.add("show");}
 const WORDING_NOTE="Saved to config. This changes how the agent words its position — not whether it triggers or its stance.";
-const THRESHOLD_NOTE="Thresholds saved — the next Decision-desk run checks with them. Wording notes change narration only.";
+const RULES_NOTE="Saved. The next Decision-desk run checks with these rules and thresholds.";
+const UNCHANGED_NOTE="Nothing was changed, so nothing was saved — this is the current saved config on the supplier scenario.";
 function showSavedOnly(id,msg){const el=document.getElementById(id);
   el.innerHTML=`<div>${msg}</div><div style="color:var(--muted);margin-top:6px;font-size:11.5px">${WORDING_NOTE}</div>`;el.classList.add("show");}
 
-document.getElementById("council").addEventListener("input",e=>{
-  const ri=e.target.closest(".rin"); if(!ri) return;
-  const k=ri.dataset.agent, i=+ri.dataset.i;
-  CONFIGS[k]=CONFIGS[k]||{rules_summary:[]};
-  CONFIGS[k].rules_summary[i]=ri.value;
+const councilEl=document.getElementById("council");
+function markDraft(k){const chip=document.getElementById("dirty-"+k);if(chip)chip.hidden=!draftDirty(k);}
+councilEl.addEventListener("input",e=>{
+  const ri=e.target.closest(".rin");
+  if(ri){const k=ri.dataset.agent, i=+ri.dataset.i;
+    CONFIGS[k]=CONFIGS[k]||{rules_summary:[]}; CONFIGS[k].rules_summary[i]=ri.value; return;}
+  const lb=e.target.closest(".rlabel");
+  if(lb){DRAFT[lb.dataset.k].rows[+lb.dataset.i].label=lb.value; markDraft(lb.dataset.k); return;}
+  const th=e.target.closest("[data-tkey]");
+  if(th){const k=th.dataset.k, key=th.dataset.tkey; DRAFT[k].thresholds[key]=th.value===""?"":+th.value;
+    // one threshold can serve several rules (PMO's hard-reject multiple): keep those inputs in step
+    councilEl.querySelectorAll(`[data-tkey="${key}"][data-k="${k}"]`).forEach(o=>{if(o!==th)o.value=th.value;});
+    markDraft(k); return;}
+  const rv=e.target.closest("input.rval");
+  if(rv){const r=DRAFT[rv.dataset.k].rows[+rv.dataset.i]; r.value=rv.value===""?"":+rv.value; if(r.condition)r.condition.value=r.value; markDraft(rv.dataset.k);}
 });
-document.getElementById("council").addEventListener("click",async e=>{
+councilEl.addEventListener("change",e=>{
+  const st=e.target.closest(".rstance");
+  if(st){DRAFT[st.dataset.k].rows[+st.dataset.i].stance=st.value; markDraft(st.dataset.k); return;}
+  const rv=e.target.closest("select.rval");
+  if(rv){const r=DRAFT[rv.dataset.k].rows[+rv.dataset.i]; r.value=rv.value==="true"?true:(rv.value==="false"?false:rv.value); if(r.condition)r.condition.value=r.value; markDraft(rv.dataset.k); return;}
+  const af=e.target.closest("[id^='af-field-']");
+  if(af)syncAddForm(af.dataset.k);
+});
+councilEl.addEventListener("click",async e=>{
   const rx=e.target.closest(".rx");
   if(rx){const k=rx.dataset.agent;CONFIGS[k].rules_summary.splice(+rx.dataset.i,1);renderRuleList(k);return;}
 
   const ad=e.target.closest("[data-add]");
   if(ad){const k=ad.dataset.add;CONFIGS[k]=CONFIGS[k]||{rules_summary:[]};CONFIGS[k].rules_summary.push("New wording note — describe how this agent should explain itself");renderRuleList(k);
     const ins=document.querySelectorAll("#rl-"+k+" .rin");if(ins.length){ins[ins.length-1].focus();ins[ins.length-1].select();}return;}
+
+  const rd=e.target.closest(".rdel");
+  if(rd){const k=rd.dataset.k; DRAFT[k].rows.splice(+rd.dataset.i,1); renderRules(k); return;}
+
+  const go=e.target.closest("[data-addgo]");
+  if(go){const k=go.dataset.addgo, err=document.getElementById("af-err-"+k);
+    const {row,err:msg}=freshRow(k); if(msg){err.textContent=msg; return;}
+    err.textContent=""; DRAFT[k].rows.push(row); renderRules(k);
+    document.getElementById("af-label-"+k).value="";
+    const rows=document.querySelectorAll(`#xr-${k} .xrule`); if(rows.length)rows[rows.length-1].scrollIntoView({block:"nearest"});
+    return;}
 
   const lic=e.target.closest("[data-lic]");
   if(lic){licState=lic.dataset.lic;lic.parentNode.querySelectorAll("button").forEach(b=>b.classList.toggle("on",b===lic));return;}
@@ -788,35 +941,32 @@ document.getElementById("council").addEventListener("click",async e=>{
 
   const sv=e.target.closest("[data-save]");
   if(sv){
-    const k=sv.dataset.save; sv.disabled=true;
+    const k=sv.dataset.save; sv.disabled=true; document.getElementById("resw-"+k).classList.remove("show");
     try{
       const res=await fetch(`/agents/${k}/config`,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify({rules_summary:CONFIGS[k].rules_summary})});
-      if(!res.ok){const err=await res.json();showError(`res-${k}`,err.detail||"Could not save");return;}
+      if(!res.ok){const err=await res.json();showError(`resw-${k}`,err.detail||"Could not save");return;}
       CONFIGS[k]=await res.json();renderRuleList(k);
-      showSavedOnly(`res-${k}`,`✓ ${AGENTS[k].nm}'s ${CONFIGS[k].rules_summary.length} wording notes saved.`);
+      showSavedOnly(`resw-${k}`,`✓ ${AGENTS[k].nm}'s ${CONFIGS[k].rules_summary.length} wording notes saved.`);
     } finally { sv.disabled=false; }
     return;
   }
 
   const rt=e.target.closest("[data-retest]");
   if(rt){
-    const k=rt.dataset.retest; rt.disabled=true;
+    const k=rt.dataset.retest; rt.disabled=true; document.getElementById("res-"+k).classList.remove("show");
     try{
-      const configOverrides={rules_summary:(CONFIGS[k]&&CONFIGS[k].rules_summary)||[]};
-      if(k==="finance"){
-        configOverrides.margin_erosion_threshold_pts=+document.getElementById("cf-margin").value;
-        configOverrides.supplier_cost_increase_threshold_pct=+document.getElementById("cf-supplier").value;
-        configOverrides.early_forecast_threshold_pct=+document.getElementById("cf-forecast").value;
+      const dirty=draftDirty(k);
+      if(dirty){
+        const putRes=await fetch(`/agents/${k}/rules`,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(draftBody(k))});
+        if(!putRes.ok){const err=await putRes.json();showError(`res-${k}`,err.detail||"Could not save");return;}  // draft kept so it can be fixed
+        RULES[k]=await putRes.json(); DRAFT[k]=draftFromView(RULES[k]); renderRules(k);
+        const tag=document.querySelector(`#res-${k}`).closest(".ccard").querySelector(".cch .tag"); if(tag)tag.textContent=`${RULES[k].rules.length} rules`;
       }
-      const putRes=await fetch(`/agents/${k}/config`,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(configOverrides)});
-      if(!putRes.ok){const err=await putRes.json();showError(`res-${k}`,err.detail||"Could not save");return;}
-      CONFIGS[k]=await putRes.json();renderRuleList(k);
-
       const retestBody={agent_id:k};
       if(k==="operations")retestBody.fact_overrides={licence_provisioned_for_new_date:licState==="yes"};
       const retestRes=await fetch("/council/retest",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(retestBody)});
       const pos=await retestRes.json();
-      showResult(`res-${k}`,pos.stance,pos.reasoning||pos.detail,k==="finance"?THRESHOLD_NOTE:WORDING_NOTE+" The licence toggle applies to this re-test only.");
+      showResult(`res-${k}`,pos.stance,pos.reasoning||pos.detail,dirty?RULES_NOTE:UNCHANGED_NOTE);
     } finally { rt.disabled=false; }
     return;
   }
