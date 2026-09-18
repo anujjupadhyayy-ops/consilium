@@ -62,10 +62,15 @@ config save) and are never executed — there is no `eval`. Because it has no ar
 subscripting, anything that needs either (an interpolated threshold, a dict-shaped fact) is
 computed by the agent's `derive()` in trusted code and exposed as a plain name.
 
-**Config, not code.** The rules are edited in the config file, not the UI: the Council tab shows
-`rules[]` read-only (description, condition, stance) and only edits the numeric thresholds and the
-free-text `rules_summary` (narration wording — it feeds `narrate()`'s prompt and cannot change
-whether an agent triggers). Thresholds live in the same JSON, loaded through a Pydantic model per agent
+**Config, not code.** The Council tab edits rules through a guided form, never a typed expression
+(`agents/rule_edit.py`, `PUT /agents/{id}/rules`; `GET` returns each rule in plain English). A shipped
+rule's stance, description (`label`) and threshold — a config scalar named by its `threshold` — can
+change; its field and operator can't, and it can't be deleted. A user-added rule carries a structured
+`condition` (field, operator, typed value validated against the fact's type and bounds); its `when`
+is *generated* from that, and its description is stored brace-escaped so it is literal text under
+`str.format`. `enforce_rule_policy` runs inside `save_agent_config`, so a raw `PUT /config` gets the
+same protection as the UI. `rules_summary` is separate free text (narration wording): it feeds
+`narrate()`'s prompt and cannot change whether an agent triggers. Thresholds live in the same JSON, loaded through a Pydantic model per agent
 kind (`agents/registry.py`), with `Field(ge=.., le=..)` bounds. `PUT /agents/{id}/config`
 re-validates every rule and **refuses any change to a `stance: blocker` rule** (add, remove or
 alter) — blocker rules are system-governed and must declare `keywords` for the tripwire below.
