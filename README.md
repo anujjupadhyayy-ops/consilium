@@ -198,6 +198,35 @@ you can try both a seed scenario and your own free-text decision immediately.
 > settings *into* the source tree would reload the whole process (and drop the in-flight request)
 > on every save.
 
+## Troubleshooting
+
+**Run every command from the repo root** (the folder that contains `backend/`, `frontend/` and
+`start.sh`). `cd: no such file or directory: backend` means you are one level off — `cd` into the
+`Consilium` folder first. `./start.sh` works from there and needs no `cd backend`.
+
+**The Council tab is empty, or every agent says "Couldn't load this agent's rules from the server."**
+The server that's answering is older than the page you're looking at: it was started before you
+pulled or updated the code and was never restarted. The page is served fresh from disk but the API
+is whatever code the running process loaded, so the two drift apart. Restart it:
+
+```bash
+lsof -ti :8000 | xargs kill      # stop whatever is holding the port (skip if nothing is)
+./start.sh                       # or: source .venv/bin/activate && uvicorn api.app:app --app-dir backend
+```
+
+then hard-reload the page (Cmd/Ctrl-Shift-R). Always restart after updating the code. If a restart
+fails, the *old* server is still the one answering — check the terminal for an error, and for
+`address already in use` stop the old process first (the command above).
+
+**Rules show odd names, or the threshold boxes are missing, after running an older backend.**
+An older backend rewrites an agent's config file when you save anything (even a wording note), and
+it drops any field it doesn't know about — so rule labels and thresholds added by a newer version
+disappear from `backend/agents/configs/*.json`. Look for it with `git diff backend/agents/configs/`;
+restore the file with `git checkout -- backend/agents/configs/<agent>.json`, then re-enter any
+edit of your own. Prevent it by restarting the backend after every update.
+
+**`address already in use`** — an earlier server is still running: `lsof -ti :8000 | xargs kill`.
+
 ## How to use it
 
 - **Seed scenarios** on the Decision desk are one-click, pre-written dilemmas with engineered
