@@ -252,6 +252,7 @@
   .newtag{font:700 9px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--coral);border:1px solid var(--coral);border-radius:5px;padding:1px 6px} .newtag.saved{color:var(--muted);border-color:var(--line)}
   .thline{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding-top:8px;border-top:1px solid var(--line)}
   .thl{font-size:12px;color:var(--ink-soft);flex:1;min-width:120px} .thu{font:600 11.5px var(--mono);color:var(--muted);min-width:22px}
+  .rnote.unavail{color:var(--crit);background:var(--crit-tint);border-radius:8px;padding:9px 11px}
   .thl.shared{color:var(--muted);font-style:italic}
   .thin{width:96px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;padding:6px 8px;font:600 12.5px var(--sans)}
   .addbox summary{list-style:none} .addbox summary::-webkit-details-marker{display:none}
@@ -834,12 +835,15 @@ function renderRuleList(k){const el=document.getElementById("rl-"+k);if(el)el.ou
 function specCard(k){
   const a=AGENTS[k];
   const ops=k==="operations"?`<div class="field"><label>Re-test with the early-cutover licence provisioned?</label><span class="toggle"><button data-lic="no" class="on">No</button><button data-lic="yes">Yes</button></span></div>`:"";
-  const tag=`${(RULES[k]&&RULES[k].rules.length)||0} rules`;
-  return `<div class="ccard"><div class="cch"><span class="ic" style="background:${a.c}">${a.ic}</span><div><div class="nm">${a.nm}</div><div class="ln">${a.lens}</div></div><span class="tag">${tag}</span></div><div class="ccb">
-    <section class="rulesec"><div class="rlab">Rules — these decide whether ${a.nm} triggers</div>
+  const tag=RULES[k]?`${RULES[k].rules.length} rules`:"rules unavailable";
+  const rulesSec=RULES[k]?`<section class="rulesec"><div class="rlab">Rules — these decide whether ${a.nm} triggers</div>
     <p class="rnote">Edit a rule's description, stance or threshold, add your own, or delete one you added. Saving checks the rules and the next run uses them. Blocker rules are system-governed: only their threshold can change.</p>
     <div class="xrules" id="xr-${k}"></div>${addFormHtml(k)}
-    <div class="fields">${ops}<div class="saverow"><button class="retest" data-retest="${k}">Save rules &amp; re-test on supplier scenario ▸</button><span class="dirty" id="dirty-${k}" hidden>Unsaved changes</span></div><div class="result" id="res-${k}"></div></div></section>
+    <div class="fields">${ops}<div class="saverow"><button class="retest" data-retest="${k}">Save rules &amp; re-test on supplier scenario ▸</button><span class="dirty" id="dirty-${k}" hidden>Unsaved changes</span></div><div class="result" id="res-${k}"></div></div></section>`
+    :`<section class="rulesec"><div class="rlab">Rules — these decide whether ${a.nm} triggers</div>
+    <p class="rnote unavail" role="alert">Couldn't load this agent's rules from the server, so they can't be shown or edited. The backend is probably running an older version than this page — restart it (then reload) to fix this.</p></section>`;
+  return `<div class="ccard"><div class="cch"><span class="ic" style="background:${a.c}">${a.ic}</span><div><div class="nm">${a.nm}</div><div class="ln">${a.lens}</div></div><span class="tag">${tag}</span></div><div class="ccb">
+    ${rulesSec}
     <section class="wordsec"><div class="rlab">Narration wording — how ${a.nm} explains itself</div>
     <p class="rnote">Free text that only shapes how the agent's position is worded. It never changes whether the agent triggers or what its stance is.</p>
     ${ruleList(k)}<button class="retest" data-save="${k}">Save wording ▸</button><div class="result" id="resw-${k}"></div></section></div></div>`;
@@ -847,16 +851,19 @@ function specCard(k){
 
 async function loadConfigs(){
   const entries=await Promise.all(ORDER.map(async k=>{
-    try{ const res=await fetch(`/agents/${k}/config`); return [k, await res.json()]; }
+    try{ const res=await fetch(`/agents/${k}/config`); const c=await res.json();
+         return [k, res.ok&&Array.isArray(c.rules_summary)?c:{rules_summary:[]}]; }
     catch(_){ return [k, {rules_summary:[]}]; }
   }));
   CONFIGS=Object.fromEntries(entries);
+  // A missing/garbled rules view is null -- that card says so; it never blanks the tab.
   const views=await Promise.all(ORDER.map(async k=>{
-    try{ const res=await fetch(`/agents/${k}/rules`); return [k, await res.json()]; }
-    catch(_){ return [k, {rules:[],fields:[],operators:{},operator_words:{}}]; }
+    try{ const res=await fetch(`/agents/${k}/rules`); const v=await res.json();
+         return [k, res.ok&&v&&Array.isArray(v.rules)&&Array.isArray(v.fields)?v:null]; }
+    catch(_){ return [k, null]; }
   }));
   RULES=Object.fromEntries(views);
-  DRAFT=Object.fromEntries(ORDER.map(k=>[k,draftFromView(RULES[k])]));
+  DRAFT=Object.fromEntries(ORDER.filter(k=>RULES[k]).map(k=>[k,draftFromView(RULES[k])]));
 }
 async function loadPersona(){
   try{
@@ -876,9 +883,9 @@ async function renderCouncil(){
     <div class="locknote">The adjudication core is locked by design — users configure the specialists, not how the council resolves conflict. Rewriting that would undermine trust in every verdict.</div>
     <div class="prefbox"><div class="pl">Configure your Chief of Staff — persona &amp; wording guidance</div><textarea class="cospersona" id="cos-persona">${persona.replace(/</g,"&lt;")}</textarea><button class="retest" style="margin-top:8px" id="cos-save">Save persona ▸</button><span class="saved" id="cos-saved">✓ Saved</span></div>
     <div class="prefbox"><div class="pl">What to flag to me</div><div class="field" style="margin-bottom:8px"><label>Escalate verdicts at or above</label><span class="toggle"><button class="on">Blocker</button><button>Any conflict</button><button>All</button></span></div><div class="field"><label>Revenue-at-risk alert threshold (£k)</label><input type="number" value="250" min="0"></div></div></div></div>`;
-  document.getElementById("council").innerHTML=master+`<div class="cgrid">${ORDER.map(specCard).join("")}</div>`;
-  ORDER.forEach(renderRules);
-  ORDER.forEach(syncAddForm);   // build the add-form controls once, so opening the panel never rebuilds them
+  const card=k=>{try{return specCard(k);}catch(e){console.error(e);return `<div class="ccard"><div class="ccb"><p class="rnote unavail" role="alert">Couldn't draw ${esc(AGENTS[k].nm)}'s card: ${esc(e.message)}</p></div></div>`;}};
+  document.getElementById("council").innerHTML=master+`<div class="cgrid">${ORDER.map(card).join("")}</div>`;
+  ORDER.forEach(k=>{try{renderRules(k);syncAddForm(k);}catch(e){console.error(e);}});   // add-form controls are built once, so opening the panel never rebuilds them
 }
 function showResult(id,stance,msg,note){const[cl,lb]=STANCE[stance]||(stance==null?["s-yes","All clear"]:["s-cond",stance]);const el=document.getElementById(id);
   el.innerHTML=`<span class="stance ${cl}">${lb}</span><div>${msg}</div><div style="color:var(--muted);margin-top:6px;font-size:11.5px">${note}</div>`;el.classList.add("show");}

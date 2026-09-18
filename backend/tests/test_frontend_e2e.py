@@ -729,3 +729,25 @@ def test_saving_with_no_changes_says_nothing_was_saved(page):
     _council_finance(page)
     text = _save_rules(page, "finance")
     assert "nothing was saved" in text.lower() and "checks with these rules" not in text
+
+
+# ------------- the Council tab must degrade, never go blank ---------------
+
+def test_council_still_renders_when_the_rules_endpoint_is_unavailable(page):
+    """Regression: a backend that predates /agents/{id}/rules (e.g. an app
+    started before an upgrade and never restarted) 404s it. The whole Council
+    tab used to render nothing -- not even the Chief of Staff card."""
+    errors = []
+    page.on("pageerror", lambda e: errors.append(str(e)))
+    page.route("**/agents/*/rules", lambda route: route.fulfill(status=404, content_type="application/json",
+                                                              body='{"detail":"Not Found"}'))
+    page.reload()
+    page.click("[data-v='council']")
+    page.wait_for_selector(".ccard")
+    text = page.inner_text("#view-council")
+    assert page.locator(".mastercard").count() == 1                       # Chief of Staff card is there
+    assert page.locator(".ccard").count() == 4                            # so are all four specialists
+    assert page.locator(".rulelist .rin").count() > 0                     # and their narration wording
+    assert "couldn't load" in text.lower() and "restart" in text.lower()  # with a visible, actionable reason
+    assert page.locator("[data-retest]").count() == 0                     # no save button that can't work
+    assert errors == []
