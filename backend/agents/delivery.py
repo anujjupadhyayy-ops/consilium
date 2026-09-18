@@ -22,17 +22,42 @@ class DeliveryConfig(AgentConfig):
 class DeliveryFacts(BaseModel):
     # Neutral/no-concern defaults -- used when the Chief of Staff's LLM
     # extraction is unavailable and evaluation must degrade gracefully.
-    budget: float = Field(100_000.0, title="milestone budget")
-    actual_pct: float = Field(0.5, title="work completed so far (share of budget)")  # 0-1
-    schedule_pct: float = Field(0.5, title="work planned to be done by now (share)")  # 0-1
-    spend_to_date: float = Field(50_000.0, title="spend to date")
-    slip_days_before_change: float = Field(0.0, title="days behind schedule before the change")
-    is_resourced: bool = Field(True, title="milestone is resourced")
-    is_on_critical_path: bool = Field(False, title="milestone is on the critical path")
-    is_revenue_tagged: bool = Field(False, title="milestone is revenue-tagged")
-    revenue_value: float = Field(0.0, title="revenue tied to the milestone")
-    reported_rag_before: RAG = Field("green", title="reported RAG status before the change")
-    reported_rag_after: RAG = Field("green", title="reported RAG status after the change")  # if accepted
+    # `description` is plain-English guidance for the extraction prompt.
+    budget: float = Field(
+        100_000.0, title="milestone budget",
+        description="The total budget of the milestone, as a plain number in the currency used (no symbol).")
+    actual_pct: float = Field(  # 0-1
+        0.5, title="work completed so far (share of budget)",
+        description="How much of the milestone's work is done so far, as a fraction between 0 and 1 "
+                    "(e.g. '40% complete' is 0.4).")
+    schedule_pct: float = Field(  # 0-1
+        0.5, title="work planned to be done by now (share)",
+        description="How much of the milestone's work the plan says should be done by now, as a fraction "
+                    "between 0 and 1 (e.g. 'should be 60% complete' is 0.6).")
+    spend_to_date: float = Field(
+        50_000.0, title="spend to date",
+        description="Money already spent on the milestone so far, as a plain number in the currency used.")
+    slip_days_before_change: float = Field(
+        0.0, title="days behind schedule before the change",
+        description="How many days the milestone is already behind its planned date before the proposed change.")
+    is_resourced: bool = Field(
+        True, title="milestone is resourced",
+        description="True if people/capacity are assigned to deliver the milestone; false if it is unstaffed.")
+    is_on_critical_path: bool = Field(
+        False, title="milestone is on the critical path",
+        description="True if the milestone is on the project's critical path, so a slip delays the whole delivery date.")
+    is_revenue_tagged: bool = Field(
+        False, title="milestone is revenue-tagged",
+        description="True if revenue is tied to the milestone being completed (e.g. an invoicing or payment milestone).")
+    revenue_value: float = Field(
+        0.0, title="revenue tied to the milestone",
+        description="The amount of revenue that depends on this milestone, as a plain number in the currency used.")
+    reported_rag_before: RAG = Field(
+        "green", title="reported RAG status before the change",
+        description="The milestone's red/amber/green status as reported before the proposed change.")
+    reported_rag_after: RAG = Field(  # if accepted
+        "green", title="reported RAG status after the change",
+        description="The milestone's red/amber/green status it would be reported at if the change is accepted.")
 
 
 class DeliveryAgent(ConfigurableAgent):

@@ -219,14 +219,16 @@ class ConfigurableAgent(ABC):
         assert_within_context(message, config.context_tokens)
 
         fields = self.facts_model.model_fields
-        field_desc = ", ".join(f"{name}: {_field_type_hint(info)}" for name, info in fields.items())
+        field_desc = "; ".join(_field_prompt_line(name, info) for name, info in fields.items())
         system = (
             f"You extract structured facts for the {self.id} specialist on a back-office decision "
             f"council, from a free-text message. Fields to extract: {field_desc}. For each field, "
             'return {"value": <the value, or null>, "evidence": [<verbatim quotes from the message '
             'that state it>]}. Return null and an empty evidence list for anything the message does '
             "not state -- never invent, estimate, or infer a plausible figure, even a 'reasonable' "
-            "one. Evidence quotes must be copied exactly from the message (whitespace/line-break "
+            "one. A brief may word a fact differently from the field's name -- match on the meaning given "
+            "for each field, but still only when the message states it, and quote the words it uses. "
+            "Evidence quotes must be copied exactly from the message (whitespace/line-break "
             "differences are fine; do not paraphrase); a fact spanning two paragraphs may cite more "
             'than one quote. Respond with ONLY a JSON object: {"fields": {<field name>: '
             '{"value": ..., "evidence": [...]}}}.'
@@ -414,6 +416,15 @@ class ConfigurableAgent(ABC):
 
 def _severity(stance: str) -> int:
     return {"yes": 0, "conditional": 1, "no": 2, "blocker": 3}[stance]
+
+
+def _field_prompt_line(name: str, field_info: Any) -> str:
+    """`name (type): plain-English meaning` -- the description tells the model
+    what the fact is and the everyday phrasings it appears under, so a brief
+    that words it differently ('a 15% uplift on our fee') still maps to it."""
+    line = f"{name} ({_field_type_hint(field_info)})"
+    description = getattr(field_info, "description", None)
+    return f"{line}: {description}" if description else line
 
 
 def _field_type_hint(field_info: Any) -> str:

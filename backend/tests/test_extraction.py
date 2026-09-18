@@ -235,3 +235,81 @@ def test_seed_run_never_calls_extraction(seed_input, seed_facts):
         FinanceAgent.extract_facts = real_extract
 
     assert called["n"] == 0
+
+
+# ------------- plain-English field descriptions reach the extraction prompt --
+
+FEE_UPLIFT_BRIEF = (
+    "Hi -- our supplier has written to say there will be a 15% uplift on our fee from next quarter "
+    "if we want the earlier delivery date."
+)
+
+
+def _capture_system_prompt(monkeypatch, agent, message="A brief."):
+    captured = {}
+
+    def fake_call_structured(system, user, response_model, config=None, temperature=0.2):
+        captured["system"] = system
+        raise LLMUnavailableError("stop after capture")
+
+    monkeypatch.setattr("model.llm.call_structured", fake_call_structured)
+    agent.extract_facts(message)
+    return captured["system"]
+
+
+@pytest.mark.parametrize("agent_id", ["finance", "delivery", "pmo", "operations"])
+def test_every_facts_field_has_a_plain_english_description(agent_id):
+    from agents.registry import get_agent
+
+    for name, info in get_agent(agent_id).facts_model.model_fields.items():
+        assert info.description and len(info.description.split()) >= 5, f"{agent_id}.{name} needs a description"
+
+
+@pytest.mark.parametrize("agent_id", ["finance", "delivery", "pmo", "operations"])
+def test_each_fields_description_is_in_that_agents_extraction_prompt(monkeypatch, agent_id):
+    from agents.registry import get_agent
+
+    agent = get_agent(agent_id)
+    system = _capture_system_prompt(monkeypatch, agent)
+    for name, info in agent.facts_model.model_fields.items():
+        assert f"{name} (" in system and info.description in system
+
+
+def test_finance_prompt_names_fee_uplift_phrasings_for_supplier_cost_increase(monkeypatch):
+    system = _capture_system_prompt(monkeypatch, _agent(), FEE_UPLIFT_BRIEF)
+    line = next(part for part in system.split("; ") if "supplier_cost_increase_pct" in part)
+    assert "uplift on our fee" in line and "15" in line
+    assert "match on the meaning" in system            # told to map wording to the field...
+    assert "never invent, estimate" in system.lower()   # ...without loosening the no-inference rule
+
+
+def test_a_fee_uplift_brief_extracts_supplier_cost_increase_and_fires_the_rule(monkeypatch):
+    """Plumbing for the reported miss: when the model returns 15 with the
+    brief's own words as evidence, the value is kept (the quote is verbatim)
+    and Finance's supplier-cost rule fires. Whether the model does so is the
+    live test below."""
+    def fake_call_structured(system, user, response_model, config=None, temperature=0.2):
+        return ExtractionResult(fields={
+            "supplier_cost_increase_pct": ExtractedValue(value=15.0, evidence=["a 15% uplift on our fee"]),
+        })
+
+    monkeypatch.setattr("model.llm.call_structured", fake_call_structured)
+    facts, evidence = _agent().extract_facts(FEE_UPLIFT_BRIEF)
+
+    assert facts == {"supplier_cost_increase_pct": 15.0}
+    assert evidence["supplier_cost_increase_pct"] == ["a 15% uplift on our fee"]
+
+
+@pytest.mark.live
+@pytest.mark.parametrize("phrasing", [
+    "a 15% uplift on our fee",
+    "there will be a 15% uplift on our fee from next quarter",
+    "they want 15% on our fee",
+])
+def test_live_model_extracts_fee_uplift_phrasings(phrasing):
+    """Owner-run (`pytest -m live`): the real model must map fee-uplift
+    wording to supplier_cost_increase_pct."""
+    from agents.registry import get_agent
+
+    facts, _ = get_agent("finance").extract_facts(f"Hi -- the supplier says {phrasing} if we want the earlier date.")
+    assert facts.get("supplier_cost_increase_pct") == 15.0

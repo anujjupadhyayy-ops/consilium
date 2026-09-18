@@ -53,13 +53,25 @@ class PMOConfig(AgentConfig):
 
 
 class PMOFacts(BaseModel):
-    is_contract_variation: bool = Field(False, title="the change is a contract variation")
-    continued_business_case_justified: bool = Field(True, title="the continued business case is justified")
-    portfolio_contention: bool = Field(False, title="the change clashes with another workstream's resources")
+    # `description` is plain-English guidance for the extraction prompt.
+    is_contract_variation: bool = Field(
+        False, title="the change is a contract variation",
+        description="True if the change alters the terms, price or scope of an existing contract "
+                    "(a variation, amendment or change order).")
+    continued_business_case_justified: bool = Field(
+        True, title="the continued business case is justified",
+        description="True if the message says the business case still stands for carrying on; "
+                    "false if it says the case no longer holds.")
+    portfolio_contention: bool = Field(
+        False, title="the change clashes with another workstream's resources",
+        description="True if the change would pull the same people or resources away from another workstream.")
     # % variance per PRINCE2 dimension this decision represents, e.g.
     # {"cost": 15.0} for a 15% cost increase. Omitted dimensions = no variance.
     tolerance_variances_pct: dict[str, float] = Field(
-        default_factory=dict, title="variance against each PRINCE2 tolerance (cost, time, scope, quality, risk, benefit)"
+        default_factory=dict, title="variance against each PRINCE2 tolerance (cost, time, scope, quality, risk, benefit)",
+        description="Percentage variance the change causes on each PRINCE2 tolerance dimension it names -- one of "
+                    "cost, time, scope, quality, risk, benefit -- as {dimension: percent}, e.g. a 15% cost "
+                    "increase is {\"cost\": 15}. Leave out any dimension the message does not give a percentage for."
     )
 
 

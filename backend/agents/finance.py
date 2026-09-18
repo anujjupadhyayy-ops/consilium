@@ -35,11 +35,26 @@ class FinanceFacts(BaseModel):
     # rather than crash on a missing required field.
     # `title` is the human label shown wherever a field is named to a user
     # (couldn't-check lines, evidence, the verdict panel) -- never the raw
-    # field name.
-    margin_erosion_pts: float = Field(0.0, title="project margin erosion (points)")
-    supplier_cost_increase_pct: float = Field(0.0, title="supplier cost increase (%)")
-    budget_forecast_utilisation_pct: float = Field(50.0, title="full-year 3PP forecast (% of budget)")
-    fy_month_elapsed: int = Field(6, title="financial-year month the forecast is read in")
+    # field name. `description` is plain-English guidance for the extraction
+    # prompt: it says what the fact means and the everyday phrasings it
+    # appears under, so a differently-worded brief still maps to the field.
+    margin_erosion_pts: float = Field(
+        0.0, title="project margin erosion (points)",
+        description="How many percentage points the project's margin would fall by if the change goes ahead "
+                    "(e.g. 'margin drops from 22% to 15%' is 7).")
+    supplier_cost_increase_pct: float = Field(
+        0.0, title="supplier cost increase (%)",
+        description="The percentage by which a supplier is raising what it charges us, however it is worded: "
+                    "price rise, cost increase, fee or rate uplift, or '15% on our fee' / 'a 15% uplift on our fee' "
+                    "(all mean 15). A percentage only -- do not work it out from amounts.")
+    budget_forecast_utilisation_pct: float = Field(
+        50.0, title="full-year 3PP forecast (% of budget)",
+        description="The full-year forecast spend on third-party (3PP) suppliers as a percentage of the annual 3PP "
+                    "budget (e.g. 'forecasting 92% of budget' is 92).")
+    fy_month_elapsed: int = Field(
+        6, title="financial-year month the forecast is read in",
+        description="Which month of the financial year the forecast is read in, counting from 1 "
+                    "(e.g. 'month 4', or 'four months in' is 4).")
 
 
 class FinanceAgent(ConfigurableAgent):

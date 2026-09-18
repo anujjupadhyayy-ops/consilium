@@ -33,11 +33,25 @@ class OperationsFacts(BaseModel):
     # Neutral/no-concern defaults (all-green) -- used when the Chief of
     # Staff's LLM extraction is unavailable and evaluation must degrade
     # gracefully.
-    capacity_utilisation_pct_if_accepted: float = Field(50.0, title="capacity utilisation if accepted (%)")
-    third_party_spend_pct_of_budget: float = Field(50.0, title="third-party spend (% of budget)")
-    savings_delivery_ratio: float = Field(1.0, title="savings delivered vs committed (ratio)")
-    licence_provisioned_for_new_date: bool = Field(True, title="licence provisioned for the new date")
-    supplier_sla_in_place: bool = Field(True, title="supplier SLA in place")
+    # `description` is plain-English guidance for the extraction prompt.
+    capacity_utilisation_pct_if_accepted: float = Field(
+        50.0, title="capacity utilisation if accepted (%)",
+        description="How full the team's capacity would be if the change is accepted, as a percentage "
+                    "(e.g. 'we would be at 95% utilisation' is 95).")
+    third_party_spend_pct_of_budget: float = Field(
+        50.0, title="third-party spend (% of budget)",
+        description="Third-party (3PP) spend as a percentage of its budget (e.g. 'spent 88% of the 3PP budget' is 88).")
+    savings_delivery_ratio: float = Field(
+        1.0, title="savings delivered vs committed (ratio)",
+        description="Savings delivered divided by savings committed, as a ratio (e.g. delivered 70% of the "
+                    "committed savings is 0.7).")
+    licence_provisioned_for_new_date: bool = Field(
+        True, title="licence provisioned for the new date",
+        description="True if the software licence or access needed is in place for the new/earlier date; "
+                    "false if it is not yet provisioned or will not be ready in time.")
+    supplier_sla_in_place: bool = Field(
+        True, title="supplier SLA in place",
+        description="True if a supplier service-level agreement (SLA) covers this work; false if there is none.")
 
 
 class OperationsAgent(ConfigurableAgent):

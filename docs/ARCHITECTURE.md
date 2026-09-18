@@ -58,11 +58,14 @@ checked.
 **The rules engine** (`agents/rules.py`) parses `when` with `ast.parse(mode="eval")` and walks a
 whitelist only: and/or/not, `> >= < <= == !=`, names, constants. Calls, attributes, subscripts,
 lambdas, imports, dunder names and unknown names are rejected when the config loads (and on every
-Council save) and are never executed — there is no `eval`. Because it has no arithmetic or
+config save) and are never executed — there is no `eval`. Because it has no arithmetic or
 subscripting, anything that needs either (an interpolated threshold, a dict-shaped fact) is
 computed by the agent's `derive()` in trusted code and exposed as a plain name.
 
-**Config, not code.** Thresholds live in the same JSON, loaded through a Pydantic model per agent
+**Config, not code.** The rules are edited in the config file, not the UI: the Council tab shows
+`rules[]` read-only (description, condition, stance) and only edits the numeric thresholds and the
+free-text `rules_summary` (narration wording — it feeds `narrate()`'s prompt and cannot change
+whether an agent triggers). Thresholds live in the same JSON, loaded through a Pydantic model per agent
 kind (`agents/registry.py`), with `Field(ge=.., le=..)` bounds. `PUT /agents/{id}/config`
 re-validates every rule and **refuses any change to a `stance: blocker` rule** (add, remove or
 alter) — blocker rules are system-governed and must declare `keywords` for the tripwire below.
@@ -80,7 +83,10 @@ evidence quote that code has verified. Nothing else counts: no schema defaults, 
 
 **Extraction** (free text only; seeds bypass it entirely) is one LLM call per agent, in parallel,
 asking for that agent's own fields only, at temperature 0, over the *whole* message — never chunked.
-The prompt instructs the model to return null for anything not stated and to attach quotes for
+Each field goes in as `name (type): description` — the `description` on every facts-model field is
+plain English saying what the fact means and the everyday phrasings it appears under (e.g. "15% on
+our fee" for a supplier cost increase), so differently-worded briefs still map to the field. The
+prompt instructs the model to return null for anything not stated and to attach quotes for
 everything else; the old "make a reasonable illustrative estimate" instruction is gone. Code then
 verifies each quote is a substring of the message after whitespace normalisation (`agents/
 evidence.py`); a paraphrase fails. A value with no or unverifiable evidence, the wrong type or an
