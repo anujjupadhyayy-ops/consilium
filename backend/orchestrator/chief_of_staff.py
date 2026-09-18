@@ -198,6 +198,12 @@ def _blocker_field_lists(checks: dict) -> tuple[list[str], list[str]]:
     return unclear, not_mentioned
 
 
+# The verdict panel's heading for the block of blocker-related unchecked
+# facts. Backend wording that points at it uses this constant, and a test
+# asserts frontend/index.html carries the same string, so they cannot drift.
+NOT_CHECKED_HEADING = "Could stop this — not stated in the brief"
+
+
 def _apply_verdict_cap(reconciliation: Reconciliation, checks: dict) -> Reconciliation:
     """P3.6 §5.5, code-authoritative (same reasoning as _enforce_blocker_policy
     -- never inferred from the model's wording). Two levels, only reached
@@ -231,8 +237,7 @@ def _apply_verdict_cap(reconciliation: Reconciliation, checks: dict) -> Reconcil
 
 
 def _not_checked_block(checks: dict) -> dict:
-    """Display data for the verdict panel's "Not checked -- not stated in the
-    brief" block: every fact no rule could be checked on, grouped by agent,
+    """Display data for the verdict panel's NOT_CHECKED_HEADING block: every fact no rule could be checked on, grouped by agent,
     by HUMAN label (the facts model's title), blocker-related facts first
     within each agent (unclear before not-mentioned). `confirm_first` lists
     the blocker facts that were mentioned but unconfirmed -- the panel leads
@@ -263,24 +268,38 @@ def _not_checked_block(checks: dict) -> dict:
 
 def _no_trigger_reconciliation(checks: dict) -> Reconciliation:
     """P3.6 §5.6: no agent's rules fired on the facts as stated. Not an
-    approval -- the absence of a triggered concern. What couldn't be checked
-    is listed in the verdict panel's structured block, not spelled out here."""
+    approval -- the absence of a triggered concern. The panel lists only the
+    blocker-related unchecked facts (under NOT_CHECKED_HEADING) and leaves the
+    rest on each agent's card, so this wording names exactly what is where --
+    and only mentions the block when it will actually be shown."""
     any_unchecked = any(c.get("unchecked") for c in checks.values())
+    has_blocker_block = any(g["items"] for g in _not_checked_block(checks)["groups"] if any(i["blocker"] for i in g["items"]))
 
     why = "Every agent checked its rules against the facts available and none fired."
     if any_unchecked:
-        why += " Some facts could not be checked -- they are listed below."
+        why += (
+            f" Some facts could not be checked: the ones that could stop this are listed under "
+            f"\"{NOT_CHECKED_HEADING}\" below; the rest are on each agent's card."
+            if has_blocker_block
+            else " Some facts could not be checked -- see each agent's card."
+        )
+
+    if not any_unchecked:
+        not_considered = ["Nothing outstanding -- every referenced fact was stated and checked."]
+    elif has_blocker_block:
+        not_considered = [
+            f"Facts the brief doesn't state -- those that could stop this are under \"{NOT_CHECKED_HEADING}\"; "
+            "the rest are on each agent's card. No rule could be evaluated on any of them."
+        ]
+    else:
+        not_considered = ["Facts the brief doesn't state -- see each agent's card. No rule could be evaluated on them."]
 
     return Reconciliation(
         recommendation="No rule triggered on stated facts.",
         why=why,
         trade_off="Not assessable -- no rule fired to name a trade-off.",
         assumptions=["No agent's rules were triggered by the facts as stated."],
-        not_considered=(
-            ["The facts listed under \"Not checked\" -- no rule could be evaluated on them."]
-            if any_unchecked
-            else ["Nothing outstanding -- every referenced fact was stated and checked."]
-        ),
+        not_considered=not_considered,
     )
 
 

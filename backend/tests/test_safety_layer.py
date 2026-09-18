@@ -262,3 +262,50 @@ def test_reconciliation_text_and_block_never_contain_a_raw_field_name(monkeypatc
             user_text += " " + item["label"]
     assert not _RAW_NAME.search(user_text), _RAW_NAME.search(user_text)
     assert rec["recommendation"] == "Proceed only after confirming the blocker-related facts listed below."
+
+
+# ----------------- backend wording must match the panel it points at --
+
+def _no_trigger(monkeypatch, message):
+    return _free_text_run(monkeypatch, message, {})["reconciliation"]
+
+
+def test_no_trigger_wording_points_at_the_actual_panel_heading_not_the_old_one(monkeypatch):
+    from orchestrator.chief_of_staff import NOT_CHECKED_HEADING
+
+    rec = _no_trigger(monkeypatch, "Please advise on this vague request; no figures are given at all.")
+    text = " ".join([rec["why"], *rec["not_considered"]])
+    assert NOT_CHECKED_HEADING in text
+    assert "Not checked" not in text            # the old heading
+    assert "each agent's card" in text          # says where the rest went
+    assert not _RAW_NAME.search(text)
+
+
+def test_frontend_heading_is_the_backend_constant():
+    from pathlib import Path
+
+    from orchestrator.chief_of_staff import NOT_CHECKED_HEADING
+
+    html = (Path(__file__).resolve().parents[2] / "frontend" / "index.html").read_text(encoding="utf-8")
+    assert f"<h4>{NOT_CHECKED_HEADING}</h4>" in html
+
+
+def test_no_trigger_wording_never_mentions_the_block_when_no_blocker_fact_is_unchecked():
+    """Only non-blocker facts unchecked -> the panel shows no block, so the
+    wording must not point at one."""
+    from orchestrator.chief_of_staff import NOT_CHECKED_HEADING, _no_trigger_reconciliation
+
+    checks = {"finance": {"unchecked": ["supplier_cost_increase_pct"], "unclear": [], "blocker_not_mentioned": [],
+                          "labels": {"supplier_cost_increase_pct": "supplier cost increase (%)"}}}
+    rec = _no_trigger_reconciliation(checks)
+    text = " ".join([rec["why"], *rec["not_considered"]])
+    assert NOT_CHECKED_HEADING not in text
+    assert "each agent's card" in text
+
+
+def test_no_trigger_wording_when_everything_was_checked():
+    from orchestrator.chief_of_staff import _no_trigger_reconciliation
+
+    rec = _no_trigger_reconciliation({"finance": {"unchecked": [], "unclear": [], "blocker_not_mentioned": []}})
+    assert rec["not_considered"] == ["Nothing outstanding -- every referenced fact was stated and checked."]
+    assert "could not be checked" not in rec["why"]
