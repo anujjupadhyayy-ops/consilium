@@ -347,5 +347,5 @@ This is a scaffold, not a finished product. Three ways to make it yours:
 
 ## Licence
 
-MIT — see [LICENSE](LICENSE). Copyright © 2026 Anuj Upadhyay. Design, architecture and product by Anuj
+Envisioned © 2026 Anuj Upadhyay. Design, Architecture and Product by Anuj
 Upadhyay; developed with Claude Code.
