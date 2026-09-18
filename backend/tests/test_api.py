@@ -412,3 +412,33 @@ def test_trigger_inbound_email_matches_pmo_and_delivery_keywords():
     assert "pmo" in body["convened"]  # "contract variation" is a PMO trigger keyword
     assert "delivery" in body["convened"]  # "milestone" is a Delivery trigger keyword
     assert body["run_text"]
+
+
+# ------------------------------------------- P3.6 §6.7: SSE `check` shape --
+
+def test_sse_emits_exactly_one_check_per_agent_with_the_full_shape():
+    events = _parse_sse(client.get("/run/stream?seed_id=supplier_milestone&pace=0").text)
+    checks = [d for e, d in events if e == "trace" and d["kind"] == "check"]
+    assert sorted(c["agent"] for c in checks) == ["delivery", "finance", "operations", "pmo"]
+    for c in checks:
+        assert {"triggered", "stance", "fired", "unchecked", "unclear", "evidence", "provenance"} <= set(c["payload"])
+
+
+def test_sse_never_emits_a_route_event():
+    events = _parse_sse(client.get("/run/stream?seed_id=supplier_milestone&pace=0").text)
+    assert all(d["kind"] != "route" for e, d in events if e == "trace")
+
+
+def test_conflict_and_reconciliation_come_after_every_check():
+    events = _parse_sse(client.get("/run/stream?seed_id=supplier_milestone&pace=0").text)
+    kinds = [d["kind"] for e, d in events if e == "trace"]
+    last_check = max(i for i, k in enumerate(kinds) if k == "check")
+    assert kinds.index("conflict") > last_check
+    assert kinds.index("reconciliation") > kinds.index("conflict")
+
+
+def test_seeded_facts_carry_seeded_provenance_and_no_evidence_quotes():
+    events = _parse_sse(client.get("/run/stream?seed_id=supplier_milestone&pace=0").text)
+    ops = next(d for e, d in events if e == "trace" and d["kind"] == "check" and d["agent"] == "operations")
+    assert set(ops["payload"]["provenance"].values()) == {"seeded"}
+    assert ops["payload"]["evidence"] == {}

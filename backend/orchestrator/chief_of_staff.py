@@ -272,7 +272,10 @@ def reconcile_node(state: ConsiliumState) -> dict:
     blockers = [p for p in positions if p["stance"] == "blocker"]
 
     if not positions:
-        reconciliation = _no_trigger_reconciliation(checks)
+        # No agent triggered -- still subject to the verdict cap: a blocker
+        # field that was mentioned but unconfirmed must read "proceed only
+        # after confirming", not a bare "no rule triggered" (P3.6 §5.5).
+        reconciliation = _apply_verdict_cap(_no_trigger_reconciliation(checks), checks)
     else:
         try:
             reconciliation = _llm_reconcile(state["input"], positions, conflict, blockers)

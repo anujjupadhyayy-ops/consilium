@@ -122,3 +122,71 @@ def test_blocker_field_lists_aggregates_across_agents_with_agent_prefix():
     unclear, not_mentioned = _blocker_field_lists(checks)
     assert unclear == ["operations.licence_ok"]
     assert not_mentioned == ["finance.margin_erosion_pts"]
+
+
+# --------------------------- end-to-end through the real graph (free text) --
+
+def _free_text_run(monkeypatch, message, extracted_by_agent):
+    """Run the real graph on free text with per-agent extraction mocked to
+    return `extracted_by_agent[agent_id]` (dict of field -> (value, quote))."""
+    from agents.evidence import ExtractedValue, ExtractionResult
+    from orchestrator.graph import build_graph
+    from orchestrator.state import initial_state
+
+    def fake(system, user, response_model, config=None, temperature=0.2):
+        if response_model is ExtractionResult:
+            agent_id = system.split("for the ")[1].split(" specialist")[0]
+            return ExtractionResult(fields={
+                f: ExtractedValue(value=v, evidence=[q]) for f, (v, q) in extracted_by_agent.get(agent_id, {}).items()
+            })
+        from model.llm import LLMUnavailableError
+        raise LLMUnavailableError("mocked")
+
+    monkeypatch.setattr("model.llm.call_structured", fake)
+    return build_graph().invoke(initial_state(message, {}), config={"recursion_limit": 10})
+
+
+SUPPLIER_EMAIL = (
+    "A 3rd-party supplier offers to pull a delivery milestone forward 3 weeks for a 15% cost "
+    "increase and a contract variation."
+)
+
+
+def test_supplier_email_without_licence_sla_or_capacity_wording_produces_no_unclear_flags(monkeypatch):
+    """Owner change 1: tripwire keywords are specific to the fact -- a brief
+    that says supplier/contract/cost but never licence/SLA/capacity/3PP
+    spend/savings must NOT flag anything `unclear`."""
+    result = _free_text_run(monkeypatch, SUPPLIER_EMAIL, {})
+    for check in result["checks"].values():
+        assert check["unclear"] == []
+    # ...but the unmentioned blocker fields are disclosed as not in the brief:
+    assert result["checks"]["operations"]["blocker_not_mentioned"]
+
+
+def test_unmentioned_blocker_fields_disclosed_verdict_not_a_clean_approve(monkeypatch):
+    result = _free_text_run(monkeypatch, SUPPLIER_EMAIL, {})
+    rec = result["reconciliation"]["recommendation"]
+    # nothing triggered at all here -> the no-trigger verdict, listing what couldn't be checked
+    assert "no rule triggered" in rec.lower()
+    assert "operations.licence_provisioned_for_new_date" in result["reconciliation"]["why"]
+
+
+def test_licence_mentioned_but_unconfirmed_is_unclear_and_caps_the_verdict(monkeypatch):
+    msg = SUPPLIER_EMAIL + " We are still checking whether the licence will be ready."
+    result = _free_text_run(monkeypatch, msg, {"finance": {"supplier_cost_increase_pct": (3.0, "a 15% cost increase")}})
+    ops = result["checks"]["operations"]
+    assert "licence_provisioned_for_new_date" in ops["unclear"]
+    rec = result["reconciliation"]["recommendation"].lower()
+    assert "proceed only after confirming" in rec
+    assert "operations.licence_provisioned_for_new_date" in rec
+
+
+def test_stated_licence_blocker_extracted_with_evidence_blocks_the_verdict(monkeypatch):
+    msg = SUPPLIER_EMAIL + " The licence won't be ready for the new date."
+    result = _free_text_run(monkeypatch, msg, {
+        "operations": {"licence_provisioned_for_new_date": (False, "The licence won't be ready for the new date")},
+        "finance": {"supplier_cost_increase_pct": (3.0, "a 15% cost increase")},
+    })
+    assert result["checks"]["operations"]["stance"] == "blocker"
+    assert result["checks"]["operations"]["provenance"]["licence_provisioned_for_new_date"] == "extracted"
+    assert "decline" in result["reconciliation"]["recommendation"].lower()

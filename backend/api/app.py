@@ -33,7 +33,7 @@ _FRONTEND_DIR = _REPO_ROOT / "frontend"
 # one imperceptible tick. Pure UI pacing -- lives here, never in
 # orchestrator/graph.py, and never touches agent logic or trace content.
 # `pace=0` (used by tests) disables it.
-PACING_SECONDS = {"after_route": 0.5, "between_positions": 0.3, "before_reconcile": 0.7}
+PACING_SECONDS = {"first_check": 0.5, "between_checks": 0.3, "before_reconcile": 0.7}
 
 
 @app.get("/health")
@@ -59,8 +59,8 @@ def _stream_run(text: str, pace: float, facts: Optional[dict] = None) -> Iterato
         for chunk in compiled.stream(state, config={"recursion_limit": 10}, stream_mode="updates"):
             for _node_name, update in chunk.items():
                 for event in update.get("trace", []):
-                    if event["kind"] == "position":
-                        time.sleep((PACING_SECONDS["after_route"] if first_stage else PACING_SECONDS["between_positions"]) * pace)
+                    if event["kind"] == "check":
+                        time.sleep((PACING_SECONDS["first_check"] if first_stage else PACING_SECONDS["between_checks"]) * pace)
                         first_stage = False
                     elif event["kind"] == "conflict":
                         time.sleep(PACING_SECONDS["before_reconcile"] * pace)
@@ -78,13 +78,12 @@ def _stream_run(text: str, pace: float, facts: Optional[dict] = None) -> Iterato
 
 @app.get("/run/stream")
 def run_stream(text: str = "", seed_id: str = "", pace: float = 1.0) -> StreamingResponse:
-    """The one real pipeline every run goes through -- routing, narration,
-    and reconciliation are always genuine LLM calls (with a deterministic
-    fallback if the model is unavailable). A seed additionally pre-supplies
-    its engineered facts as a head start -- the scenario already comes
-    with known figures, so there's nothing to estimate -- free text has
-    none, so the Chief of Staff's routing call also extracts facts for
-    whichever agents it engages."""
+    """The one real pipeline every run goes through -- every agent checks
+    its own rules (no routing; nothing can be skipped), triggered agents are
+    narrated, and reconciliation writes the wording (each an LLM call with a
+    deterministic fallback if the model is unavailable). A seed supplies its
+    authored facts and bypasses extraction; free text has none, so each
+    agent runs its own evidence-verified extraction over the whole message."""
     facts = None
     if seed_id:
         seed = get_seed(seed_id)
@@ -390,7 +389,11 @@ def _record_trigger_decision(text: str, label: str) -> dict:
         "verdict": rec.get("recommendation", "(run did not complete)"),
     }
     append_run(entry)
-    return entry
+    # The checks table (every agent's triggered/fired/unchecked/unclear/
+    # evidence/provenance) goes to the tamper-evident ledger as its own
+    # entry after the run -- the trigger itself was already recorded first,
+    # before anything ran, so a rejected or crashed run still leaves a trace.
+    return {**entry, "checks": {k: dict(v) for k, v in (result.get("checks") or {}).items()}}
 
 
 def _convene_and_record(*, source: str, actor: str, subject: str, body: str, auth_ok: bool) -> dict:
@@ -481,7 +484,16 @@ def trigger_webhook(
             detail=f"Invalid or missing X-Consilium-Token (rejected attempt logged as event #{result['event_id']}).",
         )
     # A real trigger runs the council and records the verdict -- not just a log.
-    result["decision"] = _record_trigger_decision(req.body, f"Webhook: {req.subject or 'inbound email'}")
+    decision = _record_trigger_decision(req.body, f"Webhook: {req.subject or 'inbound email'}")
+    checks = decision.pop("checks", {})
+    ledger.record({
+        "kind": "council_checks",
+        "trigger_event_id": result["event_id"],
+        "checks": checks,
+        "verdict": decision["verdict"],
+        "recommend_only": True,
+    })
+    result["decision"] = decision
     return result
 
 
