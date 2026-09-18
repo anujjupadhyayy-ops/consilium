@@ -1,5 +1,43 @@
 import pytest
 
+# --- Hermetic agent configs ----------------------------------------------------
+# The app persists Council edits straight into backend/agents/configs/*.json, so
+# a developer who has used the Council tab has a locally-modified copy there. The
+# suite must test the SHIPPED configs, not whatever is on someone's disk: at
+# collection time (before any test module binds the registry's paths) point the
+# registry at a snapshot of the committed files -- `git show HEAD:<file>`, falling
+# back to the working tree when git isn't available (e.g. an unpacked archive,
+# where the working tree IS the shipped copy).
+import subprocess
+import tempfile
+from pathlib import Path
+
+from agents import registry as _registry
+
+
+def _snapshot_shipped_configs() -> None:
+    repo = Path(__file__).resolve().parents[2]
+    dest = Path(tempfile.mkdtemp(prefix="consilium_shipped_configs_"))
+
+    def shipped_bytes(path: Path) -> bytes:
+        try:
+            rel = path.resolve().relative_to(repo).as_posix()
+            return subprocess.check_output(["git", "-C", str(repo), "show", f"HEAD:{rel}"], stderr=subprocess.DEVNULL)
+        except Exception:
+            return path.read_bytes()
+
+    configs = dest / "configs"
+    configs.mkdir()
+    for f in Path(_registry.DEFAULT_CONFIGS_DIR).glob("*.json"):
+        (configs / f.name).write_bytes(shipped_bytes(f))
+    manifest = dest / "manifest.json"
+    manifest.write_bytes(shipped_bytes(Path(_registry.DEFAULT_MANIFEST_PATH)))
+    _registry.DEFAULT_CONFIGS_DIR = configs
+    _registry.DEFAULT_MANIFEST_PATH = manifest
+
+
+_snapshot_shipped_configs()
+
 
 @pytest.fixture(autouse=True)
 def _blank_real_credentials(monkeypatch):

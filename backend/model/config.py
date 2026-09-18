@@ -11,6 +11,22 @@ from .runtime_settings import read_runtime_settings
 load_dotenv(find_dotenv(usecwd=True))
 
 
+def disable_tracing_without_key() -> None:
+    """LangSmith tracing uploads each run's inputs/outputs -- for this app, the
+    text of the decision -- to a third party. With tracing switched on but no
+    key, it still tries (and is rejected with a 401 on every run), so switch it
+    off unless a key is actually present. Tracing is opt-in: set the key."""
+    for flag, key in (("LANGCHAIN_TRACING_V2", "LANGCHAIN_API_KEY"), ("LANGSMITH_TRACING", "LANGSMITH_API_KEY")):
+        if os.environ.get(flag, "").strip().lower() == "true" and not (
+            os.environ.get(key, "").strip() or os.environ.get("LANGSMITH_API_KEY", "").strip()
+            or os.environ.get("LANGCHAIN_API_KEY", "").strip()
+        ):
+            os.environ[flag] = "false"
+
+
+disable_tracing_without_key()
+
+
 @dataclass(frozen=True)
 class ModelConfig:
     """OpenAI-compatible model config, sourced only from env.

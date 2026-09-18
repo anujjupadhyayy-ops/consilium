@@ -110,7 +110,7 @@ indicator makes that state visible rather than silent.
 
 ## Prerequisites
 
-- **Python 3.10+.**
+- **Python 3.12+** (tested on 3.12 and 3.14; older versions are untested).
 - **A model — optional.** Consilium is model-optional: with no model reachable it runs every
   decision through its deterministic fallback path, with a **Fallback mode** indicator so that
   state reads as intentional rather than broken. For genuine multi-agent reasoning, point it at any
@@ -264,10 +264,11 @@ cd backend
 pytest
 ```
 
-207 backend tests, plus 15 real-browser Playwright end-to-end tests that drive the actual served
-UI (catching wiring defects — a dead button, a stubbed-not-real connection, state lost on reload —
-that backend unit tests structurally can't see). Every LLM call is mocked by default, so the suite
-needs no reachable model and runs in a few seconds; specific tests override the mock to verify
+A few hundred backend tests, plus a real-browser Playwright end-to-end suite that drives the actual
+served UI (catching wiring defects — a dead button, a stubbed-not-real connection, state lost on
+reload — that backend unit tests structurally can't see). Every LLM call is mocked by default, so
+the suite needs no reachable model (the backend tests take a few seconds, the browser suite about a
+minute); specific tests override the mock to verify
 genuine LLM-driven behaviour. Regression control for the rules migration is permanent: golden
 fact-set files (`backend/tests/golden/`) generated from the original `evaluate()` code pin every
 agent's stance and driving constraint, including every threshold edge.
@@ -304,9 +305,9 @@ pieces above is built the way it is.
 Consilium is a showcase of a design, on an illustrative domain — not a product.
 
 - **Extraction depends on the model.** Free-text facts are only as good as the model reading them.
-  Measured blocker-field hit rate: `[TO BE MEASURED: run pytest -m live tests/extraction_eval]`
-  (model to be recorded with it; the 24 evaluation emails' expected answers are still unconfirmed
-  by the project owner, so no number is valid until they are).
+  The blocker-field hit rate has **not been measured yet** — run `pytest -m live tests/extraction_eval -s`
+  against your model to get it (the 24 evaluation emails' expected answers are still unconfirmed by
+  the project owner, so no number is valid until they are).
 - **A miss is visible, not silent.** A field the model can't ground in a verified quote is shown as
   "couldn't check" or, when its keyword appears, "unclear" — and an unclear blocker field caps the
   verdict. Weak models, and facts that are only *implied* ("should be fine by then"), will therefore
@@ -330,8 +331,9 @@ This is a scaffold, not a finished product. Three ways to make it yours:
   change which agents run. No Python changes needed. (The Council tab does the common edits live —
   thresholds, stance, description, guided new rules; the file is where a rule's own field and
   operator are defined.)
-- **Change the reasoning.** Replace `evaluate()` in any `backend/agents/*.py` with your own domain
-  logic (and its matching `*Config`/`*Facts` Pydantic models), or add a wholly new agent kind and
+- **Change the reasoning.** For a new domain, write the agent's rules in its config `rules[]` and, where a
+  rule needs a computed value, add it in that agent's `derive()` in `backend/agents/*.py` (with its
+  matching `*Config`/`*Facts` Pydantic models), or add a wholly new agent kind and
   register it in `backend/agents/registry.py`'s `AGENT_KIND_REGISTRY`. A JSON file alone can
   parameterise existing logic; a genuinely new *kind* of reasoning needs this step.
 - **Change the model.** Any OpenAI-compatible endpoint works via `.env` or the Settings tab —

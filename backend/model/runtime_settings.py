@@ -7,6 +7,7 @@ alongside .env since it can hold an API key.
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 from typing import Optional
 
@@ -29,3 +30,4 @@ def write_runtime_settings(data: dict, path: Optional[Path] = None) -> None:
     path = path or RUNTIME_SETTINGS_PATH
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(data, indent=2))
+    os.chmod(path, 0o600)  # can hold an API key: readable by the owner only, not other local users
