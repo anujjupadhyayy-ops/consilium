@@ -693,6 +693,8 @@ async function renderCouncil(){
 }
 function showResult(id,stance,msg){const[cl,lb]=STANCE[stance]||(stance==null?["s-yes","All clear"]:["s-cond",stance]);const el=document.getElementById(id);
   el.innerHTML=`<span class="stance ${cl}">${lb}</span><div>${msg}</div><div style="color:var(--muted);margin-top:6px;font-size:11.5px">Saved to config — the next Decision-desk run reasons with this too.</div>`;el.classList.add("show");}
+function showError(id,msg){const el=document.getElementById(id);
+  el.innerHTML=`<span class="stance s-no">Not saved</span><div>⚠ ${esc(msg)}</div><div style="color:var(--muted);margin-top:6px;font-size:11.5px">Nothing was changed — fix the value and try again.</div>`;el.classList.add("show");}
 function showSavedOnly(id,msg){const el=document.getElementById(id);
   el.innerHTML=`<div>${msg}</div><div style="color:var(--muted);margin-top:6px;font-size:11.5px">Saved to config — the next Decision-desk run reasons with this too.</div>`;el.classList.add("show");}
 
@@ -721,7 +723,7 @@ document.getElementById("council").addEventListener("click",async e=>{
     const k=sv.dataset.save; sv.disabled=true;
     try{
       const res=await fetch(`/agents/${k}/config`,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify({rules_summary:CONFIGS[k].rules_summary})});
-      if(!res.ok){const err=await res.json();showSavedOnly(`res-${k}`,`⚠ ${err.detail||"Could not save"}`);return;}
+      if(!res.ok){const err=await res.json();showError(`res-${k}`,err.detail||"Could not save");return;}
       CONFIGS[k]=await res.json();renderRuleList(k);
       showSavedOnly(`res-${k}`,`✓ ${AGENTS[k].nm}'s ${CONFIGS[k].rules_summary.length} rules saved.`);
     } finally { sv.disabled=false; }
@@ -739,7 +741,7 @@ document.getElementById("council").addEventListener("click",async e=>{
         configOverrides.early_forecast_threshold_pct=+document.getElementById("cf-forecast").value;
       }
       const putRes=await fetch(`/agents/${k}/config`,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(configOverrides)});
-      if(!putRes.ok){const err=await putRes.json();showResult(`res-${k}`,"conditional",`⚠ ${err.detail||"Could not save"}`);return;}
+      if(!putRes.ok){const err=await putRes.json();showError(`res-${k}`,err.detail||"Could not save");return;}
       CONFIGS[k]=await putRes.json();renderRuleList(k);
 
       const retestBody={agent_id:k};

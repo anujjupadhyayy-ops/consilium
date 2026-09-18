@@ -295,3 +295,25 @@ def test_history_renders_old_and_new_entries_without_a_page_error(page, base_url
     page.wait_for_selector("#hgrid .hrow")
     assert "Pre-P3.6 run" in page.inner_text("#hgrid")
     assert errors == []
+
+
+def test_council_shows_the_backend_validation_error_for_a_rejected_rule_edit(page):
+    page.click("[data-v='council']")
+    page.locator("#rl-pmo .rin").first.fill("x" * 300)  # over the 240-char rule limit
+    page.click("[data-save='pmo']")
+    page.wait_for_selector("#res-pmo.show")
+    text = page.inner_text("#res-pmo")
+    assert "240" in text and "not saved" in text.lower()  # the backend's own reason, readable
+    assert "saved to config" not in text.lower()  # never claims success on a rejection
+    assert "value_error" not in text and "pydantic" not in text.lower()
+
+
+def test_council_shows_the_backend_validation_error_for_a_rejected_threshold_edit(page):
+    page.click("[data-v='council']")
+    page.evaluate("document.getElementById('cf-margin').removeAttribute('min')")  # bypass the browser's own bound
+    page.fill("#cf-margin", "-5")
+    page.click("[data-retest='finance']")
+    page.wait_for_selector("#res-finance.show")
+    text = page.inner_text("#res-finance")
+    assert "margin_erosion_threshold_pts" in text and "not saved" in text.lower()
+    assert "all clear" not in text.lower() and "saved to config" not in text.lower()

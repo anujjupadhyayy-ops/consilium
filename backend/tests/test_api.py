@@ -442,3 +442,18 @@ def test_seeded_facts_carry_seeded_provenance_and_no_evidence_quotes():
     ops = next(d for e, d in events if e == "trace" and d["kind"] == "check" and d["agent"] == "operations")
     assert set(ops["payload"]["provenance"].values()) == {"seeded"}
     assert ops["payload"]["evidence"] == {}
+
+
+def test_rejected_config_edits_return_a_readable_reason(tmp_path, monkeypatch):
+    _isolate_configs(tmp_path, monkeypatch)
+
+    too_long = client.put("/agents/finance/config", json={"rules_summary": ["x" * 500]})
+    assert too_long.status_code == 422
+    detail = too_long.json()["detail"]
+    assert detail.startswith("Rejected --") and "240" in detail and "pydantic" not in detail.lower()
+
+    out_of_range = client.put("/agents/finance/config", json={"margin_erosion_threshold_pts": -5})
+    assert "margin_erosion_threshold_pts" in out_of_range.json()["detail"]
+
+    blocker = client.put("/agents/operations/config", json={"rules": []})
+    assert blocker.status_code == 422 and "system-governed" in blocker.json()["detail"]

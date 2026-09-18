@@ -12,7 +12,7 @@ from typing import Any, Iterator, Optional
 from fastapi import FastAPI, Header, HTTPException
 from fastapi.responses import StreamingResponse
 from fastapi.staticfiles import StaticFiles
-from pydantic import BaseModel
+from pydantic import BaseModel, ValidationError
 
 from audit import ledger
 
@@ -178,8 +178,15 @@ def put_agent_config(agent_id: str, body: dict[str, Any]) -> dict:
         agent = save_agent_config(agent_id, body)
     except UnknownAgentError:
         raise HTTPException(status_code=404, detail=f"Unknown agent '{agent_id}'.")
-    except Exception as exc:  # pydantic.ValidationError or a bad value
-        raise HTTPException(status_code=422, detail=f"Invalid config: {exc}") from exc
+    except ValidationError as exc:
+        # Readable "field: reason" lines for the Council UI, not pydantic's
+        # multi-line dump (with its docs URL and repr of the rejected input).
+        reasons = "; ".join(
+            f"{'.'.join(str(p) for p in e['loc'])}: {e['msg'].removeprefix('Value error, ')}" for e in exc.errors()
+        )
+        raise HTTPException(status_code=422, detail=f"Rejected -- {reasons}") from exc
+    except Exception as exc:  # RuleError, BlockerRuleImmutableError, ...
+        raise HTTPException(status_code=422, detail=f"Rejected -- {exc}") from exc
     return agent.config.model_dump()
 
 
