@@ -345,7 +345,32 @@ This is a scaffold, not a finished product. Three ways to make it yours:
 - **Change the model.** Any OpenAI-compatible endpoint works via `.env` or the Settings tab —
   OpenAI, Anthropic, Groq, OpenRouter, or a self-hosted OSS model.
 
+## Disclaimer & responsible use
+
+Consilium is a one-off showcase of a design, built on an illustrative back-office scenario. It is
+provided under the [MIT licence](LICENSE), **as is, without warranty of any kind**, and the author
+accepts no liability for how it is used or for any loss or damage arising from it.
+
+- **Not advice.** Its outputs are decision *support* generated from configurable rules and,
+  optionally, a language model that can be wrong. They are not legal, financial, compliance,
+  medical or other professional advice, and must not be relied on for regulated, safety-critical
+  or high-stakes decisions without qualified human review.
+- **Lawful use only.** You are solely responsible for how you use, modify, deploy or distribute
+  this software, and for complying with every law and regulation that applies to you — including
+  data-protection and privacy law where you process personal or confidential information. The
+  author does not authorise, endorse or accept responsibility for any illegal, fraudulent,
+  deceptive or malicious use, and no such use is permitted by the author's intent in publishing it.
+- **Your data and third parties.** If you connect a model provider or tracing service, the text of
+  your decisions is sent to that third party under its terms. You supply and safeguard your own API
+  keys; none are included in this repository.
+- **Forks and derivatives.** Anything built on this code is the responsibility of whoever builds
+  it. The author is not affiliated with, and does not support or vouch for, any fork or product
+  derived from it.
+
+
+  
+
 ## Licence
 
-Envisioned © 2026 Anuj Upadhyay. Design, Architecture and Product by Anuj
+Copyright © 2026 Anuj Upadhyay. Design, Architecture and Product by Anuj
 Upadhyay; developed with Claude Code.
