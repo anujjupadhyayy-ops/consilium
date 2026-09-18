@@ -9,6 +9,12 @@ ships with an illustrative back-office example (Finance, Delivery, PMO, Operatio
 a domain most people can sanity-check — a framework showcase, not a product; the agents are
 config (JSON), not hardcoded logic.
 
+> **Credits.** The design, architecture and product are by **Anuj Upadhyay**. The development was
+> done with [Claude Code](https://claude.com/claude-code).
+>
+> **Status.** A finished, one-off showcase — not a maintained product, with no releases or roadmap
+> planned. Run it, try what it does, then fork it and take it wherever you like (see [Fork it](#fork-it)).
+
 ![Dashboard: the Chief of Staff's morning briefing, flagged items needing a decision, and the council's latest signals from Finance, Delivery, PMO and Operations](docs/images/dashboard.png)
 
 *The Dashboard — a Chief of Staff briefing, what's flagged for you, and each specialist's latest
@@ -341,4 +347,5 @@ This is a scaffold, not a finished product. Three ways to make it yours:
 
 ## Licence
 
-MIT — see [LICENSE](LICENSE).
+MIT — see [LICENSE](LICENSE). Copyright © 2026 Anuj Upadhyay. Design, architecture and product by Anuj
+Upadhyay; developed with Claude Code.
