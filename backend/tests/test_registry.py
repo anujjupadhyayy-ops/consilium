@@ -171,3 +171,30 @@ def test_editing_a_config_file_on_disk_changes_the_evaluated_stance(tmp_path, se
     result = finance_agent.check(seed_facts["finance"])
 
     assert not any("supplier_cost" in f.id for f in result.fired)
+
+
+# ------------------------------------- name-collision guard (config vs facts) --
+
+def test_config_scalar_named_like_a_facts_field_is_rejected_at_load_with_a_readable_error():
+    from agents.finance import FinanceAgent, FinanceConfig
+
+    class CollidingConfig(FinanceConfig):
+        margin_erosion_pts: float = 5.0  # same name as FinanceFacts.margin_erosion_pts
+
+    agent = FinanceAgent(agent_id="finance", config=CollidingConfig(lens="t", rules_summary=[]))
+    with pytest.raises(RuleError) as exc:
+        agent.validate_rules()
+    assert "margin_erosion_pts" in str(exc.value) and "rename" in str(exc.value).lower()
+
+
+def test_no_shipped_config_scalar_collides_with_a_facts_field():
+    for agent in load_agents_from_manifest():
+        assert not (set(agent.facts_model.model_fields) & set(agent._config_scalar_env())), agent.id
+        assert not (set(agent.facts_model.model_fields) & agent.derived_field_names()), agent.id
+
+
+def test_facts_take_precedence_over_derived_then_config_in_the_rule_environment():
+    agent = load_agents_from_manifest()[0]
+    agent._config_scalar_env = lambda: {"x": "config", "y": "config"}
+    env = agent._rule_env({"x": "fact"}, derived={"x": "derived", "y": "derived"})
+    assert env["x"] == "fact" and env["y"] == "derived"

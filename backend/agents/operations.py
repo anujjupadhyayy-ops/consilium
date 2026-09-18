@@ -81,7 +81,7 @@ class OperationsAgent(ConfigurableAgent):
                 signal_names.append(name)
 
         driving_constraint = f"Weakest signal: {', '.join(signal_names)} ({self._SEVERITY_WORD[result.stance]})"
-        env: dict[str, Any] = {**raw_facts, **self.derive(raw_facts), **self._config_scalar_env()}
+        env: dict[str, Any] = self._rule_env(raw_facts)
 
         def render(desc: str) -> str:
             try:

@@ -124,7 +124,7 @@ class PMOAgent(ConfigurableAgent):
         if result.stance != "conditional":
             return super()._position_from_check(raw_facts, result)
 
-        env: dict[str, Any] = {**raw_facts, **self.derive(raw_facts), **self._config_scalar_env()}
+        env: dict[str, Any] = self._rule_env(raw_facts)
 
         def render(desc: str) -> str:
             try:

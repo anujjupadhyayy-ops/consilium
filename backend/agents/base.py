@@ -11,7 +11,7 @@ from pydantic import BaseModel, Field, field_validator, model_validator
 from orchestrator.state import AgentPosition, Check, ConsiliumState
 from orchestrator.trace import make_trace_event, next_step
 
-from .rules import CheckResult, Rule, check_rules, most_severe, validate_expression
+from .rules import CheckResult, Rule, RuleError, check_rules, most_severe, validate_expression
 
 # P3.6: plain-English rules are free-text and genuinely change an agent's
 # reasoning (they're injected into narrate()'s system prompt below) --
@@ -138,9 +138,29 @@ class ConfigurableAgent(ABC):
     def allowed_rule_names(self) -> set[str]:
         return set(self.facts_model.model_fields.keys()) | self.derived_field_names() | set(self._config_scalar_env().keys())
 
+    def _rule_env(self, raw_facts: dict[str, Any], derived: Optional[dict[str, Any]] = None) -> dict[str, Any]:
+        """The one place the name environment is assembled, with the spec's
+        precedence (§5.1): stated facts, then derived values, then config
+        thresholds -- the later dict in the merge is the LOWER precedence
+        here, so facts win. validate_rules() rejects any collision at load,
+        so precedence is a backstop, not something a config can lean on."""
+        derived = self.derive(raw_facts) if derived is None else derived
+        return {**self._config_scalar_env(), **derived, **raw_facts}
+
     def validate_rules(self) -> None:
         """Called by registry.py at config load and on every Council-UI
         save -- never skip this before check()."""
+        fact_names = set(self.facts_model.model_fields.keys())
+        clash = sorted(fact_names & set(self._config_scalar_env().keys()))
+        if clash:
+            raise RuleError(
+                f"agent {self.id!r}: config field(s) {clash} have the same name as a facts field. "
+                "A rule's name must mean one thing -- rename the config threshold "
+                "(e.g. add a _threshold suffix)."
+            )
+        derived_clash = sorted(fact_names & self.derived_field_names())
+        if derived_clash:
+            raise RuleError(f"agent {self.id!r}: derived value(s) {derived_clash} shadow a facts field.")
         allowed = self.allowed_rule_names()
         for rule_config in self.config.rules:
             validate_expression(rule_config.when, allowed)
@@ -150,7 +170,7 @@ class ConfigurableAgent(ABC):
         stated = {k for k, v in raw_facts.items() if v is not None}
         derived = self.derive(raw_facts)
         stated |= set(derived.keys())
-        env: dict[str, Any] = {**raw_facts, **derived, **self._config_scalar_env()}
+        env: dict[str, Any] = self._rule_env(raw_facts, derived)
         rules = [
             Rule(
                 id=rc.id, description=rc.description, fields=tuple(rc.fields),
@@ -257,7 +277,7 @@ class ConfigurableAgent(ABC):
         return ""
 
     def _position_from_check(self, raw_facts: dict[str, Any], result: CheckResult) -> AgentPosition:
-        env: dict[str, Any] = {**raw_facts, **self.derive(raw_facts), **self._config_scalar_env()}
+        env: dict[str, Any] = self._rule_env(raw_facts)
         top_severity = max(_severity(f.stance) for f in result.fired)
         top_fired = [f for f in result.fired if _severity(f.stance) == top_severity]
 
