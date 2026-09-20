@@ -1,4 +1,4 @@
-# Consilium
+# Consilium: LangGraph Multi-Agent Decision Framework
 
 Consilium is a forkable, open-source multi-agent decision framework built around one principle:
 **rules decide, the LLM reads and explains.** Every specialist agent checks its own rules against
