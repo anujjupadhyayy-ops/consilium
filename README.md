@@ -258,10 +258,11 @@ edit of your own. Prevent it by restarting the backend after every update.
   triggers). The Chief of Staff's persona (tone and wording guidance only — it can never touch extraction, checks, or
   stances) is editable; its adjudication policy and guardrails are not.
 
-  ![The specialists grid: Finance, Delivery, PMO and Operations, each with a wording list](docs/images/council-specialists.png)
+  ![Two specialist cards, Finance and Delivery: each rule in plain English with its stance and an editable threshold, then a separate narration-wording box](docs/images/council-specialists.png)
 
-  *Finance, Delivery, PMO, Operations — rules and narration wording, editable live, no redeploy.
-  (Screenshot predates the guided rule editor: rules are now listed above the wording box.)*
+  *Finance and Delivery (PMO and Operations are laid out the same way) — each rule in plain English
+  with its stance and editable threshold, and a separate narration-wording box beneath. Edits save
+  live, no redeploy.*
 
 ## Testing
 
