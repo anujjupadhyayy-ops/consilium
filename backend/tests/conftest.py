@@ -1,3 +1,18 @@
+# --- Never touch the real per-user data directory ------------------------------
+# The app keeps its writable state (model settings -- which can hold an API key --
+# the Chief of Staff persona, run history, the profile, the audit ledger) in
+# $CONSILIUM_DATA_DIR, default ~/.consilium. Two of those paths
+# (model.runtime_settings.RUNTIME_SETTINGS_PATH, orchestrator.cos_settings.
+# COS_SETTINGS_PATH) are computed ONCE, when their module is first imported, so a
+# test that sets CONSILIUM_DATA_DIR afterwards does not redirect them -- and the
+# suite silently overwrote a developer's real saved API key with a test dummy.
+# So: before anything from the app is imported, point the data directory at a
+# throwaway one (overriding whatever the developer has set), and guard below.
+import os
+import tempfile
+
+os.environ["CONSILIUM_DATA_DIR"] = tempfile.mkdtemp(prefix="consilium_test_data_")
+
 import pytest
 
 # --- Hermetic agent configs ----------------------------------------------------
@@ -84,3 +99,34 @@ def built_graph():
     from orchestrator.graph import build_graph
 
     return build_graph()
+
+
+@pytest.fixture(autouse=True)
+def _isolated_settings_files(tmp_path, monkeypatch):
+    """Each test gets its own settings files, so nothing leaks between tests
+    (and nothing can reach the real ~/.consilium even if the import-time
+    paths above were ever computed before the override)."""
+    from model import runtime_settings
+    from orchestrator import cos_settings
+
+    monkeypatch.setattr(runtime_settings, "RUNTIME_SETTINGS_PATH", tmp_path / "runtime_settings.json")
+    monkeypatch.setattr(cos_settings, "COS_SETTINGS_PATH", tmp_path / "cos_settings.json")
+
+
+@pytest.fixture(autouse=True, scope="session")
+def _test_suite_must_not_use_the_real_data_dir():
+    """Fail the whole run loudly, before any test can write, if the suite is
+    ever pointed at the real per-user data directory again."""
+    from pathlib import Path
+
+    from appdata import data_dir
+    from model import runtime_settings
+    from orchestrator import cos_settings
+
+    real = (Path.home() / ".consilium").resolve()
+    for label, path in (("data_dir()", data_dir()), ("RUNTIME_SETTINGS_PATH", runtime_settings.RUNTIME_SETTINGS_PATH),
+                        ("COS_SETTINGS_PATH", cos_settings.COS_SETTINGS_PATH)):
+        resolved = Path(path).resolve()
+        assert resolved != real and real not in resolved.parents, (
+            f"the test suite would write to the real data directory via {label}: {resolved}"
+        )
